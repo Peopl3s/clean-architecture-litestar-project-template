@@ -1,21 +1,21 @@
-# :electric_plug: :jigsaw: Clean Architecture FastAPI Project Template
+# :electric_plug: :jigsaw: Clean Architecture Litestar Project Template
 
-[![Python 3.9–3.13](https://img.shields.io/badge/Python-3.9--3.13-000000?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/downloads/)[![GitHub Stars](https://img.shields.io/github/stars/Peopl3s/clean-architecture-fastapi-project-template?style=for-the-badge&logo=github&logoColor=white&color=000000)](https://github.com/Peopl3s/clean-architecture-fastapi-project-template/stargazers)
-[![Last Commit](https://img.shields.io/github/last-commit/Peopl3s/clean-architecture-fastapi-project-template?style=for-the-badge&color=000000)](https://github.com/Peopl3s/clean-architecture-fastapi-project-template/commits/main)
-[![License](https://img.shields.io/github/license/Peopl3s/clean-architecture-fastapi-project-template?style=for-the-badge&color=000000)](./LICENSE)
+[![Python 3.9–3.13](https://img.shields.io/badge/Python-3.9--3.13-000000?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/downloads/)[![GitHub Stars](https://img.shields.io/github/stars/Peopl3s/clean-architecture-litestar-project-template?style=for-the-badge&logo=github&logoColor=white&color=000000)](https://github.com/Peopl3s/clean-architecture-litestar-project-template/stargazers)
+[![Last Commit](https://img.shields.io/github/last-commit/Peopl3s/clean-architecture-litestar-project-template?style=for-the-badge&color=000000)](https://github.com/Peopl3s/clean-architecture-litestar-project-template/commits/main)
+[![License](https://img.shields.io/github/license/Peopl3s/clean-architecture-litestar-project-template?style=for-the-badge&color=000000)](./LICENSE)
 
-![FastAPI](https://img.shields.io/badge/FastAPI-000000?style=for-the-badge&logo=fastapi&logoColor=white)
+![Litestar](https://img.shields.io/badge/Litestar-000000?style=for-the-badge&logo=litestar&logoColor=white)
 ![FastStream](https://img.shields.io/badge/FastStream-000000?style=for-the-badge&logo=faststream&logoColor=white)
 ![Dishka](https://img.shields.io/badge/Dishka-000000?style=for-the-badge&logoColor=white)
 ![Clean Architecture](https://img.shields.io/badge/Clean_Architecture-000000?style=for-the-badge&logo=python&logoColor=white)
 
 
-A comprehensive cookiecutter template for creating modern FastAPI applications with clean architecture, Docker support, and best practices included.
+A comprehensive cookiecutter template for creating modern Litestar applications with clean architecture, Docker support, and best practices included.
 
 ## 🚀 Features
 
 - **Clean Architecture**: Domain-Driven Design with clear separation of concerns
-- **FastAPI**: High-performance async web framework
+- **Litestar**: High-performance async web framework
 - **SQLAlchemy**: Modern ORM with async support
 - **Database Support**: Optional database support (PostgreSQL/SQLite/MySQL)
 - **Alembic**: Database migration management
@@ -73,15 +73,15 @@ xdg-open _build/html/index.html  # Linux
 ### Basic Usage
 
 ```bash
-cookiecutter https://github.com/Peopl3s/clean-architecture-fastapi-project-template.git
+cookiecutter https://github.com/Peopl3s/clean-architecture-litestar-project-template.git
 ```
 
 ### Local Usage
 
 ```bash
 # Clone the template
-git clone https://github.com/Peopl3s/clean-architecture-fastapi-project-template.git
-cd clean-architecture-fastapi-project-template
+git clone https://github.com/Peopl3s/clean-architecture-litestar-project-template.git
+cd clean-architecture-litestar-project-template
 
 # Use the template
 cookiecutter .
@@ -111,9 +111,9 @@ cookiecutter . --no-input \
 
 | Variable | Description | Default | Required |
 |----------|-------------|---------|----------|
-| `project_name` | Name of the project | "My FastAPI Project" | Yes |
+| `project_name` | Name of the project | "My Litestar Project" | Yes |
 | `project_slug` | Slugified project name (auto-generated) | - | No |
-| `project_description` | Short description of the project | "A modern FastAPI application..." | Yes |
+| `project_description` | Short description of the project | "A modern Litestar application..." | Yes |
 | `author_name` | Author's name | "Your Name" | Yes |
 | `author_email` | Author's email | "your.email@example.com" | Yes |
 | `github_username` | GitHub username | "yourusername" | Yes |
@@ -473,7 +473,7 @@ Services included:
 - **Database**: Database support (PostgreSQL, SQLite, or MySQL, optional)
 - **Caching System**: Caching support (Redis, KeyDB, Tarantool, or Dragonfly, optional)
 - **Message Broker**: Message broker support (Kafka/Zookeeper, RabbitMQ, or NATS, optional)
-- **Application**: FastAPI application
+- **Application**: Litestar application
 
 ## 📝 Implementation Examples
 
@@ -563,7 +563,7 @@ Want to contribute? Check out our [contribution guide](CONTRIBUTING.md) for guid
 
 ## 🙏 Acknowledgments
 
-- [FastAPI](https://fastapi.tiangolo.com/) for the excellent web framework
+- [Litestar](https://litestar.dev/) for the excellent web framework
 - [SQLAlchemy](https://www.sqlalchemy.org/) for the powerful ORM
 - [Dishka](https://github.com/reagento/dishka) for dependency injection
 - [Faststream](https://github.com/ag2ai/faststream) for the convenient work with message brokers

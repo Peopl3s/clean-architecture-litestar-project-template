@@ -1,6 +1,6 @@
 # Documentation
 
-This directory contains the Sphinx documentation for the Clean Architecture FastAPI Template.
+This directory contains the Sphinx documentation for the Clean Architecture Litestar Template.
 
 ## Building Documentation
 
