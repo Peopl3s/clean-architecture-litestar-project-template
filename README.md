@@ -12,7 +12,7 @@
 
 A comprehensive cookiecutter template for creating modern Litestar applications with clean architecture, Docker support, and best practices included.
 
-:electric_plug: FastAPI Clean Acrhitecture Project Template - https://github.com/Peopl3s/clean-architecture-fastapi-project-template
+:electric_plug: FastAPI Clean Architecture Project Template - https://github.com/Peopl3s/clean-architecture-fastapi-project-template
 
 ## 🚀 Features
 
@@ -171,7 +171,6 @@ cookiecutter . --no-input \
 │       ├── settings.py              # Main settings facade
 │       └── base.py                  # Backward compatibility wrapper
 ├── 📁 tests/                        # Test suite
-├── 📁 alembic/                      # Database migrations
 ├── 📁 docs/                         # Documentation
 ├── 📁 scripts/                      # Utility scripts
 ├── pyproject.toml                   # Project configuration
