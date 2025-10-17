@@ -1,4 +1,4 @@
-# :electric_plug: :jigsaw: Clean Architecture Litestar Project Template
+# :star2: :dizzy: Clean Architecture Litestar Project Template
 
 [![Python 3.9–3.13](https://img.shields.io/badge/Python-3.9--3.13-000000?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/downloads/)[![GitHub Stars](https://img.shields.io/github/stars/Peopl3s/clean-architecture-litestar-project-template?style=for-the-badge&logo=github&logoColor=white&color=000000)](https://github.com/Peopl3s/clean-architecture-litestar-project-template/stargazers)
 [![Last Commit](https://img.shields.io/github/last-commit/Peopl3s/clean-architecture-litestar-project-template?style=for-the-badge&color=000000)](https://github.com/Peopl3s/clean-architecture-litestar-project-template/commits/main)
