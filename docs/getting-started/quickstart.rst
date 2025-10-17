@@ -1,7 +1,7 @@
 Quick Start
 ===========
 
-Get up and running with the Clean Architecture FastAPI template in minutes.
+Get up and running with the Clean Architecture Litestar template in minutes.
 
 Create Your First Project
 --------------------------
@@ -16,7 +16,7 @@ Create Your First Project
 
 .. code-block:: bash
 
-   cookiecutter https://github.com/Peopl3s/clean-architecture-fastapi-project-template.git
+   cookiecutter https://github.com/Peopl3s/clean-architecture-litestar-project-template.git
 
 3. **Configure Your Project**
 
@@ -24,7 +24,7 @@ Answer the prompts with your project details. For a quick start, you can accept 
 
 .. code-block:: text
 
-   project_name [My FastAPI Project]: Todo API
+   project_name [My Litestar Project]: Todo API
    project_slug [todo_api]:
    project_description: A simple todo list API
    author_name: Your Name

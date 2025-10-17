@@ -1,7 +1,7 @@
 Installation
 ============
 
-This guide will help you install and use the Clean Architecture FastAPI template.
+This guide will help you install and use the Clean Architecture Litestar template.
 
 Prerequisites
 -------------
@@ -38,7 +38,7 @@ Create a new project directly from the GitHub repository:
 
 .. code-block:: bash
 
-   cookiecutter https://github.com/Peopl3s/clean-architecture-fastapi-project-template.git
+   cookiecutter https://github.com/Peopl3s/clean-architecture-litestar-project-template.git
 
 From Local Clone
 ~~~~~~~~~~~~~~~~
@@ -48,8 +48,8 @@ If you want to customize the template or work offline:
 .. code-block:: bash
 
    # Clone the template repository
-   git clone https://github.com/Peopl3s/clean-architecture-fastapi-project-template.git
-   cd clean-architecture-fastapi-project-template
+   git clone https://github.com/Peopl3s/clean-architecture-litestar-project-template.git
+   cd clean-architecture-litestar-project-template
 
    # Create a new project from the local template
    cookiecutter .
@@ -61,9 +61,9 @@ During project creation, you'll be prompted for various configuration options:
 
 .. code-block:: text
 
-   project_name [My FastAPI Project]: My Awesome API
+   project_name [My Litestar Project]: My Awesome API
    project_slug [my_awesome_api]:
-   project_description [A modern FastAPI application]: An awesome API
+   project_description [A modern Litestar application]: An awesome API
    author_name [Your Name]: John Doe
    author_email [your.email@example.com]: john@example.com
    github_username [yourusername]: johndoe
@@ -85,7 +85,7 @@ For automation or CI/CD, use non-interactive mode:
 
 .. code-block:: bash
 
-   cookiecutter https://github.com/Peopl3s/clean-architecture-fastapi-project-template.git \
+   cookiecutter https://github.com/Peopl3s/clean-architecture-litestar-project-template.git \
      --no-input \
      project_name="My Awesome API" \
      project_description="An awesome API for my project" \

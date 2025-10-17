@@ -1,7 +1,7 @@
 License
 =======
 
-The Clean Architecture FastAPI Template is released under the MIT License.
+The Clean Architecture Litestar Template is released under the MIT License.
 
 MIT License
 -----------
@@ -46,11 +46,11 @@ Third-Party Licenses
 
 This template uses several third-party packages, each with their own licenses:
 
-FastAPI
-~~~~~~~
+Litestar
+~~~~~~~~
 
 * **License**: MIT
-* **URL**: https://github.com/tiangolo/fastapi
+* **URL**: https://github.com/litestar-org/litestar
 
 SQLAlchemy
 ~~~~~~~~~~

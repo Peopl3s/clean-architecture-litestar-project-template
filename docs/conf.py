@@ -1,11 +1,11 @@
-"""Sphinx configuration file for Clean Architecture FastAPI Template."""
+"""Sphinx configuration file for Clean Architecture Litestar Template."""
 
 import os
 import sys
 from datetime import datetime
 
 # -- Project information -----------------------------------------------------
-project = "Clean Architecture FastAPI Template"
+project = "Clean Architecture Litestar Template"
 copyright = f"{datetime.now().year}, Peopl3s"
 author = "Peopl3s"
 release = "1.0.0"
@@ -75,7 +75,7 @@ napoleon_use_rtype = True
 # Intersphinx mapping
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
-    "fastapi": ("https://fastapi.tiangolo.com", None),
+    "litestar": ("https://litestar.dev", None),
     "cookiecutter": ("https://cookiecutter.readthedocs.io/en/stable/", None),
 }
 
@@ -98,7 +98,7 @@ copybutton_prompt_is_regexp = True
 html_context = {
     "display_github": True,
     "github_user": "Peopl3s",
-    "github_repo": "clean-architecture-fastapi-project-template",
+    "github_repo": "clean-architecture-litestar-project-template",
     "github_version": "main",
     "conf_py_path": "/docs/",
 }

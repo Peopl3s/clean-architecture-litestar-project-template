@@ -102,7 +102,7 @@ The presentation layer handles user interfaces and external communication.
 **Components:**
 
 - **REST API** (`src/{{cookiecutter.project_slug}}/presentation/api/rest/`):
-  - ``Controllers``: FastAPI endpoint handlers
+  - ``Controllers``: Litestar endpoint handlers
   - ``Schemas``: Pydantic models for request/response validation
   - ``Mappers``: DTO to schema transformation
 
@@ -169,7 +169,7 @@ Data Flow Example
 Here's how a typical request flows through the architecture:
 
 1. **HTTP Request** → Presentation Layer
-   - FastAPI controller receives request
+   - Litestar controller receives request
    - Validates request schema
 
 2. **Controller** → Application Layer

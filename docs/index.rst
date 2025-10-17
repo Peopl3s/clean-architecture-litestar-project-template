@@ -1,15 +1,15 @@
-Clean Architecture FastAPI Project Template
+Clean Architecture Litestar Project Template
 ===========================================
 
-A comprehensive cookiecutter template for creating modern FastAPI applications with clean architecture, Docker support, and best practices included.
+A comprehensive cookiecutter template for creating modern Litestar applications with clean architecture, Docker support, and best practices included.
 
 .. image:: https://img.shields.io/badge/python-3.12+-blue.svg
    :target: https://www.python.org/downloads/
    :alt: Python Version
 
-.. image:: https://img.shields.io/badge/FastAPI-0.117+-green.svg
-   :target: https://fastapi.tiangolo.com
-   :alt: FastAPI
+.. image:: https://img.shields.io/badge/Litestar-2.0+-green.svg
+   :target: https://litestar.dev
+   :alt: Litestar
 
 .. image:: https://img.shields.io/badge/code%20style-ruff-000000.svg
    :target: https://github.com/astral-sh/ruff
@@ -18,12 +18,12 @@ A comprehensive cookiecutter template for creating modern FastAPI applications w
 Overview
 --------
 
-This cookiecutter template provides a production-ready foundation for building FastAPI applications following Clean Architecture principles. It includes everything you need to start developing a scalable, maintainable web application.
+This cookiecutter template provides a production-ready foundation for building Litestar applications following Clean Architecture principles. It includes everything you need to start developing a scalable, maintainable web application.
 
 **Key Features:**
 
 * 🏗️ **Clean Architecture** - Domain-Driven Design with clear separation of concerns
-* ⚡ **FastAPI** - High-performance async web framework
+* ⚡ **Litestar** - High-performance async web framework
 * 🗄️ **Multiple Database Support** - PostgreSQL, MySQL, or SQLite
 * 🔄 **Message Brokers** - Kafka, RabbitMQ, or NATS integration
 * 💾 **Caching** - Redis, KeyDB, Tarantool, or Dragonfly support
@@ -40,7 +40,7 @@ Install cookiecutter and create a new project:
 .. code-block:: bash
 
    pip install cookiecutter
-   cookiecutter https://github.com/Peopl3s/clean-architecture-fastapi-project-template.git
+   cookiecutter https://github.com/Peopl3s/clean-architecture-litestar-project-template.git
 
 Follow the prompts to configure your project, then:
 
