@@ -1,0 +1,88 @@
+Cookiecutter Hooks
+==================
+
+Hooks allow you to run Python code before and after project generation.
+
+Hook Types
+----------
+
+Pre-generation Hook
+~~~~~~~~~~~~~~~~~~~
+
+File: ``hooks/pre_gen_project.py``
+
+Runs **before** the project is generated. Use for:
+
+* Validating input
+* Checking prerequisites
+* Aborting generation if needed
+
+Post-generation Hook
+~~~~~~~~~~~~~~~~~~~~
+
+File: ``hooks/post_gen_project.py``
+
+Runs **after** the project is generated. Use for:
+
+* Initializing git repository
+* Installing dependencies
+* Removing unused files
+* Running setup scripts
+
+Examples
+--------
+
+Validation Hook
+~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   # hooks/pre_gen_project.py
+   import re
+   import sys
+   
+   project_slug = "{{ cookiecutter.project_slug }}"
+   
+   if not re.match(r'^[a-z][a-z0-9_]+$', project_slug):
+       print(f"ERROR: '{project_slug}' is not a valid Python package name")
+       sys.exit(1)
+
+Cleanup Hook
+~~~~~~~~~~~~
+
+.. code-block:: python
+
+   # hooks/post_gen_project.py
+   import os
+   
+   # Remove Docker files if not needed
+   if "{{ cookiecutter.add_docker }}" != "y":
+       os.remove("Dockerfile")
+       os.remove("docker-compose.yml")
+       os.remove(".dockerignore")
+
+Git Initialization
+~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   # hooks/post_gen_project.py
+   import subprocess
+   
+   subprocess.run(["git", "init"])
+   subprocess.run(["git", "add", "."])
+   subprocess.run(["git", "commit", "-m", "Initial commit"])
+
+Best Practices
+--------------
+
+* Keep hooks simple
+* Handle errors gracefully
+* Provide clear error messages
+* Test hooks thoroughly
+
+See Also
+--------
+
+* :doc:`customization` - Template customization
+* :doc:`../development/contributing` - Contributing

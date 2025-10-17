@@ -1,0 +1,550 @@
+Database
+========
+
+The template supports multiple database backends with async SQLAlchemy and Alembic migrations.
+
+Supported Databases
+-------------------
+
+* **PostgreSQL** - Recommended for production (via asyncpg)
+* **MySQL** - Alternative production database (via aiomysql)
+* **SQLite** - Development and testing (via aiosqlite)
+
+Database Setup
+--------------
+
+PostgreSQL
+~~~~~~~~~~
+
+**Installation:**
+
+.. code-block:: bash
+
+   # macOS
+   brew install postgresql
+   
+   # Ubuntu
+   sudo apt-get install postgresql
+
+**Configuration:**
+
+.. code-block:: bash
+
+   DATABASE_URL=postgresql+asyncpg://user:password@localhost:5432/dbname
+
+**Docker:**
+
+.. code-block:: yaml
+
+   services:
+     postgres:
+       image: postgres:16-alpine
+       environment:
+         POSTGRES_DB: mydb
+         POSTGRES_USER: user
+         POSTGRES_PASSWORD: password
+       ports:
+         - "5432:5432"
+
+MySQL
+~~~~~
+
+**Configuration:**
+
+.. code-block:: bash
+
+   DATABASE_URL=mysql+aiomysql://user:password@localhost:3306/dbname
+
+**Docker:**
+
+.. code-block:: yaml
+
+   services:
+     mysql:
+       image: mysql:8
+       environment:
+         MYSQL_DATABASE: mydb
+         MYSQL_USER: user
+         MYSQL_PASSWORD: password
+         MYSQL_ROOT_PASSWORD: rootpassword
+       ports:
+         - "3306:3306"
+
+SQLite
+~~~~~~
+
+**Configuration:**
+
+.. code-block:: bash
+
+   DATABASE_URL=sqlite+aiosqlite:///./database.db
+
+No additional setup required.
+
+SQLAlchemy Configuration
+------------------------
+
+Base Model
+~~~~~~~~~~
+
+Location: ``src/{project}/infrastructure/database/base.py``
+
+.. code-block:: python
+
+   from sqlalchemy.orm import DeclarativeBase
+   
+   class Base(DeclarativeBase):
+       """Base class for all database models."""
+       pass
+
+Session Management
+~~~~~~~~~~~~~~~~~~
+
+Location: ``src/{project}/infrastructure/database/session.py``
+
+.. code-block:: python
+
+   from sqlalchemy.ext.asyncio import (
+       AsyncSession,
+       async_sessionmaker,
+       create_async_engine,
+   )
+   
+   engine = create_async_engine(
+       settings.database_url,
+       echo=settings.db_echo,
+       pool_size=settings.db_pool_size,
+       max_overflow=settings.db_max_overflow,
+   )
+   
+   async_session_maker = async_sessionmaker(
+       engine,
+       class_=AsyncSession,
+       expire_on_commit=False,
+   )
+
+Creating Models
+---------------
+
+Domain Entity
+~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   # domain/entities/user.py
+   from dataclasses import dataclass
+   from datetime import datetime
+   
+   @dataclass
+   class User:
+       """User domain entity."""
+       id: int
+       username: str
+       email: str
+       created_at: datetime
+       updated_at: datetime | None = None
+
+Database Model
+~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   # infrastructure/database/models/user.py
+   from sqlalchemy import Column, Integer, String, DateTime
+   from sqlalchemy.sql import func
+   from infrastructure.database.base import Base
+   
+   class UserModel(Base):
+       """User database model."""
+       __tablename__ = "users"
+       
+       id = Column(Integer, primary_key=True, autoincrement=True)
+       username = Column(String(50), unique=True, nullable=False, index=True)
+       email = Column(String(100), unique=True, nullable=False, index=True)
+       created_at = Column(DateTime, server_default=func.now(), nullable=False)
+       updated_at = Column(DateTime, onupdate=func.now())
+
+Relationships
+~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   from sqlalchemy import ForeignKey
+   from sqlalchemy.orm import relationship
+   
+   class UserModel(Base):
+       __tablename__ = "users"
+       
+       id = Column(Integer, primary_key=True)
+       posts = relationship("PostModel", back_populates="author")
+   
+   class PostModel(Base):
+       __tablename__ = "posts"
+       
+       id = Column(Integer, primary_key=True)
+       user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+       author = relationship("UserModel", back_populates="posts")
+
+Repository Pattern
+------------------
+
+Interface Definition
+~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   # application/interfaces/repositories.py
+   from typing import Protocol, Optional
+   from domain.entities.user import User
+   
+   class IUserRepository(Protocol):
+       """User repository interface."""
+       
+       async def get(self, user_id: int) -> Optional[User]:
+           """Get user by ID."""
+           ...
+       
+       async def create(self, user: User) -> User:
+           """Create new user."""
+           ...
+       
+       async def update(self, user: User) -> User:
+           """Update existing user."""
+           ...
+       
+       async def delete(self, user_id: int) -> None:
+           """Delete user."""
+           ...
+
+Repository Implementation
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   # infrastructure/database/repositories/user_repository.py
+   from sqlalchemy import select
+   from sqlalchemy.ext.asyncio import AsyncSession
+   
+   from domain.entities.user import User
+   from infrastructure.database.models.user import UserModel
+   
+   class UserRepository:
+       """User repository implementation."""
+       
+       def __init__(self, session: AsyncSession):
+           self._session = session
+       
+       async def get(self, user_id: int) -> Optional[User]:
+           """Get user by ID."""
+           stmt = select(UserModel).where(UserModel.id == user_id)
+           result = await self._session.execute(stmt)
+           model = result.scalar_one_or_none()
+           return self._to_entity(model) if model else None
+       
+       async def create(self, user: User) -> User:
+           """Create new user."""
+           model = UserModel(
+               username=user.username,
+               email=user.email,
+           )
+           self._session.add(model)
+           await self._session.flush()
+           await self._session.refresh(model)
+           return self._to_entity(model)
+       
+       async def update(self, user: User) -> User:
+           """Update existing user."""
+           stmt = select(UserModel).where(UserModel.id == user.id)
+           result = await self._session.execute(stmt)
+           model = result.scalar_one()
+           
+           model.username = user.username
+           model.email = user.email
+           
+           await self._session.flush()
+           await self._session.refresh(model)
+           return self._to_entity(model)
+       
+       async def delete(self, user_id: int) -> None:
+           """Delete user."""
+           stmt = select(UserModel).where(UserModel.id == user_id)
+           result = await self._session.execute(stmt)
+           model = result.scalar_one()
+           await self._session.delete(model)
+       
+       @staticmethod
+       def _to_entity(model: UserModel) -> User:
+           """Convert model to entity."""
+           return User(
+               id=model.id,
+               username=model.username,
+               email=model.email,
+               created_at=model.created_at,
+               updated_at=model.updated_at,
+           )
+
+Database Migrations
+-------------------
+
+Alembic is used for database schema migrations.
+
+Create Migration
+~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Auto-generate migration
+   make migration msg="Add users table"
+   
+   # Or manually
+   uv run alembic revision --autogenerate -m "Add users table"
+
+This creates a file in ``alembic/versions/``:
+
+.. code-block:: python
+
+   """Add users table
+   
+   Revision ID: abc123
+   """
+   from alembic import op
+   import sqlalchemy as sa
+   
+   def upgrade() -> None:
+       op.create_table(
+           'users',
+           sa.Column('id', sa.Integer(), nullable=False),
+           sa.Column('username', sa.String(50), nullable=False),
+           sa.Column('email', sa.String(100), nullable=False),
+           sa.PrimaryKeyConstraint('id')
+       )
+   
+   def downgrade() -> None:
+       op.drop_table('users')
+
+Apply Migrations
+~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Apply all pending migrations
+   make migrate
+   
+   # Or manually
+   uv run alembic upgrade head
+
+Rollback Migration
+~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Rollback one migration
+   make migrate-downgrade
+   
+   # Rollback to specific version
+   uv run alembic downgrade abc123
+
+Migration History
+~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # View history
+   make migrate-history
+   
+   # View current version
+   make migrate-current
+
+Query Patterns
+--------------
+
+Basic Queries
+~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   from sqlalchemy import select
+   
+   # Get by ID
+   stmt = select(UserModel).where(UserModel.id == user_id)
+   result = await session.execute(stmt)
+   user = result.scalar_one_or_none()
+   
+   # Get all
+   stmt = select(UserModel)
+   result = await session.execute(stmt)
+   users = result.scalars().all()
+   
+   # Filter
+   stmt = select(UserModel).where(UserModel.username == "john")
+   result = await session.execute(stmt)
+   user = result.scalar_one()
+
+Pagination
+~~~~~~~~~~
+
+.. code-block:: python
+
+   def paginate(stmt, page: int, size: int):
+       offset = (page - 1) * size
+       return stmt.limit(size).offset(offset)
+   
+   stmt = select(UserModel).order_by(UserModel.id)
+   stmt = paginate(stmt, page=1, size=10)
+   result = await session.execute(stmt)
+   users = result.scalars().all()
+
+Joins
+~~~~~
+
+.. code-block:: python
+
+   from sqlalchemy.orm import selectinload
+   
+   # Eager loading
+   stmt = select(UserModel).options(
+       selectinload(UserModel.posts)
+   )
+   result = await session.execute(stmt)
+   user = result.scalar_one()
+
+Aggregations
+~~~~~~~~~~~~
+
+.. code-block:: python
+
+   from sqlalchemy import func
+   
+   # Count
+   stmt = select(func.count(UserModel.id))
+   result = await session.execute(stmt)
+   count = result.scalar()
+   
+   # Group by
+   stmt = select(
+       UserModel.created_at,
+       func.count(UserModel.id)
+   ).group_by(UserModel.created_at)
+
+Transactions
+------------
+
+Auto-commit
+~~~~~~~~~~~
+
+.. code-block:: python
+
+   async with async_session_maker() as session:
+       user = UserModel(username="john", email="john@example.com")
+       session.add(user)
+       await session.commit()  # Explicit commit
+
+Manual Transaction
+~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   async with async_session_maker() as session:
+       async with session.begin():
+           user = UserModel(username="john")
+           session.add(user)
+           # Auto-commits on exit
+
+Rollback on Error
+~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   async with async_session_maker() as session:
+       try:
+           async with session.begin():
+               # Operations
+               pass
+       except Exception:
+           await session.rollback()
+           raise
+
+Best Practices
+--------------
+
+1. **Use Async Everywhere**
+   
+   * Always use ``async/await``
+   * Use async drivers (asyncpg, aiomysql, aiosqlite)
+   * Use ``AsyncSession``
+
+2. **Connection Pooling**
+   
+   * Configure appropriate pool size
+   * Set max_overflow
+   * Use pool_pre_ping for health checks
+
+3. **Indexes**
+   
+   * Add indexes to frequently queried columns
+   * Use composite indexes for multi-column queries
+   * Monitor query performance
+
+4. **Migrations**
+   
+   * Review auto-generated migrations
+   * Test migrations before applying
+   * Keep migrations reversible
+   * Version control migration files
+
+5. **Repository Pattern**
+   
+   * One repository per entity
+   * Keep database logic in repositories
+   * Return domain entities, not models
+   * Use interfaces for testability
+
+Troubleshooting
+---------------
+
+Connection Errors
+~~~~~~~~~~~~~~~~~
+
+**Problem:** Can't connect to database
+
+**Solutions:**
+
+1. Verify database is running
+2. Check connection string
+3. Verify credentials
+4. Check network/firewall
+5. Test with database client
+
+Migration Errors
+~~~~~~~~~~~~~~~~
+
+**Problem:** Migration fails
+
+**Solutions:**
+
+1. Check database state
+2. Review migration file
+3. Rollback and retry
+4. Check for conflicts
+5. Manual intervention if needed
+
+Performance Issues
+~~~~~~~~~~~~~~~~~~
+
+**Problem:** Slow queries
+
+**Solutions:**
+
+1. Add appropriate indexes
+2. Use eager loading for relationships
+3. Implement pagination
+4. Optimize queries
+5. Use database profiling tools
+
+See Also
+--------
+
+* :doc:`../development/migrations` - Migration guide
+* :doc:`configuration` - Configuration guide
+* :doc:`testing` - Testing with databases
+* :doc:`../reference/makefile-commands` - Database commands

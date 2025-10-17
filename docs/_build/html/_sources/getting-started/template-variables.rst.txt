@@ -1,0 +1,353 @@
+Template Variables
+==================
+
+This page describes all configuration variables available when creating a project from the template.
+
+Overview
+--------
+
+The template uses Cookiecutter variables to customize the generated project. These variables are defined in ``cookiecutter.json`` and can be set interactively or via command-line arguments.
+
+Project Information
+-------------------
+
+project_name
+~~~~~~~~~~~~
+
+* **Type**: String
+* **Default**: ``My FastAPI Project``
+* **Description**: The human-readable name of your project
+* **Example**: ``Todo API``, ``E-commerce Backend``
+
+.. code-block:: bash
+
+   project_name [My FastAPI Project]: My Awesome API
+
+project_slug
+~~~~~~~~~~~~
+
+* **Type**: String (auto-generated)
+* **Default**: Derived from ``project_name``
+* **Description**: Python package name (lowercase, underscores)
+* **Example**: ``my_awesome_api``, ``todo_api``
+
+.. note::
+   This is automatically generated from ``project_name`` by converting to lowercase and replacing spaces/hyphens with underscores.
+
+project_description
+~~~~~~~~~~~~~~~~~~~
+
+* **Type**: String
+* **Default**: ``A modern FastAPI application with clean architecture``
+* **Description**: Short description of your project
+* **Used in**: README, package metadata, API documentation
+
+Author Information
+------------------
+
+author_name
+~~~~~~~~~~~
+
+* **Type**: String
+* **Default**: ``Your Name``
+* **Description**: Your full name or organization name
+* **Used in**: License, documentation, package metadata
+
+author_email
+~~~~~~~~~~~~
+
+* **Type**: String
+* **Default**: ``your.email@example.com``
+* **Description**: Contact email address
+* **Used in**: Package metadata, documentation
+
+github_username
+~~~~~~~~~~~~~~~
+
+* **Type**: String
+* **Default**: ``yourusername``
+* **Description**: GitHub username or organization
+* **Used in**: CI/CD workflows, documentation links
+
+Version Information
+-------------------
+
+version
+~~~~~~~
+
+* **Type**: String
+* **Default**: ``0.1.0``
+* **Description**: Initial version number (SemVer format)
+* **Example**: ``0.1.0``, ``1.0.0``
+
+python_version
+~~~~~~~~~~~~~~
+
+* **Type**: String
+* **Default**: ``3.12``
+* **Description**: Minimum Python version required
+* **Options**: ``3.10``, ``3.11``, ``3.12``
+
+API Configuration
+-----------------
+
+api_title
+~~~~~~~~~
+
+* **Type**: String (auto-generated)
+* **Default**: ``{{ cookiecutter.project_name }} API``
+* **Description**: API title shown in OpenAPI documentation
+
+api_version
+~~~~~~~~~~~
+
+* **Type**: String
+* **Default**: ``1.0.0``
+* **Description**: API version (can differ from package version)
+
+api_description
+~~~~~~~~~~~~~~~
+
+* **Type**: String (auto-generated)
+* **Default**: ``API for {{ cookiecutter.project_description }}``
+* **Description**: API description in OpenAPI docs
+
+domain_name
+~~~~~~~~~~~
+
+* **Type**: String
+* **Default**: ``example.com``
+* **Description**: Domain name for production deployment
+* **Used in**: CORS settings, SSL configuration
+
+Database Configuration
+----------------------
+
+use_database
+~~~~~~~~~~~~
+
+* **Type**: Choice
+* **Default**: ``postgresql``
+* **Options**:
+  
+  * ``none`` - No database
+  * ``postgresql`` - PostgreSQL with asyncpg
+  * ``sqlite`` - SQLite with aiosqlite
+  * ``mysql`` - MySQL with aiomysql
+
+* **Description**: Database backend to use
+
+.. code-block:: bash
+
+   use_database [postgresql]: postgresql
+
+**Includes when selected:**
+
+* SQLAlchemy async engine configuration
+* Alembic migrations setup
+* Docker service (except SQLite)
+* Database models and repositories
+
+database_name
+~~~~~~~~~~~~~
+
+* **Type**: String (auto-generated)
+* **Default**: ``{{ cookiecutter.project_slug }}``
+* **Description**: Database name
+
+database_user
+~~~~~~~~~~~~~
+
+* **Type**: String (auto-generated)
+* **Default**: ``{{ cookiecutter.project_slug }}_user``
+* **Description**: Database username
+
+database_password
+~~~~~~~~~~~~~~~~~
+
+* **Type**: String (auto-generated)
+* **Default**: ``{{ cookiecutter.project_slug }}_password``
+* **Description**: Default database password (change in production!)
+
+Cache Configuration
+-------------------
+
+use_cache
+~~~~~~~~~
+
+* **Type**: Choice
+* **Default**: ``redis``
+* **Options**:
+  
+  * ``none`` - No caching
+  * ``redis`` - Redis cache
+  * ``keydb`` - KeyDB (Redis alternative)
+  * ``tarantool`` - Tarantool in-memory database
+  * ``dragonfly`` - Dragonfly (Redis alternative)
+
+* **Description**: Caching backend to use
+
+**Includes when selected:**
+
+* Cache client configuration
+* Docker service
+* Cache repository implementation
+* Connection pooling
+
+redis_password
+~~~~~~~~~~~~~~
+
+* **Type**: String
+* **Default**: ``redis_password``
+* **Description**: Redis/KeyDB/Dragonfly password
+
+Message Broker Configuration
+-----------------------------
+
+use_broker
+~~~~~~~~~~
+
+* **Type**: Choice
+* **Default**: ``none``
+* **Options**:
+  
+  * ``none`` - No message broker
+  * ``kafka`` - Apache Kafka
+  * ``rabbitmq`` - RabbitMQ
+  * ``nats`` - NATS messaging
+
+* **Description**: Message broker for async communication
+
+**Includes when selected:**
+
+* FastStream integration
+* Docker service
+* Producer/Consumer examples
+* Event handlers
+
+Feature Flags
+-------------
+
+add_docker
+~~~~~~~~~~
+
+* **Type**: Boolean (y/n)
+* **Default**: ``y``
+* **Description**: Include Docker and Docker Compose configuration
+
+**Includes:**
+
+* ``Dockerfile`` with multi-stage builds
+* ``docker-compose.yml`` with all services
+* Docker-specific Makefile commands
+* ``.dockerignore``
+
+add_tests
+~~~~~~~~~
+
+* **Type**: Boolean (y/n)
+* **Default**: ``y``
+* **Description**: Include test suite and testing infrastructure
+
+**Includes:**
+
+* ``tests/`` directory structure
+* pytest configuration
+* Test fixtures and utilities
+* Example tests
+* Coverage configuration
+
+add_docs
+~~~~~~~~
+
+* **Type**: Boolean (y/n)
+* **Default**: ``y``
+* **Description**: Include documentation files
+
+**Includes:**
+
+* ``docs/`` directory
+* Markdown documentation files
+* API documentation setup
+* Usage guides
+
+add_precommit
+~~~~~~~~~~~~~
+
+* **Type**: Boolean (y/n)
+* **Default**: ``y``
+* **Description**: Include pre-commit hooks configuration
+
+**Includes:**
+
+* ``.pre-commit-config.yaml``
+* Git hooks for code quality
+* Automatic formatting on commit
+* Linting checks
+
+License
+-------
+
+license_type
+~~~~~~~~~~~~
+
+* **Type**: Choice
+* **Default**: ``MIT``
+* **Options**:
+  
+  * ``MIT`` - MIT License
+  * ``Apache-2.0`` - Apache License 2.0
+  * ``GPL-3.0`` - GNU GPL v3
+  * ``BSD-3-Clause`` - BSD 3-Clause License
+  * ``None`` - No license file
+
+* **Description**: Open source license for your project
+
+Example Configurations
+----------------------
+
+Minimal Setup
+~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   cookiecutter . --no-input \
+     project_name="Simple API" \
+     use_database="sqlite" \
+     use_cache="none" \
+     use_broker="none" \
+     add_docker="n"
+
+Full-Featured Setup
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   cookiecutter . --no-input \
+     project_name="Enterprise API" \
+     use_database="postgresql" \
+     use_cache="redis" \
+     use_broker="kafka" \
+     add_docker="y" \
+     add_tests="y" \
+     add_docs="y" \
+     add_precommit="y"
+
+Microservice Setup
+~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   cookiecutter . --no-input \
+     project_name="User Service" \
+     use_database="postgresql" \
+     use_cache="redis" \
+     use_broker="rabbitmq" \
+     add_docker="y"
+
+See Also
+--------
+
+* :doc:`installation` - Installation guide
+* :doc:`quickstart` - Quick start guide
+* :doc:`../user-guide/configuration` - Runtime configuration

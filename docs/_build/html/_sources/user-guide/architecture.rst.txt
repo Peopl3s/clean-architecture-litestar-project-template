@@ -1,0 +1,356 @@
+Architecture
+============
+
+This template implements Clean Architecture principles, providing a scalable and maintainable foundation for FastAPI applications.
+
+Clean Architecture Overview
+----------------------------
+
+Clean Architecture separates concerns into layers, with dependencies pointing inward toward the domain layer. This creates a system that is:
+
+* **Independent of frameworks** - Business logic doesn't depend on FastAPI
+* **Testable** - Business rules can be tested without UI, database, or external services
+* **Independent of UI** - The UI can change without affecting business rules
+* **Independent of database** - Business rules don't know about the database
+* **Independent of external services** - Business rules don't depend on external APIs
+
+Architecture Layers
+-------------------
+
+.. mermaid::
+
+   graph TB
+       A[Presentation Layer] --> B[Application Layer]
+       B --> C[Domain Layer]
+       A --> D[Infrastructure Layer]
+       B --> D
+       D --> C
+
+       style C fill:#90EE90
+       style B fill:#87CEEB
+       style A fill:#FFB6C1
+       style D fill:#FFD700
+
+1. Domain Layer (Core)
+~~~~~~~~~~~~~~~~~~~~~~
+
+**Location**: ``src/{project}/domain/``
+
+The innermost layer containing business entities and rules. This layer:
+
+* Has **no dependencies** on other layers
+* Contains pure business logic
+* Defines entities, value objects, and domain exceptions
+* Is framework-agnostic
+
+**Components:**
+
+* **Entities** (``domain/entities/``) - Business objects with identity
+* **Value Objects** (``domain/value_objects/``) - Immutable objects without identity
+* **Domain Exceptions** (``domain/exceptions.py``) - Business rule violations
+
+**Example Entity:**
+
+.. code-block:: python
+
+   # domain/entities/user.py
+   from dataclasses import dataclass
+   from datetime import datetime
+
+   @dataclass
+   class User:
+       """User domain entity."""
+       id: int
+       username: str
+       email: str
+       created_at: datetime
+       
+       def is_active(self) -> bool:
+           """Business rule: user activity check."""
+           return self.created_at is not None
+
+2. Application Layer (Use Cases)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Location**: ``src/{project}/application/``
+
+Contains application-specific business rules and orchestrates the flow of data. This layer:
+
+* Depends only on the **Domain Layer**
+* Implements use cases (application business rules)
+* Coordinates domain objects
+* Defines interfaces (ports) for external services
+
+**Components:**
+
+* **Use Cases** (``application/use_cases/``) - Application business logic
+* **DTOs** (``application/dto/``) - Data Transfer Objects
+* **Interfaces** (``application/interfaces/``) - Abstract ports for infrastructure
+* **Mappers** (``application/mappers.py``) - Convert between layers
+* **Exceptions** (``application/exceptions.py``) - Application-level errors
+
+**Example Use Case:**
+
+.. code-block:: python
+
+   # application/use_cases/create_user.py
+   from domain.entities.user import User
+   from application.interfaces.repositories import IUserRepository
+   from application.dto.user import CreateUserDTO
+
+   class CreateUserUseCase:
+       def __init__(self, user_repository: IUserRepository):
+           self._repository = user_repository
+       
+       async def execute(self, dto: CreateUserDTO) -> User:
+           """Create a new user."""
+           # Business logic here
+           user = User(
+               id=0,  # Will be set by database
+               username=dto.username,
+               email=dto.email,
+               created_at=datetime.now()
+           )
+           return await self._repository.create(user)
+
+3. Infrastructure Layer (Adapters)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Location**: ``src/{project}/infrastructure/``
+
+Implements interfaces defined by the application layer. This layer:
+
+* Depends on **Application** and **Domain** layers
+* Implements external service adapters
+* Contains framework-specific code
+* Handles data persistence, caching, messaging, etc.
+
+**Components:**
+
+* **Database** (``infrastructure/database/``)
+  
+  * Models (SQLAlchemy)
+  * Repositories (implementations)
+  * Migrations (Alembic)
+
+* **Cache** (``infrastructure/cache/``)
+  
+  * Cache clients
+  * Cache repositories
+
+* **Message Brokers** (``infrastructure/broker/``)
+  
+  * Producers
+  * Consumers
+
+* **External Services** (``infrastructure/external/``)
+  
+  * API clients
+  * Third-party integrations
+
+**Example Repository:**
+
+.. code-block:: python
+
+   # infrastructure/database/repositories/user_repository.py
+   from sqlalchemy.ext.asyncio import AsyncSession
+   from application.interfaces.repositories import IUserRepository
+   from domain.entities.user import User
+   from infrastructure.database.models.user import UserModel
+
+   class UserRepository(IUserRepository):
+       def __init__(self, session: AsyncSession):
+           self._session = session
+       
+       async def create(self, user: User) -> User:
+           """Persist user to database."""
+           model = UserModel(
+               username=user.username,
+               email=user.email
+           )
+           self._session.add(model)
+           await self._session.flush()
+           return self._map_to_entity(model)
+
+4. Presentation Layer (Controllers)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Location**: ``src/{project}/presentation/``
+
+Handles HTTP requests and responses. This layer:
+
+* Depends on **Application Layer**
+* Contains FastAPI routers and endpoints
+* Handles request validation
+* Formats responses
+
+**Components:**
+
+* **API Routes** (``presentation/api/``) - FastAPI routers
+* **Schemas** (``presentation/schemas/``) - Pydantic models for API
+* **Dependencies** (``presentation/dependencies/``) - FastAPI dependencies
+* **Middleware** (``presentation/middleware/``) - Request/response processing
+
+**Example Endpoint:**
+
+.. code-block:: python
+
+   # presentation/api/v1/users.py
+   from fastapi import APIRouter, Depends
+   from dishka.integrations.fastapi import FromDishka
+   
+   from application.use_cases.create_user import CreateUserUseCase
+   from presentation.schemas.user import UserCreateSchema, UserSchema
+
+   router = APIRouter(prefix="/users", tags=["users"])
+
+   @router.post("/", response_model=UserSchema)
+   async def create_user(
+       data: UserCreateSchema,
+       use_case: FromDishka[CreateUserUseCase],
+   ):
+       """Create a new user."""
+       user = await use_case.execute(data.to_dto())
+       return UserSchema.from_entity(user)
+
+Dependency Flow
+---------------
+
+.. mermaid::
+
+   graph LR
+       A[HTTP Request] --> B[Presentation]
+       B --> C[Application Use Case]
+       C --> D[Domain Entity]
+       C --> E[Infrastructure Repository]
+       E --> D
+       E --> F[Database]
+
+1. HTTP request arrives at **Presentation** layer
+2. **Presentation** validates input and calls **Application** use case
+3. **Use Case** orchestrates **Domain** entities
+4. **Use Case** uses **Infrastructure** repositories
+5. **Repository** persists/retrieves data
+6. Response flows back through layers
+
+Dependency Injection
+--------------------
+
+The template uses **Dishka** for dependency injection, which:
+
+* Manages object lifecycles
+* Resolves dependencies automatically
+* Supports async operations
+* Integrates with FastAPI
+
+**Container Setup:**
+
+.. code-block:: python
+
+   # config/di.py
+   from dishka import Provider, Scope, provide
+   
+   class ApplicationProvider(Provider):
+       @provide(scope=Scope.REQUEST)
+       def get_user_repository(
+           self, session: AsyncSession
+       ) -> IUserRepository:
+           return UserRepository(session)
+       
+       @provide(scope=Scope.REQUEST)
+       def get_create_user_use_case(
+           self, repo: IUserRepository
+       ) -> CreateUserUseCase:
+           return CreateUserUseCase(repo)
+
+**Usage in Endpoints:**
+
+.. code-block:: python
+
+   from dishka.integrations.fastapi import FromDishka
+
+   @router.post("/users")
+   async def create_user(
+       use_case: FromDishka[CreateUserUseCase],  # Auto-injected
+   ):
+       return await use_case.execute(...)
+
+Benefits of This Architecture
+------------------------------
+
+Testability
+~~~~~~~~~~~
+
+Each layer can be tested independently:
+
+.. code-block:: python
+
+   # Test domain logic without infrastructure
+   def test_user_is_active():
+       user = User(id=1, username="test", email="test@example.com", 
+                   created_at=datetime.now())
+       assert user.is_active()
+
+   # Test use case with mocked repository
+   async def test_create_user_use_case():
+       mock_repo = Mock(IUserRepository)
+       use_case = CreateUserUseCase(mock_repo)
+       await use_case.execute(dto)
+       mock_repo.create.assert_called_once()
+
+Maintainability
+~~~~~~~~~~~~~~~
+
+* Clear separation of concerns
+* Easy to locate and modify code
+* Changes in one layer don't affect others
+* New features follow established patterns
+
+Scalability
+~~~~~~~~~~~
+
+* Easy to add new use cases
+* Simple to swap implementations (e.g., change database)
+* Can extract layers into microservices
+* Supports horizontal scaling
+
+Best Practices
+--------------
+
+1. **Keep Domain Pure**
+   
+   * No framework dependencies
+   * No infrastructure code
+   * Pure business logic only
+
+2. **Use Interfaces**
+   
+   * Define ports in application layer
+   * Implement adapters in infrastructure
+   * Enables easy testing and swapping
+
+3. **Dependency Rule**
+   
+   * Dependencies point inward
+   * Inner layers know nothing about outer layers
+   * Use dependency injection
+
+4. **Single Responsibility**
+   
+   * Each class has one reason to change
+   * Use cases do one thing
+   * Repositories handle one entity
+
+5. **Don't Skip Layers**
+   
+   * Don't call infrastructure from presentation
+   * Always go through application layer
+   * Maintain proper dependency flow
+
+See Also
+--------
+
+* :doc:`project-structure` - Detailed file structure
+* :doc:`../development/code-quality` - Code standards
+* :doc:`testing` - Testing strategies
+* :doc:`../advanced/best-practices` - Advanced patterns

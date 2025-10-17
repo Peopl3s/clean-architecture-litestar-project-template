@@ -1,0 +1,583 @@
+Testing
+=======
+
+The template includes a comprehensive testing setup with pytest, async support, and fixtures.
+
+Testing Philosophy
+------------------
+
+The project follows the testing pyramid:
+
+* **Unit Tests** (70%) - Fast, isolated tests of business logic
+* **Integration Tests** (20%) - Tests with external dependencies
+* **E2E Tests** (10%) - Full application flow tests
+
+Test Structure
+--------------
+
+.. code-block:: text
+
+   tests/
+   ├── conftest.py            # Shared fixtures
+   ├── unit/                  # Unit tests
+   │   ├── domain/           # Domain entity tests
+   │   ├── application/      # Use case tests
+   │   └── infrastructure/   # Repository tests (mocked)
+   ├── integration/           # Integration tests
+   │   ├── api/              # API endpoint tests
+   │   └── database/         # Database tests
+   ├── e2e/                   # End-to-end tests
+   └── fixtures/              # Test data
+
+Running Tests
+-------------
+
+Basic Commands
+~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Run all tests
+   make test
+   
+   # Run with coverage
+   make test-cov
+   
+   # Run specific test file
+   uv run pytest tests/unit/test_user.py
+   
+   # Run specific test
+   uv run pytest tests/unit/test_user.py::test_create_user
+   
+   # Run by marker
+   uv run pytest -m unit
+   uv run pytest -m "not slow"
+   
+   # Verbose output
+   uv run pytest -v
+   
+   # Stop on first failure
+   uv run pytest -x
+
+Coverage
+~~~~~~~~
+
+.. code-block:: bash
+
+   # Generate coverage report
+   make test-cov
+   
+   # View HTML report
+   open htmlcov/index.html
+   
+   # Coverage for specific module
+   uv run pytest --cov=src/your_project/domain tests/unit/domain/
+
+Unit Tests
+----------
+
+Domain Entity Tests
+~~~~~~~~~~~~~~~~~~~
+
+Test pure business logic without dependencies:
+
+.. code-block:: python
+
+   # tests/unit/domain/test_user.py
+   from datetime import datetime
+   from your_project.domain.entities.user import User
+   
+   def test_user_creation():
+       """Test user entity creation."""
+       user = User(
+           id=1,
+           username="testuser",
+           email="test@example.com",
+           created_at=datetime.now()
+       )
+       
+       assert user.id == 1
+       assert user.username == "testuser"
+       assert user.email == "test@example.com"
+   
+   def test_user_is_active():
+       """Test user activity check."""
+       user = User(
+           id=1,
+           username="testuser",
+           email="test@example.com",
+           created_at=datetime.now()
+       )
+       
+       assert user.is_active()
+
+Use Case Tests
+~~~~~~~~~~~~~~
+
+Test application logic with mocked dependencies:
+
+.. code-block:: python
+
+   # tests/unit/application/test_create_user.py
+   import pytest
+   from unittest.mock import AsyncMock, Mock
+   
+   from your_project.application.use_cases.create_user import CreateUserUseCase
+   from your_project.application.dto.user import CreateUserDTO
+   from your_project.domain.entities.user import User
+   
+   @pytest.mark.asyncio
+   async def test_create_user_use_case():
+       """Test user creation use case."""
+       # Arrange
+       mock_repo = AsyncMock()
+       mock_repo.create.return_value = User(
+           id=1,
+           username="testuser",
+           email="test@example.com",
+           created_at=datetime.now()
+       )
+       
+       use_case = CreateUserUseCase(mock_repo)
+       dto = CreateUserDTO(username="testuser", email="test@example.com")
+       
+       # Act
+       result = await use_case.execute(dto)
+       
+       # Assert
+       assert result.username == "testuser"
+       assert result.email == "test@example.com"
+       mock_repo.create.assert_called_once()
+   
+   @pytest.mark.asyncio
+   async def test_create_user_duplicate_username():
+       """Test user creation with duplicate username."""
+       mock_repo = AsyncMock()
+       mock_repo.create.side_effect = ValueError("Username already exists")
+       
+       use_case = CreateUserUseCase(mock_repo)
+       dto = CreateUserDTO(username="existing", email="test@example.com")
+       
+       with pytest.raises(ValueError, match="Username already exists"):
+           await use_case.execute(dto)
+
+Integration Tests
+-----------------
+
+API Endpoint Tests
+~~~~~~~~~~~~~~~~~~
+
+Test HTTP endpoints with test client:
+
+.. code-block:: python
+
+   # tests/integration/api/test_users.py
+   import pytest
+   from httpx import AsyncClient
+   
+   @pytest.mark.asyncio
+   async def test_create_user_endpoint(client: AsyncClient):
+       """Test user creation endpoint."""
+       response = await client.post(
+           "/api/v1/users",
+           json={
+               "username": "testuser",
+               "email": "test@example.com"
+           }
+       )
+       
+       assert response.status_code == 201
+       data = response.json()
+       assert data["username"] == "testuser"
+       assert data["email"] == "test@example.com"
+       assert "id" in data
+   
+   @pytest.mark.asyncio
+   async def test_get_user_endpoint(client: AsyncClient, test_user):
+       """Test get user endpoint."""
+       response = await client.get(f"/api/v1/users/{test_user.id}")
+       
+       assert response.status_code == 200
+       data = response.json()
+       assert data["id"] == test_user.id
+       assert data["username"] == test_user.username
+   
+   @pytest.mark.asyncio
+   async def test_get_nonexistent_user(client: AsyncClient):
+       """Test get nonexistent user."""
+       response = await client.get("/api/v1/users/99999")
+       
+       assert response.status_code == 404
+
+Database Tests
+~~~~~~~~~~~~~~
+
+Test repository implementations with real database:
+
+.. code-block:: python
+
+   # tests/integration/database/test_user_repository.py
+   import pytest
+   from sqlalchemy.ext.asyncio import AsyncSession
+   
+   from your_project.infrastructure.database.repositories.user_repository import UserRepository
+   from your_project.domain.entities.user import User
+   
+   @pytest.mark.asyncio
+   async def test_create_user(db_session: AsyncSession):
+       """Test creating user in database."""
+       repo = UserRepository(db_session)
+       
+       user = User(
+           id=0,
+           username="testuser",
+           email="test@example.com",
+           created_at=datetime.now()
+       )
+       
+       result = await repo.create(user)
+       await db_session.commit()
+       
+       assert result.id > 0
+       assert result.username == "testuser"
+   
+   @pytest.mark.asyncio
+   async def test_get_user(db_session: AsyncSession, test_user):
+       """Test getting user from database."""
+       repo = UserRepository(db_session)
+       
+       result = await repo.get(test_user.id)
+       
+       assert result is not None
+       assert result.id == test_user.id
+       assert result.username == test_user.username
+
+Fixtures
+--------
+
+Common Fixtures
+~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   # tests/conftest.py
+   import pytest
+   from httpx import AsyncClient
+   from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+   from sqlalchemy.pool import NullPool
+   
+   from your_project.main import app
+   from your_project.infrastructure.database.base import Base
+   
+   @pytest.fixture
+   async def client():
+       """HTTP client fixture."""
+       async with AsyncClient(app=app, base_url="http://test") as client:
+           yield client
+   
+   @pytest.fixture
+   async def db_engine():
+       """Database engine fixture."""
+       engine = create_async_engine(
+           "sqlite+aiosqlite:///:memory:",
+           poolclass=NullPool,
+       )
+       
+       async with engine.begin() as conn:
+           await conn.run_sync(Base.metadata.create_all)
+       
+       yield engine
+       
+       async with engine.begin() as conn:
+           await conn.run_sync(Base.metadata.drop_all)
+       
+       await engine.dispose()
+   
+   @pytest.fixture
+   async def db_session(db_engine):
+       """Database session fixture."""
+       async with AsyncSession(db_engine) as session:
+           yield session
+           await session.rollback()
+   
+   @pytest.fixture
+   async def test_user(db_session: AsyncSession):
+       """Test user fixture."""
+       from your_project.infrastructure.database.models.user import UserModel
+       
+       user = UserModel(
+           username="testuser",
+           email="test@example.com"
+       )
+       db_session.add(user)
+       await db_session.commit()
+       await db_session.refresh(user)
+       
+       return user
+
+Test Data Fixtures
+~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   # tests/fixtures/users.py
+   import pytest
+   
+   @pytest.fixture
+   def user_data():
+       """User test data."""
+       return {
+           "username": "testuser",
+           "email": "test@example.com"
+       }
+   
+   @pytest.fixture
+   def multiple_users_data():
+       """Multiple users test data."""
+       return [
+           {"username": f"user{i}", "email": f"user{i}@example.com"}
+           for i in range(5)
+       ]
+
+Mocking
+-------
+
+Mock External Services
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   from unittest.mock import AsyncMock, patch
+   
+   @pytest.mark.asyncio
+   async def test_with_mocked_service():
+       """Test with mocked external service."""
+       with patch('your_project.infrastructure.external.email_service.EmailService') as mock:
+           mock_instance = mock.return_value
+           mock_instance.send_email = AsyncMock(return_value=True)
+           
+           # Test code using the service
+           result = await send_welcome_email("test@example.com")
+           
+           assert result is True
+           mock_instance.send_email.assert_called_once()
+
+Mock Repository
+~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   @pytest.fixture
+   def mock_user_repository():
+       """Mock user repository."""
+       repo = AsyncMock()
+       repo.get.return_value = User(
+           id=1,
+           username="testuser",
+           email="test@example.com",
+           created_at=datetime.now()
+       )
+       return repo
+
+Parametrized Tests
+------------------
+
+.. code-block:: python
+
+   @pytest.mark.parametrize("username,email,expected", [
+       ("user1", "user1@example.com", True),
+       ("user2", "user2@example.com", True),
+       ("", "invalid@example.com", False),
+       ("user3", "invalid-email", False),
+   ])
+   def test_user_validation(username, email, expected):
+       """Test user validation with different inputs."""
+       is_valid = validate_user(username, email)
+       assert is_valid == expected
+
+Test Markers
+------------
+
+Custom Markers
+~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   # Mark slow tests
+   @pytest.mark.slow
+   async def test_slow_operation():
+       pass
+   
+   # Mark integration tests
+   @pytest.mark.integration
+   async def test_database_integration():
+       pass
+   
+   # Mark unit tests
+   @pytest.mark.unit
+   def test_business_logic():
+       pass
+
+Run by Marker
+~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Run only unit tests
+   pytest -m unit
+   
+   # Skip slow tests
+   pytest -m "not slow"
+   
+   # Run integration tests
+   pytest -m integration
+
+Best Practices
+--------------
+
+1. **Test Naming**
+   
+   * Use descriptive names: ``test_create_user_with_valid_data``
+   * Follow pattern: ``test_<what>_<condition>_<expected>``
+   * Be specific about what is tested
+
+2. **Arrange-Act-Assert**
+   
+   .. code-block:: python
+   
+      async def test_example():
+          # Arrange - Set up test data
+          user_data = {"username": "test"}
+          
+          # Act - Perform action
+          result = await create_user(user_data)
+          
+          # Assert - Verify result
+          assert result.username == "test"
+
+3. **One Assert Per Test**
+   
+   * Focus on one behavior
+   * Makes failures clear
+   * Easier to maintain
+
+4. **Use Fixtures**
+   
+   * Reuse common setup
+   * Keep tests DRY
+   * Improve readability
+
+5. **Mock External Dependencies**
+   
+   * Don't call real APIs in tests
+   * Use mocks for external services
+   * Keep tests fast and reliable
+
+6. **Test Edge Cases**
+   
+   * Empty inputs
+   * Null values
+   * Boundary conditions
+   * Error scenarios
+
+7. **Keep Tests Fast**
+   
+   * Unit tests < 100ms
+   * Use in-memory database
+   * Mock slow operations
+   * Run in parallel
+
+Coverage Goals
+--------------
+
+Target Coverage
+~~~~~~~~~~~~~~~
+
+* **Overall**: 80%+
+* **Domain Layer**: 90%+
+* **Application Layer**: 85%+
+* **Infrastructure**: 70%+
+* **Presentation**: 75%+
+
+Check Coverage
+~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Generate report
+   make test-cov
+   
+   # View in browser
+   open htmlcov/index.html
+   
+   # Fail if below threshold
+   pytest --cov --cov-fail-under=80
+
+Continuous Integration
+----------------------
+
+GitHub Actions
+~~~~~~~~~~~~~~
+
+.. code-block:: yaml
+
+   # .github/workflows/test.yml
+   name: Tests
+   
+   on: [push, pull_request]
+   
+   jobs:
+     test:
+       runs-on: ubuntu-latest
+       steps:
+         - uses: actions/checkout@v3
+         - name: Set up Python
+           uses: actions/setup-python@v4
+           with:
+             python-version: '3.12'
+         - name: Install dependencies
+           run: make install-dev
+         - name: Run tests
+           run: make test-cov
+         - name: Upload coverage
+           uses: codecov/codecov-action@v3
+
+Troubleshooting
+---------------
+
+Async Test Issues
+~~~~~~~~~~~~~~~~~
+
+**Problem:** Async tests not running
+
+**Solution:** Add ``@pytest.mark.asyncio`` decorator
+
+Database Test Issues
+~~~~~~~~~~~~~~~~~~~~
+
+**Problem:** Tests interfere with each other
+
+**Solution:** Use transactions and rollback:
+
+.. code-block:: python
+
+   @pytest.fixture
+   async def db_session(db_engine):
+       async with AsyncSession(db_engine) as session:
+           yield session
+           await session.rollback()  # Rollback after each test
+
+Fixture Not Found
+~~~~~~~~~~~~~~~~~
+
+**Problem:** Fixture not recognized
+
+**Solution:** Check ``conftest.py`` location and imports
+
+See Also
+--------
+
+* :doc:`../development/code-quality` - Code quality standards
+* :doc:`../reference/makefile-commands` - Test commands
+* :doc:`database` - Database testing
+* :doc:`../advanced/best-practices` - Testing patterns

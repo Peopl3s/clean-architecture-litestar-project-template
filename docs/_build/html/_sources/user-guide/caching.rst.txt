@@ -1,0 +1,99 @@
+Caching
+=======
+
+Guide to using caching in generated projects.
+
+Supported Backends
+------------------
+
+* **Redis** - Most popular, proven reliability
+* **KeyDB** - Redis-compatible, multi-threaded
+* **Dragonfly** - Modern Redis alternative
+* **Tarantool** - In-memory database
+
+Configuration
+-------------
+
+Redis
+~~~~~
+
+.. code-block:: bash
+
+   REDIS_URL=redis://localhost:6379/0
+   REDIS_PASSWORD=your_password
+
+Docker:
+
+.. code-block:: yaml
+
+   services:
+     redis:
+       image: redis:7-alpine
+       ports:
+         - "6379:6379"
+
+Usage
+-----
+
+Basic Caching
+~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   from your_project.infrastructure.cache.client import CacheClient
+   
+   cache = CacheClient()
+   
+   # Set value
+   await cache.set("key", "value", ttl=3600)
+   
+   # Get value
+   value = await cache.get("key")
+   
+   # Delete
+   await cache.delete("key")
+
+Cache Decorator
+~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   from functools import wraps
+   
+   def cache(ttl: int = 3600):
+       def decorator(func):
+           @wraps(func)
+           async def wrapper(*args, **kwargs):
+               key = f"{func.__name__}:{args}:{kwargs}"
+               
+               # Try cache
+               cached = await cache_client.get(key)
+               if cached:
+                   return cached
+               
+               # Execute and cache
+               result = await func(*args, **kwargs)
+               await cache_client.set(key, result, ttl=ttl)
+               return result
+           return wrapper
+       return decorator
+   
+   @cache(ttl=3600)
+   async def get_user_stats(user_id: int):
+       # Expensive operation
+       pass
+
+Best Practices
+--------------
+
+* Set appropriate TTL values
+* Use namespaced keys
+* Handle cache misses gracefully
+* Monitor cache hit rates
+* Invalidate on updates
+
+See Also
+--------
+
+* :doc:`configuration` - Configuration guide
+* :doc:`../development/docker` - Docker setup

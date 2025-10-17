@@ -1,0 +1,46 @@
+# https://pre-commit.com/
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: debug-statements
+      - id: mixed-line-ending
+        args: [ '--fix=lf' ]
+        description: Forces to replace line ending by the UNIX 'lf' character.
+      - id: check-merge-conflict
+      - id: check-ast
+
+  - repo: https://github.com/jorisroovers/gitlint
+    rev: v0.19.1
+    hooks:
+      - id: gitlint
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version.
+    rev: v0.12.12
+    hooks:
+      - id: ruff
+        args: [ --fix, --exit-non-zero-on-fix, --exclude=tests/ ]
+        pass_filenames: false
+      - id: ruff-format
+        args: [ --config=pyproject.toml ]
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.5.1
+    hooks:
+      - id: mypy
+        additional_dependencies: [
+          types-requests,
+          types-redis,
+          types-setuptools,
+          fastapi,
+          pydantic,
+          sqlalchemy,
+          httpx,
+          dishka,
+        ]
+        args: [--config-file=pyproject.toml, src/, --exclude=tests/]
+        pass_filenames: false

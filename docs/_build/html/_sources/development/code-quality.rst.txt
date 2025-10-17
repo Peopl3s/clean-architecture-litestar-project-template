@@ -1,0 +1,533 @@
+Code Quality
+============
+
+The template enforces high code quality standards through automated tools and best practices.
+
+Tools Overview
+--------------
+
+The generated projects include:
+
+* **Ruff** - Fast Python linter and formatter
+* **MyPy** - Static type checker
+* **Pytest** - Testing framework
+* **Pre-commit** - Git hooks for automated checks
+
+Ruff
+----
+
+Ruff is an extremely fast Python linter and formatter written in Rust.
+
+Configuration
+~~~~~~~~~~~~~
+
+Configuration is in ``pyproject.toml``:
+
+.. code-block:: toml
+
+   [tool.ruff]
+   target-version = "py312"
+   line-length = 88
+   
+   [tool.ruff.lint]
+   select = [
+       "E",    # pycodestyle errors
+       "F",    # pyflakes
+       "W",    # pycodestyle warnings
+       "B",    # flake8-bugbear
+       "I",    # isort
+       "N",    # pep8-naming
+       "D",    # pydocstyle
+       # ... more rules
+   ]
+
+Running Ruff
+~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Check for issues
+   make lint
+   
+   # Fix auto-fixable issues
+   make lint-fix
+   
+   # Format code
+   make format
+
+Common Rules
+~~~~~~~~~~~~
+
+**Import Sorting (I)**
+
+.. code-block:: python
+
+   # Good
+   import os
+   from datetime import datetime
+   
+   from fastapi import FastAPI
+   from sqlalchemy import select
+   
+   from your_project.domain.entities import User
+
+**Docstrings (D)**
+
+.. code-block:: python
+
+   # Good
+   def create_user(username: str, email: str) -> User:
+       """Create a new user.
+       
+       Args:
+           username: The username for the new user.
+           email: The email address.
+           
+       Returns:
+           The created user entity.
+       """
+       pass
+
+**Naming Conventions (N)**
+
+.. code-block:: python
+
+   # Good
+   class UserRepository:  # PascalCase for classes
+       pass
+   
+   def get_user_by_id(user_id: int):  # snake_case for functions
+       pass
+   
+   MAX_RETRY_ATTEMPTS = 3  # UPPER_CASE for constants
+
+MyPy
+----
+
+MyPy performs static type checking to catch type-related errors.
+
+Configuration
+~~~~~~~~~~~~~
+
+.. code-block:: toml
+
+   [tool.mypy]
+   python_version = "3.12"
+   strict = false
+   warn_return_any = true
+   disallow_untyped_defs = false
+   check_untyped_defs = true
+
+Running MyPy
+~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Type check
+   make type-check
+
+Type Hints Best Practices
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Function Signatures**
+
+.. code-block:: python
+
+   from typing import Optional
+   
+   # Good
+   def get_user(user_id: int) -> Optional[User]:
+       """Get user by ID."""
+       pass
+   
+   async def create_user(data: CreateUserDTO) -> User:
+       """Create a new user."""
+       pass
+
+**Generic Types**
+
+.. code-block:: python
+
+   from typing import List, Dict, Optional
+   
+   def get_users(limit: int) -> List[User]:
+       pass
+   
+   def get_user_map() -> Dict[int, User]:
+       pass
+   
+   def find_user(user_id: int) -> Optional[User]:
+       pass
+
+**Protocol for Interfaces**
+
+.. code-block:: python
+
+   from typing import Protocol
+   
+   class IUserRepository(Protocol):
+       async def get(self, user_id: int) -> Optional[User]:
+           ...
+       
+       async def create(self, user: User) -> User:
+           ...
+
+Pytest
+------
+
+Pytest is the testing framework with async support.
+
+Configuration
+~~~~~~~~~~~~~
+
+.. code-block:: toml
+
+   [tool.pytest.ini_options]
+   testpaths = ["tests"]
+   python_files = "test_*.py"
+   asyncio_mode = "auto"
+   markers = [
+       "asyncio: mark test as async",
+       "slow: marks tests as slow",
+       "integration: marks tests as integration tests",
+       "unit: marks tests as unit tests"
+   ]
+
+Running Tests
+~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # All tests
+   make test
+   
+   # With coverage
+   make test-cov
+   
+   # Specific test file
+   uv run pytest tests/unit/test_user.py
+   
+   # Specific test
+   uv run pytest tests/unit/test_user.py::test_create_user
+   
+   # By marker
+   uv run pytest -m unit
+   uv run pytest -m "not slow"
+
+Writing Tests
+~~~~~~~~~~~~~
+
+**Unit Tests**
+
+.. code-block:: python
+
+   # tests/unit/domain/test_user.py
+   from datetime import datetime
+   from your_project.domain.entities.user import User
+   
+   def test_user_is_active():
+       """Test user activity check."""
+       user = User(
+           id=1,
+           username="testuser",
+           email="test@example.com",
+           created_at=datetime.now()
+       )
+       assert user.is_active()
+
+**Async Tests**
+
+.. code-block:: python
+
+   # tests/unit/application/test_create_user.py
+   import pytest
+   from unittest.mock import AsyncMock
+   
+   @pytest.mark.asyncio
+   async def test_create_user_use_case():
+       """Test user creation use case."""
+       mock_repo = AsyncMock()
+       use_case = CreateUserUseCase(mock_repo)
+       
+       result = await use_case.execute(dto)
+       
+       assert result.username == "testuser"
+       mock_repo.create.assert_called_once()
+
+**Integration Tests**
+
+.. code-block:: python
+
+   # tests/integration/test_user_api.py
+   import pytest
+   from httpx import AsyncClient
+   
+   @pytest.mark.asyncio
+   async def test_create_user_endpoint(client: AsyncClient):
+       """Test user creation endpoint."""
+       response = await client.post(
+           "/api/v1/users",
+           json={"username": "testuser", "email": "test@example.com"}
+       )
+       
+       assert response.status_code == 201
+       data = response.json()
+       assert data["username"] == "testuser"
+
+**Fixtures**
+
+.. code-block:: python
+
+   # tests/conftest.py
+   import pytest
+   from httpx import AsyncClient
+   from your_project.main import app
+   
+   @pytest.fixture
+   async def client():
+       """HTTP client fixture."""
+       async with AsyncClient(app=app, base_url="http://test") as client:
+           yield client
+   
+   @pytest.fixture
+   def user_data():
+       """User test data fixture."""
+       return {
+           "username": "testuser",
+           "email": "test@example.com"
+       }
+
+Pre-commit Hooks
+----------------
+
+Pre-commit runs checks before each commit.
+
+Configuration
+~~~~~~~~~~~~~
+
+.. code-block:: yaml
+
+   # .pre-commit-config.yaml
+   repos:
+     - repo: https://github.com/astral-sh/ruff-pre-commit
+       rev: v0.1.0
+       hooks:
+         - id: ruff
+           args: [--fix]
+         - id: ruff-format
+
+Setup
+~~~~~
+
+.. code-block:: bash
+
+   # Install pre-commit
+   pip install pre-commit
+   
+   # Install hooks
+   pre-commit install
+   
+   # Run manually
+   pre-commit run --all-files
+
+Code Quality Checklist
+----------------------
+
+Before Committing
+~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Format code
+   make format
+   
+   # Run all checks
+   make check
+   
+   # Run tests
+   make test
+
+The ``make check`` command runs:
+
+1. Ruff linting
+2. Ruff format check
+3. MyPy type checking
+
+Before Pull Request
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Full CI pipeline
+   make ci
+
+This runs:
+
+1. All code quality checks
+2. Full test suite
+3. Coverage report
+
+Best Practices
+--------------
+
+Code Style
+~~~~~~~~~~
+
+1. **Follow PEP 8**
+   
+   * 88 character line length
+   * 4 spaces for indentation
+   * Blank lines between functions
+
+2. **Use Type Hints**
+   
+   * All function parameters
+   * All return values
+   * Complex data structures
+
+3. **Write Docstrings**
+   
+   * All public functions
+   * All classes
+   * Google style format
+
+4. **Keep Functions Small**
+   
+   * Single responsibility
+   * Maximum 50 lines
+   * Clear purpose
+
+Testing
+~~~~~~~
+
+1. **Write Tests First** (TDD)
+   
+   * Define expected behavior
+   * Write failing test
+   * Implement feature
+   * Verify test passes
+
+2. **Test Coverage**
+   
+   * Aim for >80% coverage
+   * Test edge cases
+   * Test error conditions
+
+3. **Fast Tests**
+   
+   * Unit tests < 100ms
+   * Mock external dependencies
+   * Use fixtures
+
+4. **Clear Test Names**
+   
+   * Describe what is tested
+   * Include expected outcome
+   * Use ``test_`` prefix
+
+Architecture
+~~~~~~~~~~~~
+
+1. **Respect Layer Boundaries**
+   
+   * Don't skip layers
+   * Dependencies point inward
+   * Use interfaces
+
+2. **Dependency Injection**
+   
+   * Use Dishka container
+   * Inject dependencies
+   * Don't create in constructors
+
+3. **Single Responsibility**
+   
+   * One reason to change
+   * Focused classes
+   * Clear purpose
+
+4. **SOLID Principles**
+   
+   * Single Responsibility
+   * Open/Closed
+   * Liskov Substitution
+   * Interface Segregation
+   * Dependency Inversion
+
+Common Issues
+-------------
+
+Import Errors
+~~~~~~~~~~~~~
+
+**Problem:** Circular imports
+
+**Solution:** Use TYPE_CHECKING
+
+.. code-block:: python
+
+   from typing import TYPE_CHECKING
+   
+   if TYPE_CHECKING:
+       from your_project.domain.entities import User
+
+Type Errors
+~~~~~~~~~~~
+
+**Problem:** Missing type hints
+
+**Solution:** Add complete type annotations
+
+.. code-block:: python
+
+   # Bad
+   def get_user(id):
+       pass
+   
+   # Good
+   def get_user(user_id: int) -> Optional[User]:
+       pass
+
+Test Failures
+~~~~~~~~~~~~~
+
+**Problem:** Async tests not running
+
+**Solution:** Use ``@pytest.mark.asyncio``
+
+.. code-block:: python
+
+   @pytest.mark.asyncio
+   async def test_async_function():
+       result = await async_function()
+       assert result is not None
+
+Continuous Integration
+----------------------
+
+The template includes GitHub Actions workflows:
+
+.. code-block:: yaml
+
+   # .github/workflows/ci.yml
+   name: CI
+   
+   on: [push, pull_request]
+   
+   jobs:
+     test:
+       runs-on: ubuntu-latest
+       steps:
+         - uses: actions/checkout@v3
+         - name: Run checks
+           run: make ci
+
+This runs on every push and pull request.
+
+See Also
+--------
+
+* :doc:`../user-guide/testing` - Testing guide
+* :doc:`../reference/makefile-commands` - Command reference
+* :doc:`contributing` - Contributing guidelines
+* :doc:`../advanced/best-practices` - Advanced patterns

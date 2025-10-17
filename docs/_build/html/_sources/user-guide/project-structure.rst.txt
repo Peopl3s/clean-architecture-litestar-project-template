@@ -1,0 +1,379 @@
+Project Structure
+=================
+
+This page describes the directory structure and organization of projects generated from the template.
+
+Overview
+--------
+
+The template generates a well-organized project structure following Clean Architecture principles:
+
+.. code-block:: text
+
+   your-project/
+   ├── src/                        # Source code
+   │   └── your_project/
+   │       ├── domain/             # Business logic
+   │       ├── application/        # Use cases
+   │       ├── infrastructure/     # External services
+   │       ├── presentation/       # API endpoints
+   │       └── config/            # Configuration
+   ├── tests/                      # Test suite
+   ├── alembic/                    # Database migrations
+   ├── docs/                       # Documentation
+   ├── scripts/                    # Utility scripts
+   ├── docker-compose.yml          # Docker services
+   ├── Dockerfile                  # Application container
+   ├── pyproject.toml             # Project metadata
+   ├── Makefile                   # Common commands
+   └── README.md                  # Project documentation
+
+Root Directory
+--------------
+
+Configuration Files
+~~~~~~~~~~~~~~~~~~~
+
+``pyproject.toml``
+  Project metadata, dependencies, and tool configuration (ruff, mypy, pytest)
+
+``Makefile``
+  Common development commands (test, lint, docker, etc.)
+
+``docker-compose.yml``
+  Docker services configuration (database, cache, broker, app)
+
+``Dockerfile``
+  Multi-stage Docker build for the application
+
+``alembic.ini``
+  Alembic migration tool configuration
+
+``env.template``
+  Template for environment variables
+
+``.pre-commit-config.yaml``
+  Pre-commit hooks configuration
+
+``.gitignore``
+  Git ignore patterns
+
+Source Code (``src/``)
+----------------------
+
+The ``src/`` directory contains all application code, organized by architectural layer.
+
+Domain Layer (``domain/``)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Contains pure business logic with no external dependencies.
+
+.. code-block:: text
+
+   src/your_project/domain/
+   ├── __init__.py
+   ├── entities/               # Business entities
+   │   ├── __init__.py
+   │   └── user.py
+   ├── value_objects/          # Immutable value objects
+   │   ├── __init__.py
+   │   └── email.py
+   └── exceptions.py           # Domain exceptions
+
+**Key Files:**
+
+* ``entities/`` - Objects with identity (e.g., User, Product)
+* ``value_objects/`` - Immutable objects (e.g., Email, Money)
+* ``exceptions.py`` - Business rule violations
+
+Application Layer (``application/``)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Contains use cases and application business logic.
+
+.. code-block:: text
+
+   src/your_project/application/
+   ├── __init__.py
+   ├── use_cases/              # Application use cases
+   │   ├── __init__.py
+   │   ├── create_user.py
+   │   └── get_user.py
+   ├── dto/                    # Data Transfer Objects
+   │   ├── __init__.py
+   │   └── user.py
+   ├── interfaces/             # Abstract interfaces (ports)
+   │   ├── __init__.py
+   │   ├── repositories.py
+   │   └── services.py
+   ├── mappers.py             # Layer-to-layer mapping
+   └── exceptions.py          # Application exceptions
+
+**Key Files:**
+
+* ``use_cases/`` - Business operations (one file per use case)
+* ``dto/`` - Data structures for inter-layer communication
+* ``interfaces/`` - Abstract base classes for infrastructure
+* ``mappers.py`` - Convert between entities, DTOs, and models
+
+Infrastructure Layer (``infrastructure/``)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Implements external service adapters.
+
+.. code-block:: text
+
+   src/your_project/infrastructure/
+   ├── __init__.py
+   ├── database/               # Database implementation
+   │   ├── __init__.py
+   │   ├── base.py            # SQLAlchemy base
+   │   ├── session.py         # Session management
+   │   ├── models/            # SQLAlchemy models
+   │   │   ├── __init__.py
+   │   │   └── user.py
+   │   └── repositories/      # Repository implementations
+   │       ├── __init__.py
+   │       └── user_repository.py
+   ├── cache/                  # Cache implementation
+   │   ├── __init__.py
+   │   ├── client.py
+   │   └── repositories/
+   │       └── user_cache.py
+   ├── broker/                 # Message broker
+   │   ├── __init__.py
+   │   ├── producer.py
+   │   └── consumer.py
+   └── external/               # External API clients
+       ├── __init__.py
+       └── email_service.py
+
+**Key Directories:**
+
+* ``database/`` - Database models and repositories
+* ``cache/`` - Caching layer implementation
+* ``broker/`` - Message queue producers/consumers
+* ``external/`` - Third-party API integrations
+
+Presentation Layer (``presentation/``)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Handles HTTP requests and responses.
+
+.. code-block:: text
+
+   src/your_project/presentation/
+   ├── __init__.py
+   ├── api/                    # API routes
+   │   ├── __init__.py
+   │   ├── v1/                # API version 1
+   │   │   ├── __init__.py
+   │   │   ├── users.py
+   │   │   └── health.py
+   │   └── router.py          # Main router
+   ├── schemas/                # Pydantic schemas
+   │   ├── __init__.py
+   │   ├── user.py
+   │   └── common.py
+   ├── dependencies/           # FastAPI dependencies
+   │   ├── __init__.py
+   │   ├── auth.py
+   │   └── pagination.py
+   └── middleware/             # Custom middleware
+       ├── __init__.py
+       ├── logging.py
+       └── error_handler.py
+
+**Key Directories:**
+
+* ``api/`` - FastAPI routers and endpoints
+* ``schemas/`` - Pydantic models for request/response
+* ``dependencies/`` - Reusable FastAPI dependencies
+* ``middleware/`` - Request/response processing
+
+Configuration (``config/``)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Application configuration and dependency injection.
+
+.. code-block:: text
+
+   src/your_project/config/
+   ├── __init__.py
+   ├── base.py                # Settings (pydantic-settings)
+   ├── logging.py             # Logging configuration
+   └── di.py                  # Dependency injection container
+
+**Key Files:**
+
+* ``base.py`` - Environment-based configuration
+* ``logging.py`` - Structured logging setup
+* ``di.py`` - Dishka DI container configuration
+
+Tests (``tests/``)
+------------------
+
+Comprehensive test suite organized by layer.
+
+.. code-block:: text
+
+   tests/
+   ├── __init__.py
+   ├── conftest.py            # Pytest fixtures
+   ├── unit/                  # Unit tests
+   │   ├── domain/
+   │   ├── application/
+   │   └── infrastructure/
+   ├── integration/           # Integration tests
+   │   ├── api/
+   │   └── database/
+   ├── e2e/                   # End-to-end tests
+   └── fixtures/              # Test data
+
+**Test Organization:**
+
+* ``unit/`` - Fast, isolated tests
+* ``integration/`` - Tests with external dependencies
+* ``e2e/`` - Full application flow tests
+* ``fixtures/`` - Reusable test data
+
+Database Migrations (``alembic/``)
+----------------------------------
+
+Alembic migration files for database schema management.
+
+.. code-block:: text
+
+   alembic/
+   ├── versions/              # Migration files
+   │   └── 001_initial.py
+   ├── env.py                # Alembic environment
+   └── script.py.mako        # Migration template
+
+Documentation (``docs/``)
+-------------------------
+
+Project documentation files.
+
+.. code-block:: text
+
+   docs/
+   ├── _static/              # Static assets
+   ├── _templates/           # Sphinx templates
+   ├── api/                  # API documentation
+   ├── docker.md            # Docker guide
+   ├── environment.md       # Environment setup
+   └── migrations.md        # Migration guide
+
+Scripts (``scripts/``)
+----------------------
+
+Utility scripts for development and deployment.
+
+.. code-block:: text
+
+   scripts/
+   ├── setup-env.sh          # Environment setup
+   ├── wait-for-it.sh       # Service readiness check
+   └── init-db.sh           # Database initialization
+
+File Naming Conventions
+-----------------------
+
+Python Files
+~~~~~~~~~~~~
+
+* **Snake case**: ``user_repository.py``, ``create_user.py``
+* **Descriptive names**: Clearly indicate purpose
+* **One class per file**: For main classes (use cases, repositories)
+
+Classes
+~~~~~~~
+
+* **PascalCase**: ``UserRepository``, ``CreateUserUseCase``
+* **Suffixes**: 
+  
+  * Use cases: ``*UseCase``
+  * Repositories: ``*Repository``
+  * Services: ``*Service``
+  * Schemas: ``*Schema``
+
+Functions
+~~~~~~~~~
+
+* **Snake case**: ``get_user_by_id``, ``create_user``
+* **Verb-first**: Start with action verb
+* **Descriptive**: Clear purpose
+
+Constants
+~~~~~~~~~
+
+* **UPPER_SNAKE_CASE**: ``MAX_RETRY_ATTEMPTS``, ``DEFAULT_TIMEOUT``
+* **Module level**: Define at top of file
+
+Import Organization
+-------------------
+
+Imports should be organized in this order:
+
+1. Standard library
+2. Third-party packages
+3. Local application imports
+
+.. code-block:: python
+
+   # Standard library
+   from datetime import datetime
+   from typing import Optional
+
+   # Third-party
+   from fastapi import APIRouter, Depends
+   from sqlalchemy.ext.asyncio import AsyncSession
+
+   # Local
+   from your_project.domain.entities.user import User
+   from your_project.application.use_cases.create_user import CreateUserUseCase
+
+Module Organization
+-------------------
+
+Each module should have:
+
+1. **Docstring** - Module purpose
+2. **Imports** - Organized as above
+3. **Constants** - Module-level constants
+4. **Classes/Functions** - Main code
+5. **Main block** - If executable
+
+.. code-block:: python
+
+   """User repository implementation."""
+
+   from sqlalchemy import select
+   from sqlalchemy.ext.asyncio import AsyncSession
+
+   from your_project.domain.entities.user import User
+
+   MAX_PAGE_SIZE = 100
+
+   class UserRepository:
+       """Repository for user persistence."""
+       
+       def __init__(self, session: AsyncSession):
+           self._session = session
+
+Best Practices
+--------------
+
+1. **Keep files focused** - One responsibility per file
+2. **Use meaningful names** - Self-documenting code
+3. **Follow layer boundaries** - Respect dependency rules
+4. **Group related code** - Organize by feature when appropriate
+5. **Avoid deep nesting** - Keep directory depth reasonable
+
+See Also
+--------
+
+* :doc:`architecture` - Architecture principles
+* :doc:`../development/code-quality` - Code standards
+* :doc:`configuration` - Configuration guide

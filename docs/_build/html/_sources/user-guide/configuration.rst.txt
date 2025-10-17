@@ -1,0 +1,498 @@
+Configuration
+=============
+
+Projects generated from the template use environment-based configuration with validation.
+
+Configuration System
+--------------------
+
+The template uses **pydantic-settings** for type-safe configuration management:
+
+* Environment variables
+* ``.env`` file support
+* Type validation
+* Default values
+* Nested configuration
+
+Configuration File
+------------------
+
+Location: ``src/{project}/config/base.py``
+
+.. code-block:: python
+
+   from pydantic_settings import BaseSettings, SettingsConfigDict
+   
+   class Settings(BaseSettings):
+       """Application settings."""
+       
+       model_config = SettingsConfigDict(
+           env_file=".env",
+           env_file_encoding="utf-8",
+           case_sensitive=False,
+       )
+       
+       # Application
+       app_name: str = "My API"
+       app_version: str = "0.1.0"
+       debug: bool = False
+       
+       # Server
+       host: str = "0.0.0.0"
+       port: int = 8000
+       
+       # Database
+       database_url: str
+       
+       # Redis (if enabled)
+       redis_url: str | None = None
+
+Environment Variables
+---------------------
+
+Application Settings
+~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 50 25
+
+   * - Variable
+     - Description
+     - Default
+   * - ``APP_NAME``
+     - Application name
+     - Project name
+   * - ``APP_VERSION``
+     - Application version
+     - 0.1.0
+   * - ``DEBUG``
+     - Enable debug mode
+     - false
+   * - ``LOG_LEVEL``
+     - Logging level
+     - INFO
+   * - ``ENVIRONMENT``
+     - Environment (dev/staging/prod)
+     - development
+
+Server Settings
+~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 50 25
+
+   * - Variable
+     - Description
+     - Default
+   * - ``HOST``
+     - Server host
+     - 0.0.0.0
+   * - ``PORT``
+     - Server port
+     - 8000
+   * - ``WORKERS``
+     - Number of workers
+     - 1
+   * - ``RELOAD``
+     - Auto-reload on changes
+     - false
+
+Database Settings
+~~~~~~~~~~~~~~~~~
+
+**PostgreSQL:**
+
+.. code-block:: bash
+
+   DATABASE_URL=postgresql+asyncpg://user:password@localhost:5432/dbname
+   DB_ECHO=false
+   DB_POOL_SIZE=5
+   DB_MAX_OVERFLOW=10
+
+**MySQL:**
+
+.. code-block:: bash
+
+   DATABASE_URL=mysql+aiomysql://user:password@localhost:3306/dbname
+
+**SQLite:**
+
+.. code-block:: bash
+
+   DATABASE_URL=sqlite+aiosqlite:///./database.db
+
+Cache Settings
+~~~~~~~~~~~~~~
+
+**Redis/KeyDB/Dragonfly:**
+
+.. code-block:: bash
+
+   REDIS_URL=redis://localhost:6379/0
+   REDIS_PASSWORD=your_password
+   REDIS_POOL_SIZE=10
+
+**Tarantool:**
+
+.. code-block:: bash
+
+   TARANTOOL_HOST=localhost
+   TARANTOOL_PORT=3301
+   TARANTOOL_USER=guest
+   TARANTOOL_PASSWORD=
+
+Message Broker Settings
+~~~~~~~~~~~~~~~~~~~~~~~
+
+**Kafka:**
+
+.. code-block:: bash
+
+   KAFKA_BOOTSTRAP_SERVERS=localhost:9092
+   KAFKA_GROUP_ID=my_consumer_group
+   KAFKA_TOPIC=my_topic
+
+**RabbitMQ:**
+
+.. code-block:: bash
+
+   RABBITMQ_URL=amqp://guest:guest@localhost:5672/
+   RABBITMQ_QUEUE=my_queue
+
+**NATS:**
+
+.. code-block:: bash
+
+   NATS_URL=nats://localhost:4222
+   NATS_SUBJECT=my_subject
+
+Setting Up Environment
+----------------------
+
+Development
+~~~~~~~~~~~
+
+1. Copy template:
+
+.. code-block:: bash
+
+   cp env.template .env
+
+2. Edit ``.env``:
+
+.. code-block:: bash
+
+   # Application
+   APP_NAME=My API
+   DEBUG=true
+   LOG_LEVEL=DEBUG
+   
+   # Database
+   DATABASE_URL=postgresql+asyncpg://user:pass@localhost:5432/mydb
+   
+   # Redis
+   REDIS_URL=redis://localhost:6379/0
+
+3. Load environment:
+
+.. code-block:: bash
+
+   # Automatically loaded by pydantic-settings
+   # Or use python-dotenv
+   from dotenv import load_dotenv
+   load_dotenv()
+
+Production
+~~~~~~~~~~
+
+**Never commit ``.env`` files!**
+
+Use one of these approaches:
+
+1. **Environment Variables**
+
+.. code-block:: bash
+
+   export DATABASE_URL="postgresql+asyncpg://..."
+   export REDIS_URL="redis://..."
+
+2. **Secret Management**
+
+   * AWS Secrets Manager
+   * HashiCorp Vault
+   * Kubernetes Secrets
+   * Azure Key Vault
+
+3. **Container Secrets**
+
+.. code-block:: yaml
+
+   # docker-compose.yml
+   services:
+     app:
+       environment:
+         - DATABASE_URL=${DATABASE_URL}
+       env_file:
+         - .env.production
+
+Accessing Configuration
+-----------------------
+
+In Application Code
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   from your_project.config.base import Settings
+   
+   settings = Settings()
+   
+   print(settings.app_name)
+   print(settings.database_url)
+
+With Dependency Injection
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   # config/di.py
+   from dishka import Provider, Scope, provide
+   
+   class ConfigProvider(Provider):
+       @provide(scope=Scope.APP)
+       def get_settings(self) -> Settings:
+           return Settings()
+
+.. code-block:: python
+
+   # In endpoint
+   from dishka.integrations.fastapi import FromDishka
+   
+   @router.get("/config")
+   async def get_config(settings: FromDishka[Settings]):
+       return {"app_name": settings.app_name}
+
+Validation
+----------
+
+Pydantic validates configuration on startup:
+
+.. code-block:: python
+
+   from pydantic import Field, validator
+   
+   class Settings(BaseSettings):
+       port: int = Field(ge=1, le=65535)
+       database_url: str = Field(min_length=1)
+       
+       @validator("database_url")
+       def validate_database_url(cls, v):
+           if not v.startswith(("postgresql", "mysql", "sqlite")):
+               raise ValueError("Invalid database URL")
+           return v
+
+Environment-Specific Config
+---------------------------
+
+Multiple Environments
+~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   from enum import Enum
+   
+   class Environment(str, Enum):
+       DEVELOPMENT = "development"
+       STAGING = "staging"
+       PRODUCTION = "production"
+   
+   class Settings(BaseSettings):
+       environment: Environment = Environment.DEVELOPMENT
+       
+       @property
+       def is_production(self) -> bool:
+           return self.environment == Environment.PRODUCTION
+
+Configuration Files
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # .env.development
+   DEBUG=true
+   LOG_LEVEL=DEBUG
+   
+   # .env.production
+   DEBUG=false
+   LOG_LEVEL=WARNING
+
+Load based on environment:
+
+.. code-block:: python
+
+   import os
+   
+   env = os.getenv("ENVIRONMENT", "development")
+   
+   class Settings(BaseSettings):
+       model_config = SettingsConfigDict(
+           env_file=f".env.{env}",
+       )
+
+Secrets Management
+------------------
+
+Best Practices
+~~~~~~~~~~~~~~
+
+1. **Never commit secrets**
+   
+   * Add ``.env`` to ``.gitignore``
+   * Use ``.env.template`` for documentation
+   * Rotate secrets regularly
+
+2. **Use secret management services**
+   
+   * AWS Secrets Manager
+   * HashiCorp Vault
+   * Cloud provider solutions
+
+3. **Encrypt secrets at rest**
+   
+   * Use encrypted storage
+   * Limit access permissions
+   * Audit secret access
+
+AWS Secrets Manager Example
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   import boto3
+   import json
+   
+   def get_secret(secret_name: str) -> dict:
+       client = boto3.client("secretsmanager")
+       response = client.get_secret_value(SecretId=secret_name)
+       return json.loads(response["SecretString"])
+   
+   class Settings(BaseSettings):
+       def __init__(self, **kwargs):
+           if os.getenv("USE_AWS_SECRETS"):
+               secrets = get_secret("my-app-secrets")
+               kwargs.update(secrets)
+           super().__init__(**kwargs)
+
+Configuration Testing
+---------------------
+
+Test Configuration
+~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   # tests/conftest.py
+   import pytest
+   from your_project.config.base import Settings
+   
+   @pytest.fixture
+   def test_settings():
+       return Settings(
+           database_url="sqlite+aiosqlite:///:memory:",
+           redis_url=None,
+           debug=True,
+       )
+
+Override in Tests
+~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   def test_with_custom_config(test_settings):
+       test_settings.debug = False
+       assert not test_settings.debug
+
+Common Patterns
+---------------
+
+Feature Flags
+~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   class Settings(BaseSettings):
+       # Feature flags
+       enable_caching: bool = True
+       enable_metrics: bool = False
+       enable_new_feature: bool = False
+
+Database Connection Pooling
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   class DatabaseSettings(BaseSettings):
+       url: str
+       pool_size: int = 5
+       max_overflow: int = 10
+       pool_timeout: int = 30
+       pool_recycle: int = 3600
+
+CORS Configuration
+~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   class CORSSettings(BaseSettings):
+       allow_origins: list[str] = ["*"]
+       allow_methods: list[str] = ["*"]
+       allow_headers: list[str] = ["*"]
+       allow_credentials: bool = True
+
+Troubleshooting
+---------------
+
+Configuration Not Loading
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Problem:** Environment variables not recognized
+
+**Solutions:**
+
+1. Check ``.env`` file location (must be in project root)
+2. Verify variable names match (case-insensitive by default)
+3. Restart application after changes
+4. Check ``env_file`` path in ``SettingsConfigDict``
+
+Validation Errors
+~~~~~~~~~~~~~~~~~
+
+**Problem:** Pydantic validation fails
+
+**Solutions:**
+
+1. Check required fields are set
+2. Verify value types match annotations
+3. Review custom validators
+4. Check field constraints (min/max values)
+
+Type Errors
+~~~~~~~~~~~
+
+**Problem:** Type hints not working
+
+**Solutions:**
+
+1. Use ``str | None`` instead of ``Optional[str]`` (Python 3.10+)
+2. Import types from ``typing``
+3. Enable ``from __future__ import annotations``
+
+See Also
+--------
+
+* :doc:`../getting-started/installation` - Installation guide
+* :doc:`../development/docker` - Docker configuration
+* :doc:`../reference/environment-variables` - Full variable reference
+* :doc:`database` - Database configuration

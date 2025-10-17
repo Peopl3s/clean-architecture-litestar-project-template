@@ -1,0 +1,96 @@
+CI/CD Setup
+===========
+
+Continuous Integration and Deployment setup for generated projects.
+
+GitHub Actions
+--------------
+
+Test Workflow
+~~~~~~~~~~~~~
+
+.. code-block:: yaml
+
+   # .github/workflows/test.yml
+   name: Tests
+   
+   on: [push, pull_request]
+   
+   jobs:
+     test:
+       runs-on: ubuntu-latest
+       steps:
+         - uses: actions/checkout@v3
+         - uses: actions/setup-python@v4
+           with:
+             python-version: '3.12'
+         - name: Install dependencies
+           run: make install-dev
+         - name: Run tests
+           run: make test-cov
+
+Deploy Workflow
+~~~~~~~~~~~~~~~
+
+.. code-block:: yaml
+
+   # .github/workflows/deploy.yml
+   name: Deploy
+   
+   on:
+     push:
+       branches: [main]
+   
+   jobs:
+     deploy:
+       runs-on: ubuntu-latest
+       steps:
+         - uses: actions/checkout@v3
+         - name: Build image
+           run: docker build -t myapp:latest .
+         - name: Deploy
+           run: |
+             # Your deployment commands
+
+GitLab CI
+---------
+
+.. code-block:: yaml
+
+   # .gitlab-ci.yml
+   stages:
+     - test
+     - build
+     - deploy
+   
+   test:
+     stage: test
+     script:
+       - make install-dev
+       - make test
+   
+   build:
+     stage: build
+     script:
+       - docker build -t myapp:latest .
+   
+   deploy:
+     stage: deploy
+     script:
+       - # Deployment commands
+
+Best Practices
+--------------
+
+* Run tests on every push
+* Deploy only from main branch
+* Use environment secrets
+* Enable branch protection
+* Require passing tests for merge
+
+See Also
+--------
+
+* :doc:`../user-guide/deployment` - Deployment guide
+* :doc:`../development/code-quality` - Code quality
+* :doc:`../user-guide/testing` - Testing

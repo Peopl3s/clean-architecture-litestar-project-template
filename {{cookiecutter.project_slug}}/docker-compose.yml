@@ -1,0 +1,613 @@
+version: '3.8'
+
+# YAML Anchors for common configurations
+x-common-healthcheck: &common-healthcheck
+  interval: 10s
+  timeout: 5s
+  retries: 5
+
+# Network configuration is handled individually per service
+
+x-common-volume: &common-volume
+  driver: local
+
+x-app-environment: &app-environment
+  ENVIRONMENT: ${ENVIRONMENT:-production}
+  LOG_LEVEL: ${LOG_LEVEL:-INFO}
+  DEBUG: ${DEBUG:-false}
+  POSTGRES_USER: ${POSTGRES_USER}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  POSTGRES_SERVER: ${POSTGRES_SERVER}
+  POSTGRES_PORT: ${POSTGRES_PORT}
+  POSTGRES_DB: ${POSTGRES_DB}
+  MUSEUM_API_BASE: ${MUSEUM_API_BASE}
+  CATALOG_API_BASE: ${CATALOG_API_BASE}
+  HTTP_TIMEOUT: ${HTTP_TIMEOUT}
+  BROKER_URL: ${BROKER_URL}
+  BROKER_NEW_ARTIFACT_QUEUE: ${BROKER_NEW_ARTIFACT_QUEUE}
+  PUBLISH_RETRIES: ${PUBLISH_RETRIES}
+  PUBLISH_RETRY_BACKOFF: ${PUBLISH_RETRY_BACKOFF}
+
+x-app-dev-environment: &app-dev-environment
+  ENVIRONMENT: ${ENVIRONMENT:-dev}
+  LOG_LEVEL: ${LOG_LEVEL:-DEBUG}
+  DEBUG: ${DEBUG:-true}
+  POSTGRES_USER: ${POSTGRES_USER}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  POSTGRES_SERVER: ${POSTGRES_SERVER}
+  POSTGRES_PORT: ${POSTGRES_PORT}
+  POSTGRES_DB: ${POSTGRES_DB}
+  MUSEUM_API_BASE: ${MUSEUM_API_BASE}
+  CATALOG_API_BASE: ${CATALOG_API_BASE}
+  HTTP_TIMEOUT: ${HTTP_TIMEOUT}
+  BROKER_URL: ${BROKER_URL}
+  BROKER_NEW_ARTIFACT_QUEUE: ${BROKER_NEW_ARTIFACT_QUEUE}
+  PUBLISH_RETRIES: ${PUBLISH_RETRIES}
+  PUBLISH_RETRY_BACKOFF: ${PUBLISH_RETRY_BACKOFF}
+
+# Test environment configuration is handled individually per service
+
+# Migration configuration is handled individually per service
+
+services:
+{% if cookiecutter.use_database == "postgresql" %}
+  postgres:
+    image: postgres:16-alpine
+    container_name: {{ cookiecutter.project_slug }}-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      <<: *common-healthcheck
+    networks:
+      - {{ cookiecutter.project_slug }}-network
+
+  postgres-test:
+    image: postgres:16-alpine
+    container_name: {{ cookiecutter.project_slug }}-postgres-test
+    environment:
+      POSTGRES_DB: {{ cookiecutter.database_name }}_test
+      POSTGRES_USER: {{ cookiecutter.database_user }}
+      POSTGRES_PASSWORD: {{ cookiecutter.database_password }}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U {{ cookiecutter.database_user }} -d {{ cookiecutter.database_name }}_test"]
+      <<: *common-healthcheck
+    networks:
+      - {{ cookiecutter.project_slug }}-network
+    profiles:
+      - test
+{% endif %}
+
+{% if cookiecutter.use_database == "mysql" %}
+  mysql:
+    image: mysql:8.0
+    container_name: {{ cookiecutter.project_slug }}-mysql
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DB}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}_root
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./scripts/init-mysql.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}"]
+      <<: *common-healthcheck
+    networks:
+      - {{ cookiecutter.project_slug }}-network
+
+  mysql-test:
+    image: mysql:8.0
+    container_name: {{ cookiecutter.project_slug }}-mysql-test
+    environment:
+      MYSQL_DATABASE: {{ cookiecutter.database_name }}_test
+      MYSQL_USER: {{ cookiecutter.database_user }}
+      MYSQL_PASSWORD: {{ cookiecutter.database_password }}
+      MYSQL_ROOT_PASSWORD: {{ cookiecutter.database_password }}_root
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "{{ cookiecutter.database_user }}", "-p{{ cookiecutter.database_password }}"]
+      <<: *common-healthcheck
+    networks:
+      - {{ cookiecutter.project_slug }}-network
+    profiles:
+      - test
+{% endif %}
+
+{% if cookiecutter.use_database == "sqlite" %}
+  sqlite-init:
+    image: alpine:latest
+    container_name: {{ cookiecutter.project_slug }}-sqlite-init
+    volumes:
+      - sqlite_data:/data
+      - ./scripts/init-sqlite.sh:/init-sqlite.sh:ro
+    command: ["/bin/sh", "/init-sqlite.sh"]
+    networks:
+      - {{ cookiecutter.project_slug }}-network
+    profiles:
+      - init
+{% endif %}
+
+{% if cookiecutter.use_cache == "redis" %}
+  redis:
+    image: redis:7-alpine
+    container_name: {{ cookiecutter.project_slug }}-redis
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-{{ cookiecutter.redis_password }}}
+    volumes:
+      - redis_data:/data
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - {{ cookiecutter.project_slug }}-network
+{% endif %}
+
+{% if cookiecutter.use_cache == "keydb" %}
+  keydb:
+    image: eqalpha/keydb:latest
+    container_name: {{ cookiecutter.project_slug }}-keydb
+    command: keydb-server --appendonly yes --requirepass ${KEYDB_PASSWORD:-{{ cookiecutter.redis_password }}}
+    volumes:
+      - keydb_data:/data
+    ports:
+      - "${KEYDB_PORT:-6379}:6379"
+    healthcheck:
+      test: ["CMD", "keydb-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - {{ cookiecutter.project_slug }}-network
+{% endif %}
+
+{% if cookiecutter.use_cache == "tarantool" %}
+  tarantool:
+    image: tarantool/tarantool:latest
+    container_name: {{ cookiecutter.project_slug }}-tarantool
+    environment:
+      TARANTOOL_USER_NAME: ${TARANTOOL_USER:-{{ cookiecutter.database_user }}}
+      TARANTOOL_USER_PASSWORD: ${TARANTOOL_PASSWORD:-{{ cookiecutter.database_password }}}
+    volumes:
+      - tarantool_data:/var/lib/tarantool
+      - ./scripts/tarantool-init.lua:/etc/tarantool/init.lua:ro
+    ports:
+      - "${TARANTOOL_PORT:-3301}:3301"
+    healthcheck:
+      test: ["CMD", "tarantool", "eval", "return box.info.status == 'running'"]
+      <<: *common-healthcheck
+    networks:
+      - {{ cookiecutter.project_slug }}-network
+{% endif %}
+
+{% if cookiecutter.use_cache == "dragonfly" %}
+  dragonfly:
+    image: docker.dragonflydb.io/dragonflydb/v1.25.0
+    container_name: {{ cookiecutter.project_slug }}-dragonfly
+    command: dragonfly --requirepass ${DRAGONFLY_PASSWORD:-{{ cookiecutter.redis_password }}}
+    volumes:
+      - dragonfly_data:/data
+    ports:
+      - "${DRAGONFLY_PORT:-6379}:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - {{ cookiecutter.project_slug }}-network
+{% endif %}
+
+{% if cookiecutter.use_broker == "kafka" %}
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    container_name: {{ cookiecutter.project_slug }}-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    volumes:
+      - zookeeper_data:/var/lib/zookeeper/data
+    networks:
+      - {{ cookiecutter.project_slug }}-network
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: {{ cookiecutter.project_slug }}-kafka
+    depends_on:
+      zookeeper:
+        condition: service_started
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_NUM_PARTITIONS: 3
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - {{ cookiecutter.project_slug }}-network
+{% endif %}
+
+{% if cookiecutter.use_broker == "rabbitmq" %}
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: {{ cookiecutter.project_slug }}-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - {{ cookiecutter.project_slug }}-network
+{% endif %}
+
+{% if cookiecutter.use_broker == "nats" %}
+  nats:
+    image: nats:2.10-alpine
+    container_name: {{ cookiecutter.project_slug }}-nats
+    command: |
+      -js
+      -sd
+      -m 8222
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    volumes:
+      - nats_data:/data
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8222/jsz?acc=all&streams=true"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - {{ cookiecutter.project_slug }}-network
+{% endif %}
+
+{% if cookiecutter.add_docker == "y" %}
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: {{ cookiecutter.project_slug }}-app
+    environment:
+      <<: *app-environment
+    depends_on:
+{% if cookiecutter.use_database == "postgresql" %}
+      postgres:
+        condition: service_healthy
+{% endif %}
+{% if cookiecutter.use_database == "mysql" %}
+      mysql:
+        condition: service_healthy
+{% endif %}
+{% if cookiecutter.use_database == "sqlite" %}
+      sqlite-init:
+        condition: service_completed_successfully
+{% endif %}
+{% if cookiecutter.use_cache == "redis" %}
+      redis:
+        condition: service_healthy
+{% endif %}
+{% if cookiecutter.use_cache == "keydb" %}
+      keydb:
+        condition: service_healthy
+{% endif %}
+{% if cookiecutter.use_cache == "tarantool" %}
+      tarantool:
+        condition: service_healthy
+{% endif %}
+{% if cookiecutter.use_cache == "dragonfly" %}
+      dragonfly:
+        condition: service_healthy
+{% endif %}
+{% if cookiecutter.use_broker == "kafka" %}
+      kafka:
+        condition: service_healthy
+{% endif %}
+{% if cookiecutter.use_broker == "rabbitmq" %}
+      rabbitmq:
+        condition: service_healthy
+{% endif %}
+{% if cookiecutter.use_broker == "nats" %}
+      nats:
+        condition: service_healthy
+{% endif %}
+    ports:
+      - "8000:8000"
+    volumes:
+      - app_logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/docs"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - {{ cookiecutter.project_slug }}-network
+
+  app-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: {{ cookiecutter.project_slug }}-app-dev
+    environment:
+      <<: *app-dev-environment
+    depends_on:
+{% if cookiecutter.use_database == "postgresql" %}
+      postgres:
+        condition: service_healthy
+{% endif %}
+{% if cookiecutter.use_database == "mysql" %}
+      mysql:
+        condition: service_healthy
+{% endif %}
+{% if cookiecutter.use_database == "sqlite" %}
+      sqlite-init:
+        condition: service_completed_successfully
+{% endif %}
+{% if cookiecutter.use_cache == "redis" %}
+      redis:
+        condition: service_healthy
+{% endif %}
+{% if cookiecutter.use_cache == "keydb" %}
+      keydb:
+        condition: service_healthy
+{% endif %}
+{% if cookiecutter.use_cache == "tarantool" %}
+      tarantool:
+        condition: service_healthy
+{% endif %}
+{% if cookiecutter.use_cache == "dragonfly" %}
+      dragonfly:
+        condition: service_healthy
+{% endif %}
+{% if cookiecutter.use_broker == "kafka" %}
+      kafka:
+        condition: service_healthy
+{% endif %}
+{% if cookiecutter.use_broker == "rabbitmq" %}
+      rabbitmq:
+        condition: service_healthy
+{% endif %}
+{% if cookiecutter.use_broker == "nats" %}
+      nats:
+        condition: service_healthy
+{% endif %}
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./src:/app/src:ro
+      - ./tests:/app/tests:ro
+      - ./src/{{cookiecutter.project_slug}}/infrastructures/db/migrations:/app/src/{{cookiecutter.project_slug}}/infrastructures/db/migrations:ro
+      - ./alembic.ini:/app/alembic.ini:ro
+      - app_logs:/app/logs
+    restart: unless-stopped
+    networks:
+      - {{ cookiecutter.project_slug }}-network
+    profiles:
+      - dev
+
+{% if cookiecutter.use_database == "postgresql" %}
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: {{ cookiecutter.project_slug }}-migrate
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./scripts:/app/scripts:ro
+    command: ["/app/scripts/migrate.sh"]
+    networks:
+      - {{ cookiecutter.project_slug }}-network
+    profiles:
+      - migrate
+{% endif %}
+
+{% if cookiecutter.use_database == "mysql" %}
+  migrate-mysql:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: {{ cookiecutter.project_slug }}-migrate-mysql
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - ./scripts:/app/scripts:ro
+    command: ["/app/scripts/migrate.sh"]
+    networks:
+      - {{ cookiecutter.project_slug }}-network
+    profiles:
+      - migrate
+{% endif %}
+
+{% if cookiecutter.use_database == "sqlite" %}
+  migrate-sqlite:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: {{ cookiecutter.project_slug }}-migrate-sqlite
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+    depends_on:
+      sqlite-init:
+        condition: service_completed_successfully
+    volumes:
+      - ./scripts:/app/scripts:ro
+      - sqlite_data:/data
+    command: ["/app/scripts/migrate.sh"]
+    networks:
+      - {{ cookiecutter.project_slug }}-network
+    profiles:
+      - migrate
+{% endif %}
+
+{% if cookiecutter.add_tests == "y" %}
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: testing
+    container_name: {{ cookiecutter.project_slug }}-test
+    environment:
+      ENVIRONMENT: ${ENVIRONMENT:-testing}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      DEBUG: ${DEBUG:-false}
+      POSTGRES_USER: {{ cookiecutter.database_user }}
+      POSTGRES_PASSWORD: {{ cookiecutter.database_password }}
+      POSTGRES_SERVER: postgres-test
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: {{ cookiecutter.database_name }}_test
+      MUSEUM_API_BASE: ${MUSEUM_API_BASE}
+      CATALOG_API_BASE: ${CATALOG_API_BASE}
+      HTTP_TIMEOUT: ${HTTP_TIMEOUT}
+      BROKER_URL: ${BROKER_URL}
+      BROKER_NEW_ARTIFACT_QUEUE: ${BROKER_NEW_ARTIFACT_QUEUE}
+      PUBLISH_RETRIES: ${PUBLISH_RETRIES}
+      PUBLISH_RETRY_BACKOFF: ${PUBLISH_RETRY_BACKOFF}
+    depends_on:
+{% if cookiecutter.use_database == "postgresql" %}
+      postgres-test:
+        condition: service_healthy
+{% endif %}
+{% if cookiecutter.use_database == "mysql" %}
+      mysql-test:
+        condition: service_healthy
+{% endif %}
+{% if cookiecutter.use_database == "sqlite" %}
+      sqlite-init:
+        condition: service_completed_successfully
+{% endif %}
+{% if cookiecutter.use_cache == "redis" %}
+      redis:
+        condition: service_healthy
+{% endif %}
+{% if cookiecutter.use_cache == "keydb" %}
+      keydb:
+        condition: service_healthy
+{% endif %}
+{% if cookiecutter.use_cache == "tarantool" %}
+      tarantool:
+        condition: service_healthy
+{% endif %}
+{% if cookiecutter.use_cache == "dragonfly" %}
+      dragonfly:
+        condition: service_healthy
+{% endif %}
+    volumes:
+      - ./src:/app/src:ro
+      - ./tests:/app/tests:ro
+      - ./src/{{cookiecutter.project_slug}}/infrastructures/db/migrations:/app/src/{{cookiecutter.project_slug}}/infrastructures/db/migrations:ro
+      - ./alembic.ini:/app/alembic.ini:ro
+      - test_reports:/app/htmlcov
+    networks:
+      - {{ cookiecutter.project_slug }}-network
+    profiles:
+      - test
+{% endif %}
+{% endif %}
+
+volumes:
+{% if cookiecutter.use_database == "postgresql" %}
+  postgres_data:
+    <<: *common-volume
+{% endif %}
+{% if cookiecutter.use_database == "mysql" %}
+  mysql_data:
+    <<: *common-volume
+{% endif %}
+{% if cookiecutter.use_database == "sqlite" %}
+  sqlite_data:
+    <<: *common-volume
+{% endif %}
+{% if cookiecutter.use_cache == "redis" %}
+  redis_data:
+    <<: *common-volume
+{% endif %}
+{% if cookiecutter.use_cache == "keydb" %}
+  keydb_data:
+    <<: *common-volume
+{% endif %}
+{% if cookiecutter.use_cache == "tarantool" %}
+  tarantool_data:
+    <<: *common-volume
+{% endif %}
+{% if cookiecutter.use_cache == "dragonfly" %}
+  dragonfly_data:
+    <<: *common-volume
+{% endif %}
+{% if cookiecutter.use_broker == "kafka" %}
+  zookeeper_data:
+    <<: *common-volume
+  kafka_data:
+    <<: *common-volume
+{% endif %}
+{% if cookiecutter.use_broker == "rabbitmq" %}
+  rabbitmq_data:
+    <<: *common-volume
+{% endif %}
+{% if cookiecutter.use_broker == "nats" %}
+  nats_data:
+    <<: *common-volume
+{% endif %}
+{% if cookiecutter.add_docker == "y" %}
+  app_logs:
+    <<: *common-volume
+{% endif %}
+{% if cookiecutter.add_tests == "y" %}
+  test_reports:
+    <<: *common-volume
+{% endif %}
+
+networks:
+  {{ cookiecutter.project_slug }}-network:
+    driver: bridge

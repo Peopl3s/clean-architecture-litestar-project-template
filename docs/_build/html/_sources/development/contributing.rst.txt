@@ -1,0 +1,373 @@
+Contributing
+============
+
+Thank you for your interest in contributing to the Clean Architecture FastAPI Template!
+
+Getting Started
+---------------
+
+1. **Fork the Repository**
+
+Visit the `GitHub repository <https://github.com/Peopl3s/clean-architecture-fastapi-project-template>`_ and click "Fork".
+
+2. **Clone Your Fork**
+
+.. code-block:: bash
+
+   git clone https://github.com/YOUR_USERNAME/clean-architecture-fastapi-project-template.git
+   cd clean-architecture-fastapi-project-template
+
+3. **Create a Branch**
+
+.. code-block:: bash
+
+   git checkout -b feature/your-feature-name
+
+Development Setup
+-----------------
+
+Install Dependencies
+~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   pip install cookiecutter
+
+Test the Template
+~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Generate a test project
+   cookiecutter . --no-input
+   
+   # Test the generated project
+   cd my_fastapi_project
+   make install-dev
+   make check
+   make test
+
+Making Changes
+--------------
+
+Template Files
+~~~~~~~~~~~~~~
+
+* Modify files in ``{{cookiecutter.project_slug}}/``
+* Use Jinja2 syntax for variables: ``{{ cookiecutter.variable_name }}``
+* Use conditionals for optional features: ``{% if cookiecutter.use_feature %}...{% endif %}``
+
+Configuration
+~~~~~~~~~~~~~
+
+* Update ``cookiecutter.json`` for new variables
+* Add defaults and choices
+* Document in ``docs/getting-started/template-variables.rst``
+
+Hooks
+~~~~~
+
+* Pre-generation hooks: ``hooks/pre_gen_project.py``
+* Post-generation hooks: ``hooks/post_gen_project.py``
+* Use for validation and setup tasks
+
+Documentation
+~~~~~~~~~~~~~
+
+* Update relevant ``.rst`` files in ``docs/``
+* Add examples and use cases
+* Keep language clear and concise
+
+Testing Your Changes
+---------------------
+
+Test Generation
+~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Test with different configurations
+   cookiecutter . --no-input use_database=postgresql
+   cookiecutter . --no-input use_database=mysql
+   cookiecutter . --no-input use_cache=redis
+   cookiecutter . --no-input use_broker=kafka
+
+Test Generated Project
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   cd generated_project
+   make install-dev
+   make check
+   make test
+   make docker-up
+   # Verify everything works
+
+Code Style
+----------
+
+Template Code
+~~~~~~~~~~~~~
+
+* Follow Python PEP 8
+* Use meaningful variable names
+* Add docstrings to functions
+* Keep files focused and modular
+
+Generated Code
+~~~~~~~~~~~~~~
+
+Ensure generated projects follow:
+
+* Ruff linting rules
+* MyPy type checking
+* Clean Architecture principles
+* Project conventions
+
+Documentation Style
+~~~~~~~~~~~~~~~~~~~
+
+* Use reStructuredText format
+* Include code examples
+* Add cross-references with ``:doc:``
+* Keep sections organized
+
+Commit Guidelines
+-----------------
+
+Commit Messages
+~~~~~~~~~~~~~~~
+
+Follow conventional commits format:
+
+.. code-block:: text
+
+   type(scope): subject
+   
+   body
+   
+   footer
+
+**Types:**
+
+* ``feat``: New feature
+* ``fix``: Bug fix
+* ``docs``: Documentation changes
+* ``style``: Code style changes
+* ``refactor``: Code refactoring
+* ``test``: Test changes
+* ``chore``: Build/tooling changes
+
+**Examples:**
+
+.. code-block:: text
+
+   feat(database): add MySQL support
+   
+   - Add MySQL configuration
+   - Update docker-compose
+   - Add documentation
+   
+   Closes #123
+
+.. code-block:: text
+
+   fix(template): correct variable name in config
+   
+   The database_url variable was incorrectly named.
+
+Commit Best Practices
+~~~~~~~~~~~~~~~~~~~~~
+
+* Make atomic commits (one logical change)
+* Write clear, descriptive messages
+* Reference issues when applicable
+* Keep commits focused
+
+Submitting Changes
+------------------
+
+1. **Push to Your Fork**
+
+.. code-block:: bash
+
+   git push origin feature/your-feature-name
+
+2. **Create Pull Request**
+
+* Go to the original repository
+* Click "New Pull Request"
+* Select your fork and branch
+* Fill in the PR template
+
+3. **PR Description**
+
+Include:
+
+* What changes were made
+* Why the changes are needed
+* How to test the changes
+* Related issues
+* Screenshots (if UI changes)
+
+4. **Respond to Feedback**
+
+* Address review comments
+* Make requested changes
+* Push updates to your branch
+* Re-request review
+
+Pull Request Guidelines
+-----------------------
+
+Before Submitting
+~~~~~~~~~~~~~~~~~
+
+* [ ] Test template generation
+* [ ] Test generated project
+* [ ] Update documentation
+* [ ] Add/update tests if needed
+* [ ] Follow code style
+* [ ] Write clear commit messages
+
+PR Checklist
+~~~~~~~~~~~~
+
+* [ ] PR title is clear and descriptive
+* [ ] Description explains changes
+* [ ] Documentation is updated
+* [ ] Tests pass
+* [ ] No merge conflicts
+* [ ] Linked to related issues
+
+Review Process
+~~~~~~~~~~~~~~
+
+1. Maintainer reviews PR
+2. Automated checks run
+3. Feedback provided
+4. Changes requested (if needed)
+5. Approval and merge
+
+Types of Contributions
+----------------------
+
+Bug Reports
+~~~~~~~~~~~
+
+When reporting bugs, include:
+
+* Template version
+* Steps to reproduce
+* Expected behavior
+* Actual behavior
+* Error messages
+* Environment details
+
+**Template:**
+
+.. code-block:: markdown
+
+   **Describe the bug**
+   A clear description of the bug.
+   
+   **To Reproduce**
+   1. Run cookiecutter with...
+   2. Generate project with...
+   3. See error
+   
+   **Expected behavior**
+   What should happen.
+   
+   **Actual behavior**
+   What actually happens.
+   
+   **Environment:**
+   - OS: [e.g., macOS 13]
+   - Python: [e.g., 3.12]
+   - Cookiecutter: [e.g., 2.5.0]
+
+Feature Requests
+~~~~~~~~~~~~~~~~
+
+When requesting features:
+
+* Describe the use case
+* Explain the benefit
+* Suggest implementation
+* Consider alternatives
+
+Documentation
+~~~~~~~~~~~~~
+
+Documentation improvements are always welcome:
+
+* Fix typos
+* Clarify explanations
+* Add examples
+* Improve organization
+
+Code Contributions
+~~~~~~~~~~~~~~~~~~
+
+* New features
+* Bug fixes
+* Performance improvements
+* Code refactoring
+* Test improvements
+
+Community Guidelines
+--------------------
+
+Be Respectful
+~~~~~~~~~~~~~
+
+* Be kind and courteous
+* Respect different viewpoints
+* Accept constructive criticism
+* Focus on what's best for the project
+
+Be Collaborative
+~~~~~~~~~~~~~~~~
+
+* Help others
+* Share knowledge
+* Review PRs
+* Participate in discussions
+
+Be Professional
+~~~~~~~~~~~~~~~
+
+* Stay on topic
+* Avoid spam
+* Don't be disruptive
+* Follow the code of conduct
+
+Getting Help
+------------
+
+If you need help:
+
+* Read the documentation
+* Check existing issues
+* Ask in discussions
+* Contact maintainers
+
+Recognition
+-----------
+
+Contributors are recognized in:
+
+* GitHub contributors page
+* Release notes
+* Documentation credits
+
+Thank you for contributing! 🎉
+
+See Also
+--------
+
+* :doc:`code-quality` - Code quality standards
+* :doc:`../getting-started/quickstart` - Quick start guide
+* :doc:`../reference/faq` - FAQ

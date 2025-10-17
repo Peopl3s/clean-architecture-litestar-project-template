@@ -1,0 +1,630 @@
+Deployment
+==========
+
+This guide covers deploying applications generated from the template to production.
+
+Deployment Options
+------------------
+
+* **Docker** - Containerized deployment (recommended)
+* **Kubernetes** - Container orchestration
+* **Cloud Platforms** - AWS, GCP, Azure
+* **Platform as a Service** - Heroku, Railway, Render
+* **Virtual Machines** - Traditional server deployment
+
+Docker Deployment
+-----------------
+
+Production Build
+~~~~~~~~~~~~~~~~
+
+The template includes a multi-stage Dockerfile optimized for production:
+
+.. code-block:: bash
+
+   # Build production image
+   make docker-build
+   
+   # Or manually
+   docker build --target production -t myapp:latest .
+
+The production stage:
+
+* Uses minimal base image
+* Installs only production dependencies
+* Runs as non-root user
+* Optimized for size and security
+
+Docker Compose
+~~~~~~~~~~~~~~
+
+For simple deployments:
+
+.. code-block:: bash
+
+   # Start all services
+   docker-compose up -d
+   
+   # Run migrations
+   make docker-migrate
+   
+   # View logs
+   docker-compose logs -f app
+
+Environment Variables
+~~~~~~~~~~~~~~~~~~~~~
+
+Create a ``.env.production`` file:
+
+.. code-block:: bash
+
+   # Application
+   APP_NAME=My API
+   DEBUG=false
+   LOG_LEVEL=INFO
+   ENVIRONMENT=production
+   
+   # Database
+   DATABASE_URL=postgresql+asyncpg://user:pass@db:5432/mydb
+   
+   # Redis
+   REDIS_URL=redis://redis:6379/0
+   
+   # Security
+   SECRET_KEY=your-secret-key-here
+
+Load in docker-compose:
+
+.. code-block:: yaml
+
+   services:
+     app:
+       env_file:
+         - .env.production
+
+Kubernetes Deployment
+---------------------
+
+Deployment Manifest
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: yaml
+
+   # k8s/deployment.yaml
+   apiVersion: apps/v1
+   kind: Deployment
+   metadata:
+     name: myapp
+   spec:
+     replicas: 3
+     selector:
+       matchLabels:
+         app: myapp
+     template:
+       metadata:
+         labels:
+           app: myapp
+       spec:
+         containers:
+         - name: myapp
+           image: myapp:latest
+           ports:
+           - containerPort: 8000
+           env:
+           - name: DATABASE_URL
+             valueFrom:
+               secretKeyRef:
+                 name: myapp-secrets
+                 key: database-url
+           resources:
+             requests:
+               memory: "256Mi"
+               cpu: "250m"
+             limits:
+               memory: "512Mi"
+               cpu: "500m"
+           livenessProbe:
+             httpGet:
+               path: /health
+               port: 8000
+             initialDelaySeconds: 30
+             periodSeconds: 10
+           readinessProbe:
+             httpGet:
+               path: /health
+               port: 8000
+             initialDelaySeconds: 5
+             periodSeconds: 5
+
+Service
+~~~~~~~
+
+.. code-block:: yaml
+
+   # k8s/service.yaml
+   apiVersion: v1
+   kind: Service
+   metadata:
+     name: myapp
+   spec:
+     selector:
+       app: myapp
+     ports:
+     - protocol: TCP
+       port: 80
+       targetPort: 8000
+     type: LoadBalancer
+
+Secrets
+~~~~~~~
+
+.. code-block:: bash
+
+   # Create secrets
+   kubectl create secret generic myapp-secrets \
+     --from-literal=database-url="postgresql://..." \
+     --from-literal=redis-url="redis://..." \
+     --from-literal=secret-key="your-secret"
+
+ConfigMap
+~~~~~~~~~
+
+.. code-block:: yaml
+
+   # k8s/configmap.yaml
+   apiVersion: v1
+   kind: ConfigMap
+   metadata:
+     name: myapp-config
+   data:
+     APP_NAME: "My API"
+     LOG_LEVEL: "INFO"
+     ENVIRONMENT: "production"
+
+Deploy
+~~~~~~
+
+.. code-block:: bash
+
+   # Apply configurations
+   kubectl apply -f k8s/
+   
+   # Check status
+   kubectl get pods
+   kubectl get services
+   
+   # View logs
+   kubectl logs -f deployment/myapp
+
+AWS Deployment
+--------------
+
+AWS ECS (Fargate)
+~~~~~~~~~~~~~~~~~
+
+**1. Create ECR Repository:**
+
+.. code-block:: bash
+
+   aws ecr create-repository --repository-name myapp
+
+**2. Build and Push Image:**
+
+.. code-block:: bash
+
+   # Login to ECR
+   aws ecr get-login-password --region us-east-1 | \
+     docker login --username AWS --password-stdin \
+     123456789.dkr.ecr.us-east-1.amazonaws.com
+   
+   # Build and tag
+   docker build -t myapp:latest .
+   docker tag myapp:latest \
+     123456789.dkr.ecr.us-east-1.amazonaws.com/myapp:latest
+   
+   # Push
+   docker push 123456789.dkr.ecr.us-east-1.amazonaws.com/myapp:latest
+
+**3. Create Task Definition:**
+
+.. code-block:: json
+
+   {
+     "family": "myapp",
+     "networkMode": "awsvpc",
+     "requiresCompatibilities": ["FARGATE"],
+     "cpu": "256",
+     "memory": "512",
+     "containerDefinitions": [
+       {
+         "name": "myapp",
+         "image": "123456789.dkr.ecr.us-east-1.amazonaws.com/myapp:latest",
+         "portMappings": [
+           {
+             "containerPort": 8000,
+             "protocol": "tcp"
+           }
+         ],
+         "environment": [
+           {"name": "ENVIRONMENT", "value": "production"}
+         ],
+         "secrets": [
+           {
+             "name": "DATABASE_URL",
+             "valueFrom": "arn:aws:secretsmanager:..."
+           }
+         ],
+         "logConfiguration": {
+           "logDriver": "awslogs",
+           "options": {
+             "awslogs-group": "/ecs/myapp",
+             "awslogs-region": "us-east-1",
+             "awslogs-stream-prefix": "ecs"
+           }
+         }
+       }
+     ]
+   }
+
+**4. Create Service:**
+
+.. code-block:: bash
+
+   aws ecs create-service \
+     --cluster myapp-cluster \
+     --service-name myapp \
+     --task-definition myapp \
+     --desired-count 2 \
+     --launch-type FARGATE \
+     --network-configuration "awsvpcConfiguration={subnets=[subnet-xxx],securityGroups=[sg-xxx],assignPublicIp=ENABLED}"
+
+AWS Lambda
+~~~~~~~~~~
+
+For serverless deployment with Mangum:
+
+.. code-block:: python
+
+   # lambda_handler.py
+   from mangum import Mangum
+   from your_project.main import app
+   
+   handler = Mangum(app, lifespan="off")
+
+Deploy with AWS SAM or Serverless Framework.
+
+Google Cloud Platform
+---------------------
+
+Cloud Run
+~~~~~~~~~
+
+**1. Build and Push:**
+
+.. code-block:: bash
+
+   # Configure Docker for GCP
+   gcloud auth configure-docker
+   
+   # Build and push
+   docker build -t gcr.io/PROJECT_ID/myapp:latest .
+   docker push gcr.io/PROJECT_ID/myapp:latest
+
+**2. Deploy:**
+
+.. code-block:: bash
+
+   gcloud run deploy myapp \
+     --image gcr.io/PROJECT_ID/myapp:latest \
+     --platform managed \
+     --region us-central1 \
+     --allow-unauthenticated \
+     --set-env-vars "ENVIRONMENT=production" \
+     --set-secrets "DATABASE_URL=database-url:latest"
+
+GKE (Google Kubernetes Engine)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Create cluster
+   gcloud container clusters create myapp-cluster \
+     --num-nodes=3 \
+     --machine-type=n1-standard-1
+   
+   # Get credentials
+   gcloud container clusters get-credentials myapp-cluster
+   
+   # Deploy
+   kubectl apply -f k8s/
+
+Azure Deployment
+----------------
+
+Azure Container Instances
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Create resource group
+   az group create --name myapp-rg --location eastus
+   
+   # Create container registry
+   az acr create --resource-group myapp-rg \
+     --name myappregistry --sku Basic
+   
+   # Build and push
+   az acr build --registry myappregistry \
+     --image myapp:latest .
+   
+   # Deploy
+   az container create \
+     --resource-group myapp-rg \
+     --name myapp \
+     --image myappregistry.azurecr.io/myapp:latest \
+     --cpu 1 --memory 1 \
+     --registry-login-server myappregistry.azurecr.io \
+     --registry-username <username> \
+     --registry-password <password> \
+     --dns-name-label myapp \
+     --ports 8000
+
+Platform as a Service
+---------------------
+
+Railway
+~~~~~~~
+
+1. Connect GitHub repository
+2. Add environment variables
+3. Deploy automatically on push
+
+.. code-block:: bash
+
+   # railway.json
+   {
+     "build": {
+       "builder": "DOCKERFILE",
+       "dockerfilePath": "Dockerfile"
+     },
+     "deploy": {
+       "startCommand": "python -m your_project.main",
+       "healthcheckPath": "/health"
+     }
+   }
+
+Render
+~~~~~~
+
+Create ``render.yaml``:
+
+.. code-block:: yaml
+
+   services:
+     - type: web
+       name: myapp
+       env: docker
+       dockerfilePath: ./Dockerfile
+       envVars:
+         - key: DATABASE_URL
+           sync: false
+         - key: ENVIRONMENT
+           value: production
+
+Heroku
+~~~~~~
+
+.. code-block:: bash
+
+   # Create app
+   heroku create myapp
+   
+   # Add PostgreSQL
+   heroku addons:create heroku-postgresql:hobby-dev
+   
+   # Deploy
+   git push heroku main
+   
+   # Run migrations
+   heroku run make migrate
+
+Production Checklist
+--------------------
+
+Security
+~~~~~~~~
+
+- [ ] Set ``DEBUG=false``
+- [ ] Use strong ``SECRET_KEY``
+- [ ] Enable HTTPS/TLS
+- [ ] Configure CORS properly
+- [ ] Use environment variables for secrets
+- [ ] Enable rate limiting
+- [ ] Set up firewall rules
+- [ ] Use security headers
+- [ ] Keep dependencies updated
+- [ ] Enable authentication/authorization
+
+Performance
+~~~~~~~~~~~
+
+- [ ] Enable caching
+- [ ] Configure connection pooling
+- [ ] Set up CDN for static files
+- [ ] Enable gzip compression
+- [ ] Optimize database queries
+- [ ] Add database indexes
+- [ ] Configure worker processes
+- [ ] Set resource limits
+- [ ] Enable monitoring
+- [ ] Set up auto-scaling
+
+Reliability
+~~~~~~~~~~~
+
+- [ ] Set up health checks
+- [ ] Configure liveness/readiness probes
+- [ ] Enable auto-restart on failure
+- [ ] Set up load balancing
+- [ ] Configure backup strategy
+- [ ] Set up disaster recovery
+- [ ] Enable logging
+- [ ] Set up alerting
+- [ ] Document runbooks
+- [ ] Test rollback procedures
+
+Monitoring
+~~~~~~~~~~
+
+- [ ] Application metrics
+- [ ] Database metrics
+- [ ] Error tracking (Sentry)
+- [ ] Performance monitoring (New Relic, DataDog)
+- [ ] Log aggregation (ELK, CloudWatch)
+- [ ] Uptime monitoring
+- [ ] Alert configuration
+- [ ] Dashboard setup
+
+Database
+~~~~~~~~
+
+- [ ] Run migrations
+- [ ] Set up backups
+- [ ] Configure replication
+- [ ] Optimize indexes
+- [ ] Set connection limits
+- [ ] Enable SSL
+- [ ] Monitor performance
+- [ ] Plan for scaling
+
+Environment Variables
+---------------------
+
+Production Environment
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Application
+   APP_NAME=My API
+   APP_VERSION=1.0.0
+   DEBUG=false
+   LOG_LEVEL=WARNING
+   ENVIRONMENT=production
+   
+   # Server
+   HOST=0.0.0.0
+   PORT=8000
+   WORKERS=4
+   
+   # Database
+   DATABASE_URL=postgresql+asyncpg://user:pass@host:5432/db
+   DB_POOL_SIZE=20
+   DB_MAX_OVERFLOW=10
+   
+   # Redis
+   REDIS_URL=redis://host:6379/0
+   REDIS_POOL_SIZE=20
+   
+   # Security
+   SECRET_KEY=your-very-long-secret-key
+   ALLOWED_HOSTS=["api.example.com"]
+   CORS_ORIGINS=["https://example.com"]
+
+CI/CD Pipeline
+--------------
+
+GitHub Actions
+~~~~~~~~~~~~~~
+
+.. code-block:: yaml
+
+   # .github/workflows/deploy.yml
+   name: Deploy
+   
+   on:
+     push:
+       branches: [main]
+   
+   jobs:
+     deploy:
+       runs-on: ubuntu-latest
+       steps:
+         - uses: actions/checkout@v3
+         
+         - name: Build image
+           run: docker build -t myapp:latest .
+         
+         - name: Push to registry
+           run: |
+             echo ${{ secrets.REGISTRY_PASSWORD }} | \
+               docker login -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin
+             docker push myapp:latest
+         
+         - name: Deploy to production
+           run: |
+             # Deploy commands here
+
+Rollback Strategy
+-----------------
+
+Docker Tags
+~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Tag with version
+   docker tag myapp:latest myapp:v1.2.3
+   
+   # Rollback to previous version
+   docker pull myapp:v1.2.2
+   docker tag myapp:v1.2.2 myapp:latest
+
+Kubernetes
+~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Rollback deployment
+   kubectl rollout undo deployment/myapp
+   
+   # Rollback to specific revision
+   kubectl rollout undo deployment/myapp --to-revision=2
+
+Troubleshooting
+---------------
+
+Container Won't Start
+~~~~~~~~~~~~~~~~~~~~~
+
+1. Check logs: ``docker logs container-id``
+2. Verify environment variables
+3. Check database connectivity
+4. Verify image build
+5. Check resource limits
+
+High Memory Usage
+~~~~~~~~~~~~~~~~~
+
+1. Monitor with ``docker stats``
+2. Check for memory leaks
+3. Adjust worker count
+4. Optimize queries
+5. Enable connection pooling
+
+Slow Response Times
+~~~~~~~~~~~~~~~~~~~
+
+1. Enable caching
+2. Optimize database queries
+3. Add indexes
+4. Scale horizontally
+5. Use CDN
+
+See Also
+--------
+
+* :doc:`../development/docker` - Docker guide
+* :doc:`configuration` - Configuration reference
+* :doc:`database` - Database setup
+* :doc:`../advanced/ci-cd` - CI/CD setup

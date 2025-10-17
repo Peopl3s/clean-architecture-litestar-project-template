@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Database &mdash; Clean Architecture FastAPI Template 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../_static/copybutton.js?v=30646c52"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Caching" href="caching.html" />
+    <link rel="prev" title="Configuration" href="configuration.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Clean Architecture FastAPI Template
+          </a>
+              <div class="version">
+                1.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html#installing-cookiecutter">Installing Cookiecutter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html#creating-a-project">Creating a Project</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/installation.html#from-github">From GitHub</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/installation.html#from-local-clone">From Local Clone</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/installation.html#interactive-setup">Interactive Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/installation.html#non-interactive-setup">Non-Interactive Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html#post-installation">Post-Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/quickstart.html">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html#create-your-first-project">Create Your First Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html#project-structure-overview">Project Structure Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html#running-the-application">Running the Application</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/quickstart.html#using-docker-recommended">Using Docker (Recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/quickstart.html#local-development">Local Development</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html#exploring-the-api">Exploring the API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/quickstart.html#health-check">Health Check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/quickstart.html#interactive-documentation">Interactive Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html#development-workflow">Development Workflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/quickstart.html#running-tests">Running Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/quickstart.html#code-quality">Code Quality</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/quickstart.html#database-migrations">Database Migrations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html#adding-a-new-feature">Adding a New Feature</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html#common-commands">Common Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/template-variables.html">Template Variables</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/template-variables.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/template-variables.html#project-information">Project Information</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#project-name">project_name</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#project-slug">project_slug</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#project-description">project_description</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/template-variables.html#author-information">Author Information</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#author-name">author_name</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#author-email">author_email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#github-username">github_username</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/template-variables.html#version-information">Version Information</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#version">version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#python-version">python_version</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/template-variables.html#api-configuration">API Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#api-title">api_title</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#api-version">api_version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#api-description">api_description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#domain-name">domain_name</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/template-variables.html#database-configuration">Database Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#use-database">use_database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#database-name">database_name</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#database-user">database_user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#database-password">database_password</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/template-variables.html#cache-configuration">Cache Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#use-cache">use_cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#redis-password">redis_password</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/template-variables.html#message-broker-configuration">Message Broker Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#use-broker">use_broker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/template-variables.html#feature-flags">Feature Flags</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#add-docker">add_docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#add-tests">add_tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#add-docs">add_docs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#add-precommit">add_precommit</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/template-variables.html#license">License</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#license-type">license_type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/template-variables.html#example-configurations">Example Configurations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#minimal-setup">Minimal Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#full-featured-setup">Full-Featured Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#microservice-setup">Microservice Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/template-variables.html#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="project-structure.html">Project Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="project-structure.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project-structure.html#root-directory">Root Directory</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="project-structure.html#configuration-files">Configuration Files</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="project-structure.html#source-code-src">Source Code (<code class="docutils literal notranslate"><span class="pre">src/</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="project-structure.html#domain-layer-domain">Domain Layer (<code class="docutils literal notranslate"><span class="pre">domain/</span></code>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project-structure.html#application-layer-application">Application Layer (<code class="docutils literal notranslate"><span class="pre">application/</span></code>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project-structure.html#infrastructure-layer-infrastructure">Infrastructure Layer (<code class="docutils literal notranslate"><span class="pre">infrastructure/</span></code>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project-structure.html#presentation-layer-presentation">Presentation Layer (<code class="docutils literal notranslate"><span class="pre">presentation/</span></code>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project-structure.html#configuration-config">Configuration (<code class="docutils literal notranslate"><span class="pre">config/</span></code>)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="project-structure.html#tests-tests">Tests (<code class="docutils literal notranslate"><span class="pre">tests/</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project-structure.html#database-migrations-alembic">Database Migrations (<code class="docutils literal notranslate"><span class="pre">alembic/</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project-structure.html#documentation-docs">Documentation (<code class="docutils literal notranslate"><span class="pre">docs/</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project-structure.html#scripts-scripts">Scripts (<code class="docutils literal notranslate"><span class="pre">scripts/</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project-structure.html#file-naming-conventions">File Naming Conventions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="project-structure.html#python-files">Python Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project-structure.html#classes">Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project-structure.html#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="project-structure.html#constants">Constants</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="project-structure.html#import-organization">Import Organization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project-structure.html#module-organization">Module Organization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project-structure.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project-structure.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#clean-architecture-overview">Clean Architecture Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#architecture-layers">Architecture Layers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#domain-layer-core">1. Domain Layer (Core)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#application-layer-use-cases">2. Application Layer (Use Cases)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#infrastructure-layer-adapters">3. Infrastructure Layer (Adapters)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#presentation-layer-controllers">4. Presentation Layer (Controllers)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#dependency-flow">Dependency Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#dependency-injection">Dependency Injection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#benefits-of-this-architecture">Benefits of This Architecture</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#testability">Testability</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#maintainability">Maintainability</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#scalability">Scalability</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#configuration-system">Configuration System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#configuration-file">Configuration File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#environment-variables">Environment Variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#application-settings">Application Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#server-settings">Server Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#database-settings">Database Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#cache-settings">Cache Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#message-broker-settings">Message Broker Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#setting-up-environment">Setting Up Environment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#development">Development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#production">Production</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#accessing-configuration">Accessing Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#in-application-code">In Application Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#with-dependency-injection">With Dependency Injection</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#validation">Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#environment-specific-config">Environment-Specific Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#multiple-environments">Multiple Environments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#configuration-files">Configuration Files</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#secrets-management">Secrets Management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#best-practices">Best Practices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#aws-secrets-manager-example">AWS Secrets Manager Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#configuration-testing">Configuration Testing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#test-configuration">Test Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#override-in-tests">Override in Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#common-patterns">Common Patterns</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#feature-flags">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#database-connection-pooling">Database Connection Pooling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#cors-configuration">CORS Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#configuration-not-loading">Configuration Not Loading</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#validation-errors">Validation Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration.html#type-errors">Type Errors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Database</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#supported-databases">Supported Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#database-setup">Database Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#postgresql">PostgreSQL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mysql">MySQL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sqlite">SQLite</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sqlalchemy-configuration">SQLAlchemy Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#base-model">Base Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#session-management">Session Management</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-models">Creating Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#domain-entity">Domain Entity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#database-model">Database Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#relationships">Relationships</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#repository-pattern">Repository Pattern</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#interface-definition">Interface Definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#repository-implementation">Repository Implementation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#database-migrations">Database Migrations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#create-migration">Create Migration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#apply-migrations">Apply Migrations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rollback-migration">Rollback Migration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#migration-history">Migration History</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#query-patterns">Query Patterns</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basic-queries">Basic Queries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pagination">Pagination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#joins">Joins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aggregations">Aggregations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#transactions">Transactions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#auto-commit">Auto-commit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#manual-transaction">Manual Transaction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rollback-on-error">Rollback on Error</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#connection-errors">Connection Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#migration-errors">Migration Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#performance-issues">Performance Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="caching.html">Caching</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="caching.html#supported-backends">Supported Backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="caching.html#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="caching.html#redis">Redis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="caching.html#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="caching.html#basic-caching">Basic Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="caching.html#cache-decorator">Cache Decorator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="caching.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="caching.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="message-brokers.html">Message Brokers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="message-brokers.html#supported-brokers">Supported Brokers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="message-brokers.html#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="message-brokers.html#kafka">Kafka</a></li>
+<li class="toctree-l3"><a class="reference internal" href="message-brokers.html#rabbitmq">RabbitMQ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="message-brokers.html#nats">NATS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="message-brokers.html#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="message-brokers.html#producer">Producer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="message-brokers.html#consumer">Consumer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="message-brokers.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="message-brokers.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#testing-philosophy">Testing Philosophy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#test-structure">Test Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#running-tests">Running Tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#basic-commands">Basic Commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#coverage">Coverage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#unit-tests">Unit Tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#domain-entity-tests">Domain Entity Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#use-case-tests">Use Case Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#integration-tests">Integration Tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#api-endpoint-tests">API Endpoint Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#database-tests">Database Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#fixtures">Fixtures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#common-fixtures">Common Fixtures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#test-data-fixtures">Test Data Fixtures</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#mocking">Mocking</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#mock-external-services">Mock External Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#mock-repository">Mock Repository</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#parametrized-tests">Parametrized Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#test-markers">Test Markers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#custom-markers">Custom Markers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#run-by-marker">Run by Marker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#coverage-goals">Coverage Goals</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#target-coverage">Target Coverage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#check-coverage">Check Coverage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#continuous-integration">Continuous Integration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#github-actions">GitHub Actions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#async-test-issues">Async Test Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#database-test-issues">Database Test Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#fixture-not-found">Fixture Not Found</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deployment.html">Deployment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html#deployment-options">Deployment Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html#docker-deployment">Docker Deployment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#production-build">Production Build</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#docker-compose">Docker Compose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#environment-variables">Environment Variables</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html#kubernetes-deployment">Kubernetes Deployment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#deployment-manifest">Deployment Manifest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#service">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#secrets">Secrets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#configmap">ConfigMap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#deploy">Deploy</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html#aws-deployment">AWS Deployment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#aws-ecs-fargate">AWS ECS (Fargate)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#aws-lambda">AWS Lambda</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html#google-cloud-platform">Google Cloud Platform</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#cloud-run">Cloud Run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#gke-google-kubernetes-engine">GKE (Google Kubernetes Engine)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html#azure-deployment">Azure Deployment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#azure-container-instances">Azure Container Instances</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html#platform-as-a-service">Platform as a Service</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#railway">Railway</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#render">Render</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#heroku">Heroku</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html#production-checklist">Production Checklist</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#security">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#performance">Performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#reliability">Reliability</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#monitoring">Monitoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#database">Database</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html#id1">Environment Variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#production-environment">Production Environment</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html#ci-cd-pipeline">CI/CD Pipeline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#github-actions">GitHub Actions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html#rollback-strategy">Rollback Strategy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#docker-tags">Docker Tags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#kubernetes">Kubernetes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#container-won-t-start">Container Won’t Start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#high-memory-usage">High Memory Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deployment.html#slow-response-times">Slow Response Times</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development/code-quality.html">Code Quality</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../development/code-quality.html#tools-overview">Tools Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/code-quality.html#ruff">Ruff</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/code-quality.html#configuration">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/code-quality.html#running-ruff">Running Ruff</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/code-quality.html#common-rules">Common Rules</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/code-quality.html#mypy">MyPy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/code-quality.html#id1">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/code-quality.html#running-mypy">Running MyPy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/code-quality.html#type-hints-best-practices">Type Hints Best Practices</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/code-quality.html#pytest">Pytest</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/code-quality.html#id2">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/code-quality.html#running-tests">Running Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/code-quality.html#writing-tests">Writing Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/code-quality.html#pre-commit-hooks">Pre-commit Hooks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/code-quality.html#id3">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/code-quality.html#setup">Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/code-quality.html#code-quality-checklist">Code Quality Checklist</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/code-quality.html#before-committing">Before Committing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/code-quality.html#before-pull-request">Before Pull Request</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/code-quality.html#best-practices">Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/code-quality.html#code-style">Code Style</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/code-quality.html#testing">Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/code-quality.html#architecture">Architecture</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/code-quality.html#common-issues">Common Issues</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/code-quality.html#import-errors">Import Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/code-quality.html#type-errors">Type Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/code-quality.html#test-failures">Test Failures</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/code-quality.html#continuous-integration">Continuous Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/code-quality.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../development/docker.html">Docker Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../development/docker.html#docker-files">Docker Files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#dockerfile">Dockerfile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#docker-compose-yml">docker-compose.yml</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/docker.html#building-images">Building Images</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#development">Development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#testing">Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#production">Production</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/docker.html#running-services">Running Services</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#start-all-services">Start All Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#stop-services">Stop Services</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/docker.html#development-workflow">Development Workflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#hot-reload">Hot Reload</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#shell-access">Shell Access</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#database-operations">Database Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#testing-in-docker">Testing in Docker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/docker.html#docker-compose-profiles">Docker Compose Profiles</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#development-profile">Development Profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#testing-profile">Testing Profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#production-profile">Production Profile</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/docker.html#volumes">Volumes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#named-volumes">Named Volumes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#bind-mounts">Bind Mounts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/docker.html#networks">Networks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#custom-networks">Custom Networks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/docker.html#environment-variables">Environment Variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#env-file">.env File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#id1">docker-compose.yml</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/docker.html#health-checks">Health Checks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#application-health">Application Health</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#database-health">Database Health</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#depends-on">Depends On</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/docker.html#resource-limits">Resource Limits</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#memory-and-cpu">Memory and CPU</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/docker.html#logging">Logging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#configure-logging">Configure Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#view-logs">View Logs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/docker.html#best-practices">Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#image-optimization">Image Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#security">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#id2">Development</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/docker.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#container-won-t-start">Container Won’t Start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#port-already-in-use">Port Already in Use</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#permission-errors">Permission Errors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/docker.html#clean-up">Clean Up</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#remove-containers">Remove Containers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#remove-images">Remove Images</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/docker.html#system-cleanup">System Cleanup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/docker.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../development/migrations.html">Database Migrations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../development/migrations.html#quick-start">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/migrations.html#creating-migrations">Creating Migrations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/migrations.html#applying-migrations">Applying Migrations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/migrations.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../development/contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing.html#getting-started">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing.html#development-setup">Development Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/contributing.html#install-dependencies">Install Dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/contributing.html#test-the-template">Test the Template</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing.html#making-changes">Making Changes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/contributing.html#template-files">Template Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/contributing.html#configuration">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/contributing.html#hooks">Hooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/contributing.html#documentation">Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing.html#testing-your-changes">Testing Your Changes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/contributing.html#test-generation">Test Generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/contributing.html#test-generated-project">Test Generated Project</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing.html#code-style">Code Style</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/contributing.html#template-code">Template Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/contributing.html#generated-code">Generated Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/contributing.html#documentation-style">Documentation Style</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing.html#commit-guidelines">Commit Guidelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/contributing.html#commit-messages">Commit Messages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/contributing.html#commit-best-practices">Commit Best Practices</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing.html#submitting-changes">Submitting Changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing.html#pull-request-guidelines">Pull Request Guidelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/contributing.html#before-submitting">Before Submitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/contributing.html#pr-checklist">PR Checklist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/contributing.html#review-process">Review Process</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing.html#types-of-contributions">Types of Contributions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/contributing.html#bug-reports">Bug Reports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/contributing.html#feature-requests">Feature Requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/contributing.html#id1">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/contributing.html#code-contributions">Code Contributions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing.html#community-guidelines">Community Guidelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../development/contributing.html#be-respectful">Be Respectful</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/contributing.html#be-collaborative">Be Collaborative</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../development/contributing.html#be-professional">Be Professional</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing.html#getting-help">Getting Help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing.html#recognition">Recognition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing.html#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/customization.html">Template Customization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/customization.html#forking-the-template">Forking the Template</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/customization.html#modifying-template-files">Modifying Template Files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/customization.html#variables">Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/customization.html#conditionals">Conditionals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/customization.html#loops">Loops</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/customization.html#adding-new-variables">Adding New Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/customization.html#cookiecutter-hooks">Cookiecutter Hooks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/customization.html#pre-generation-hook">Pre-generation Hook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/customization.html#post-generation-hook">Post-generation Hook</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/customization.html#custom-templates">Custom Templates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/customization.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/hooks.html">Cookiecutter Hooks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/hooks.html#hook-types">Hook Types</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/hooks.html#pre-generation-hook">Pre-generation Hook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/hooks.html#post-generation-hook">Post-generation Hook</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/hooks.html#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/hooks.html#validation-hook">Validation Hook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/hooks.html#cleanup-hook">Cleanup Hook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/hooks.html#git-initialization">Git Initialization</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/hooks.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/hooks.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/ci-cd.html">CI/CD Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/ci-cd.html#github-actions">GitHub Actions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/ci-cd.html#test-workflow">Test Workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/ci-cd.html#deploy-workflow">Deploy Workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/ci-cd.html#gitlab-ci">GitLab CI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/ci-cd.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/ci-cd.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/best-practices.html">Best Practices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/best-practices.html#architecture">Architecture</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/best-practices.html#layer-boundaries">Layer Boundaries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/best-practices.html#single-responsibility">Single Responsibility</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/best-practices.html#code-quality">Code Quality</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/best-practices.html#type-hints">Type Hints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/best-practices.html#docstrings">Docstrings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/best-practices.html#testing">Testing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/best-practices.html#test-pyramid">Test Pyramid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/best-practices.html#mock-external-dependencies">Mock External Dependencies</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/best-practices.html#database">Database</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/best-practices.html#use-indexes">Use Indexes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/best-practices.html#connection-pooling">Connection Pooling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/best-practices.html#security">Security</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/best-practices.html#environment-variables">Environment Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/best-practices.html#input-validation">Input Validation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/best-practices.html#performance">Performance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/best-practices.html#caching">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/best-practices.html#async-operations">Async Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/best-practices.html#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference/makefile-commands.html">Makefile Commands</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/makefile-commands.html#development-commands">Development Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#install">install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#install-dev">install-dev</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#dev-setup">dev-setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/makefile-commands.html#code-quality-commands">Code Quality Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#lint">lint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#lint-fix">lint-fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#format">format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#type-check">type-check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#check">check</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/makefile-commands.html#testing-commands">Testing Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#test">test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#test-cov">test-cov</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#clean">clean</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/makefile-commands.html#database-commands">Database Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#migration">migration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#migrate">migrate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#migrate-downgrade">migrate-downgrade</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#migrate-history">migrate-history</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#migrate-current">migrate-current</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#migrate-stamp">migrate-stamp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/makefile-commands.html#docker-commands">Docker Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-build">docker-build</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-build-dev">docker-build-dev</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-build-test">docker-build-test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-up">docker-up</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-up-dev">docker-up-dev</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-down">docker-down</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-logs">docker-logs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-logs-app">docker-logs-app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-shell">docker-shell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-migrate">docker-migrate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-test">docker-test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-clean">docker-clean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-rebuild">docker-rebuild</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/makefile-commands.html#environment-commands">Environment Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#setup-env">setup-env</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#dev-setup-docker">dev-setup-docker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/makefile-commands.html#ci-cd-commands">CI/CD Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#ci">ci</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/makefile-commands.html#message-broker-commands-kafka">Message Broker Commands (Kafka)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-kafka-logs">docker-kafka-logs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-kafka-shell">docker-kafka-shell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-kafka-topics">docker-kafka-topics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-kafka-create-topic">docker-kafka-create-topic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-kafka-consume">docker-kafka-consume</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/makefile-commands.html#common-workflows">Common Workflows</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#starting-development">Starting Development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#before-committing">Before Committing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#deploying">Deploying</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/makefile-commands.html#help">Help</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#id1">help</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/makefile-commands.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/environment-variables.html">Environment Variables</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/environment-variables.html#application-variables">Application Variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/environment-variables.html#app-name">APP_NAME</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/environment-variables.html#app-version">APP_VERSION</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/environment-variables.html#debug">DEBUG</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/environment-variables.html#log-level">LOG_LEVEL</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/environment-variables.html#server-variables">Server Variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/environment-variables.html#host">HOST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/environment-variables.html#port">PORT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/environment-variables.html#workers">WORKERS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/environment-variables.html#database-variables">Database Variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/environment-variables.html#database-url">DATABASE_URL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/environment-variables.html#db-echo">DB_ECHO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/environment-variables.html#db-pool-size">DB_POOL_SIZE</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/environment-variables.html#cache-variables">Cache Variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/environment-variables.html#redis-url">REDIS_URL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/environment-variables.html#redis-password">REDIS_PASSWORD</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/environment-variables.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/faq.html">Frequently Asked Questions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#general-questions">General Questions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#what-is-this-template-for">What is this template for?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#who-should-use-this-template">Who should use this template?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#do-i-need-to-know-clean-architecture">Do I need to know Clean Architecture?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#template-usage">Template Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-create-a-project-from-this-template">How do I create a project from this template?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#can-i-use-this-template-for-commercial-projects">Can I use this template for commercial projects?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#can-i-customize-the-template">Can I customize the template?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-update-an-existing-project-with-template-changes">How do I update an existing project with template changes?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#database-questions">Database Questions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#which-database-should-i-choose">Which database should I choose?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#can-i-change-the-database-later">Can I change the database later?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-handle-database-migrations">How do I handle database migrations?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#caching-questions">Caching Questions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#do-i-need-a-cache">Do I need a cache?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#which-cache-backend-should-i-use">Which cache backend should I use?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#message-broker-questions">Message Broker Questions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#when-do-i-need-a-message-broker">When do I need a message broker?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#which-broker-should-i-choose">Which broker should I choose?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#docker-questions">Docker Questions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#do-i-need-docker">Do I need Docker?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#can-i-run-without-docker">Can I run without Docker?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-customize-docker-configuration">How do I customize Docker configuration?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#development-questions">Development Questions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-add-a-new-endpoint">How do I add a new endpoint?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-add-a-new-database-table">How do I add a new database table?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-run-tests">How do I run tests?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-format-and-lint-code">How do I format and lint code?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#deployment-questions">Deployment Questions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-deploy-to-production">How do I deploy to production?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#what-environment-variables-do-i-need">What environment variables do I need?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-handle-secrets">How do I handle secrets?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#performance-questions">Performance Questions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-improve-performance">How do I improve performance?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-many-workers-should-i-use">How many workers should I use?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#tests-are-failing">Tests are failing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#docker-containers-won-t-start">Docker containers won’t start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#database-connection-errors">Database connection errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#import-errors">Import errors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#getting-help">Getting Help</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#where-can-i-get-help">Where can I get help?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-report-bugs">How do I report bugs?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-request-features">How do I request features?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#contributing">Contributing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-can-i-contribute">How can I contribute?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">[Unreleased]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id1">[1.0.0] - 2025-10-01</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#features">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#template-variables">Template Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#documentation">Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">[0.1.0] - 2024-09-29</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id3">Added</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../license.html#mit-license">MIT License</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../license.html#generated-projects">Generated Projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../license.html#third-party-licenses">Third-Party Licenses</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../license.html#fastapi">FastAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../license.html#sqlalchemy">SQLAlchemy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../license.html#pydantic">Pydantic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../license.html#ruff">Ruff</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../license.html#dishka">Dishka</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../license.html#contributing">Contributing</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Clean Architecture FastAPI Template</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Database</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/Peopl3s/clean-architecture-fastapi-project-template/blob/main/docs/user-guide/database.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="database">
+<h1>Database<a class="headerlink" href="#database" title="Link to this heading"></a></h1>
+<p>The template supports multiple database backends with async SQLAlchemy and Alembic migrations.</p>
+<section id="supported-databases">
+<h2>Supported Databases<a class="headerlink" href="#supported-databases" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>PostgreSQL</strong> - Recommended for production (via asyncpg)</p></li>
+<li><p><strong>MySQL</strong> - Alternative production database (via aiomysql)</p></li>
+<li><p><strong>SQLite</strong> - Development and testing (via aiosqlite)</p></li>
+</ul>
+</section>
+<section id="database-setup">
+<h2>Database Setup<a class="headerlink" href="#database-setup" title="Link to this heading"></a></h2>
+<section id="postgresql">
+<h3>PostgreSQL<a class="headerlink" href="#postgresql" title="Link to this heading"></a></h3>
+<p><strong>Installation:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># macOS</span>
+brew<span class="w"> </span>install<span class="w"> </span>postgresql
+
+<span class="c1"># Ubuntu</span>
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>postgresql
+</pre></div>
+</div>
+<p><strong>Configuration:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">DATABASE_URL</span><span class="o">=</span>postgresql+asyncpg://user:password@localhost:5432/dbname
+</pre></div>
+</div>
+<p><strong>Docker:</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">postgres</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres:16-alpine</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">POSTGRES_DB</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mydb</span>
+<span class="w">      </span><span class="nt">POSTGRES_USER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">user</span>
+<span class="w">      </span><span class="nt">POSTGRES_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;5432:5432&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="mysql">
+<h3>MySQL<a class="headerlink" href="#mysql" title="Link to this heading"></a></h3>
+<p><strong>Configuration:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">DATABASE_URL</span><span class="o">=</span>mysql+aiomysql://user:password@localhost:3306/dbname
+</pre></div>
+</div>
+<p><strong>Docker:</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">mysql</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mysql:8</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">MYSQL_DATABASE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mydb</span>
+<span class="w">      </span><span class="nt">MYSQL_USER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">user</span>
+<span class="w">      </span><span class="nt">MYSQL_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span>
+<span class="w">      </span><span class="nt">MYSQL_ROOT_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rootpassword</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;3306:3306&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="sqlite">
+<h3>SQLite<a class="headerlink" href="#sqlite" title="Link to this heading"></a></h3>
+<p><strong>Configuration:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">DATABASE_URL</span><span class="o">=</span>sqlite+aiosqlite:///./database.db
+</pre></div>
+</div>
+<p>No additional setup required.</p>
+</section>
+</section>
+<section id="sqlalchemy-configuration">
+<h2>SQLAlchemy Configuration<a class="headerlink" href="#sqlalchemy-configuration" title="Link to this heading"></a></h2>
+<section id="base-model">
+<h3>Base Model<a class="headerlink" href="#base-model" title="Link to this heading"></a></h3>
+<p>Location: <code class="docutils literal notranslate"><span class="pre">src/{project}/infrastructure/database/base.py</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeclarativeBase</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Base</span><span class="p">(</span><span class="n">DeclarativeBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for all database models.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+<section id="session-management">
+<h3>Session Management<a class="headerlink" href="#session-management" title="Link to this heading"></a></h3>
+<p>Location: <code class="docutils literal notranslate"><span class="pre">src/{project}/infrastructure/database/session.py</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.ext.asyncio</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AsyncSession</span><span class="p">,</span>
+    <span class="n">async_sessionmaker</span><span class="p">,</span>
+    <span class="n">create_async_engine</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_async_engine</span><span class="p">(</span>
+    <span class="n">settings</span><span class="o">.</span><span class="n">database_url</span><span class="p">,</span>
+    <span class="n">echo</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">db_echo</span><span class="p">,</span>
+    <span class="n">pool_size</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">db_pool_size</span><span class="p">,</span>
+    <span class="n">max_overflow</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">db_max_overflow</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">async_session_maker</span> <span class="o">=</span> <span class="n">async_sessionmaker</span><span class="p">(</span>
+    <span class="n">engine</span><span class="p">,</span>
+    <span class="n">class_</span><span class="o">=</span><span class="n">AsyncSession</span><span class="p">,</span>
+    <span class="n">expire_on_commit</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="creating-models">
+<h2>Creating Models<a class="headerlink" href="#creating-models" title="Link to this heading"></a></h2>
+<section id="domain-entity">
+<h3>Domain Entity<a class="headerlink" href="#domain-entity" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># domain/entities/user.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;User domain entity.&quot;&quot;&quot;</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">username</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">email</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">created_at</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">updated_at</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</section>
+<section id="database-model">
+<h3>Database Model<a class="headerlink" href="#database-model" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># infrastructure/database/models/user.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Column</span><span class="p">,</span> <span class="n">Integer</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">DateTime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">func</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">infrastructure.database.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Base</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">UserModel</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;User database model.&quot;&quot;&quot;</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;users&quot;</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">autoincrement</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">DateTime</span><span class="p">,</span> <span class="n">server_default</span><span class="o">=</span><span class="n">func</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">updated_at</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">DateTime</span><span class="p">,</span> <span class="n">onupdate</span><span class="o">=</span><span class="n">func</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+<section id="relationships">
+<h3>Relationships<a class="headerlink" href="#relationships" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ForeignKey</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">relationship</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">UserModel</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;users&quot;</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">posts</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&quot;PostModel&quot;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;author&quot;</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">PostModel</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;posts&quot;</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">user_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;users.id&quot;</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">author</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&quot;UserModel&quot;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;posts&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="repository-pattern">
+<h2>Repository Pattern<a class="headerlink" href="#repository-pattern" title="Link to this heading"></a></h2>
+<section id="interface-definition">
+<h3>Interface Definition<a class="headerlink" href="#interface-definition" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># application/interfaces/repositories.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">domain.entities.user</span><span class="w"> </span><span class="kn">import</span> <span class="n">User</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">IUserRepository</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;User repository interface.&quot;&quot;&quot;</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">User</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get user by ID.&quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">User</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create new user.&quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">User</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update existing user.&quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Delete user.&quot;&quot;&quot;</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+</section>
+<section id="repository-implementation">
+<h3>Repository Implementation<a class="headerlink" href="#repository-implementation" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># infrastructure/database/repositories/user_repository.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">select</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.ext.asyncio</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncSession</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">domain.entities.user</span><span class="w"> </span><span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">infrastructure.database.models.user</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserModel</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">UserRepository</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;User repository implementation.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_session</span> <span class="o">=</span> <span class="n">session</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">User</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get user by ID.&quot;&quot;&quot;</span>
+        <span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">UserModel</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">UserModel</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">user_id</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">scalar_one_or_none</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_entity</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="k">if</span> <span class="n">model</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">User</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create new user.&quot;&quot;&quot;</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">UserModel</span><span class="p">(</span>
+            <span class="n">username</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="p">,</span>
+            <span class="n">email</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_entity</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">User</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update existing user.&quot;&quot;&quot;</span>
+        <span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">UserModel</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">UserModel</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">scalar_one</span><span class="p">()</span>
+
+        <span class="n">model</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">username</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span>
+
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_entity</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Delete user.&quot;&quot;&quot;</span>
+        <span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">UserModel</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">UserModel</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">user_id</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">scalar_one</span><span class="p">()</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_to_entity</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">UserModel</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">User</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert model to entity.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">User</span><span class="p">(</span>
+            <span class="nb">id</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">username</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">username</span><span class="p">,</span>
+            <span class="n">email</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+            <span class="n">created_at</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">created_at</span><span class="p">,</span>
+            <span class="n">updated_at</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">updated_at</span><span class="p">,</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="database-migrations">
+<h2>Database Migrations<a class="headerlink" href="#database-migrations" title="Link to this heading"></a></h2>
+<p>Alembic is used for database schema migrations.</p>
+<section id="create-migration">
+<h3>Create Migration<a class="headerlink" href="#create-migration" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Auto-generate migration</span>
+make<span class="w"> </span>migration<span class="w"> </span><span class="nv">msg</span><span class="o">=</span><span class="s2">&quot;Add users table&quot;</span>
+
+<span class="c1"># Or manually</span>
+uv<span class="w"> </span>run<span class="w"> </span>alembic<span class="w"> </span>revision<span class="w"> </span>--autogenerate<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Add users table&quot;</span>
+</pre></div>
+</div>
+<p>This creates a file in <code class="docutils literal notranslate"><span class="pre">alembic/versions/</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Add users table</span>
+
+<span class="sd">Revision ID: abc123</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">alembic</span><span class="w"> </span><span class="kn">import</span> <span class="n">op</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sa</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">upgrade</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">op</span><span class="o">.</span><span class="n">create_table</span><span class="p">(</span>
+        <span class="s1">&#39;users&#39;</span><span class="p">,</span>
+        <span class="n">sa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">sa</span><span class="o">.</span><span class="n">Integer</span><span class="p">(),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">sa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="n">sa</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">sa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">,</span> <span class="n">sa</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">sa</span><span class="o">.</span><span class="n">PrimaryKeyConstraint</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">downgrade</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">op</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="s1">&#39;users&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="apply-migrations">
+<h3>Apply Migrations<a class="headerlink" href="#apply-migrations" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Apply all pending migrations</span>
+make<span class="w"> </span>migrate
+
+<span class="c1"># Or manually</span>
+uv<span class="w"> </span>run<span class="w"> </span>alembic<span class="w"> </span>upgrade<span class="w"> </span>head
+</pre></div>
+</div>
+</section>
+<section id="rollback-migration">
+<h3>Rollback Migration<a class="headerlink" href="#rollback-migration" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Rollback one migration</span>
+make<span class="w"> </span>migrate-downgrade
+
+<span class="c1"># Rollback to specific version</span>
+uv<span class="w"> </span>run<span class="w"> </span>alembic<span class="w"> </span>downgrade<span class="w"> </span>abc123
+</pre></div>
+</div>
+</section>
+<section id="migration-history">
+<h3>Migration History<a class="headerlink" href="#migration-history" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># View history</span>
+make<span class="w"> </span>migrate-history
+
+<span class="c1"># View current version</span>
+make<span class="w"> </span>migrate-current
+</pre></div>
+</div>
+</section>
+</section>
+<section id="query-patterns">
+<h2>Query Patterns<a class="headerlink" href="#query-patterns" title="Link to this heading"></a></h2>
+<section id="basic-queries">
+<h3>Basic Queries<a class="headerlink" href="#basic-queries" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">select</span>
+
+<span class="c1"># Get by ID</span>
+<span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">UserModel</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">UserModel</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">user_id</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span>
+<span class="n">user</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">scalar_one_or_none</span><span class="p">()</span>
+
+<span class="c1"># Get all</span>
+<span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">UserModel</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span>
+<span class="n">users</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">scalars</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+<span class="c1"># Filter</span>
+<span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">UserModel</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">UserModel</span><span class="o">.</span><span class="n">username</span> <span class="o">==</span> <span class="s2">&quot;john&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span>
+<span class="n">user</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">scalar_one</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="pagination">
+<h3>Pagination<a class="headerlink" href="#pagination" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">paginate</span><span class="p">(</span><span class="n">stmt</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="n">offset</span> <span class="o">=</span> <span class="p">(</span><span class="n">page</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">size</span>
+    <span class="k">return</span> <span class="n">stmt</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">size</span><span class="p">)</span><span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
+
+<span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">UserModel</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">UserModel</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<span class="n">stmt</span> <span class="o">=</span> <span class="n">paginate</span><span class="p">(</span><span class="n">stmt</span><span class="p">,</span> <span class="n">page</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span>
+<span class="n">users</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">scalars</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="joins">
+<h3>Joins<a class="headerlink" href="#joins" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">selectinload</span>
+
+<span class="c1"># Eager loading</span>
+<span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">UserModel</span><span class="p">)</span><span class="o">.</span><span class="n">options</span><span class="p">(</span>
+    <span class="n">selectinload</span><span class="p">(</span><span class="n">UserModel</span><span class="o">.</span><span class="n">posts</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span>
+<span class="n">user</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">scalar_one</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="aggregations">
+<h3>Aggregations<a class="headerlink" href="#aggregations" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">func</span>
+
+<span class="c1"># Count</span>
+<span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">UserModel</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+<span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span>
+<span class="n">count</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">scalar</span><span class="p">()</span>
+
+<span class="c1"># Group by</span>
+<span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span>
+    <span class="n">UserModel</span><span class="o">.</span><span class="n">created_at</span><span class="p">,</span>
+    <span class="n">func</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">UserModel</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<span class="p">)</span><span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="n">UserModel</span><span class="o">.</span><span class="n">created_at</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="transactions">
+<h2>Transactions<a class="headerlink" href="#transactions" title="Link to this heading"></a></h2>
+<section id="auto-commit">
+<h3>Auto-commit<a class="headerlink" href="#auto-commit" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">with</span> <span class="n">async_session_maker</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">UserModel</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;john&quot;</span><span class="p">,</span> <span class="n">email</span><span class="o">=</span><span class="s2">&quot;john@example.com&quot;</span><span class="p">)</span>
+    <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>  <span class="c1"># Explicit commit</span>
+</pre></div>
+</div>
+</section>
+<section id="manual-transaction">
+<h3>Manual Transaction<a class="headerlink" href="#manual-transaction" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">with</span> <span class="n">async_session_maker</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">begin</span><span class="p">():</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">UserModel</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;john&quot;</span><span class="p">)</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+        <span class="c1"># Auto-commits on exit</span>
+</pre></div>
+</div>
+</section>
+<section id="rollback-on-error">
+<h3>Rollback on Error<a class="headerlink" href="#rollback-on-error" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">with</span> <span class="n">async_session_maker</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">begin</span><span class="p">():</span>
+            <span class="c1"># Operations</span>
+            <span class="k">pass</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+        <span class="k">raise</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>Use Async Everywhere</strong></p>
+<ul class="simple">
+<li><p>Always use <code class="docutils literal notranslate"><span class="pre">async/await</span></code></p></li>
+<li><p>Use async drivers (asyncpg, aiomysql, aiosqlite)</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">AsyncSession</span></code></p></li>
+</ul>
+</li>
+<li><p><strong>Connection Pooling</strong></p>
+<ul class="simple">
+<li><p>Configure appropriate pool size</p></li>
+<li><p>Set max_overflow</p></li>
+<li><p>Use pool_pre_ping for health checks</p></li>
+</ul>
+</li>
+<li><p><strong>Indexes</strong></p>
+<ul class="simple">
+<li><p>Add indexes to frequently queried columns</p></li>
+<li><p>Use composite indexes for multi-column queries</p></li>
+<li><p>Monitor query performance</p></li>
+</ul>
+</li>
+<li><p><strong>Migrations</strong></p>
+<ul class="simple">
+<li><p>Review auto-generated migrations</p></li>
+<li><p>Test migrations before applying</p></li>
+<li><p>Keep migrations reversible</p></li>
+<li><p>Version control migration files</p></li>
+</ul>
+</li>
+<li><p><strong>Repository Pattern</strong></p>
+<ul class="simple">
+<li><p>One repository per entity</p></li>
+<li><p>Keep database logic in repositories</p></li>
+<li><p>Return domain entities, not models</p></li>
+<li><p>Use interfaces for testability</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<section id="connection-errors">
+<h3>Connection Errors<a class="headerlink" href="#connection-errors" title="Link to this heading"></a></h3>
+<p><strong>Problem:</strong> Can’t connect to database</p>
+<p><strong>Solutions:</strong></p>
+<ol class="arabic simple">
+<li><p>Verify database is running</p></li>
+<li><p>Check connection string</p></li>
+<li><p>Verify credentials</p></li>
+<li><p>Check network/firewall</p></li>
+<li><p>Test with database client</p></li>
+</ol>
+</section>
+<section id="migration-errors">
+<h3>Migration Errors<a class="headerlink" href="#migration-errors" title="Link to this heading"></a></h3>
+<p><strong>Problem:</strong> Migration fails</p>
+<p><strong>Solutions:</strong></p>
+<ol class="arabic simple">
+<li><p>Check database state</p></li>
+<li><p>Review migration file</p></li>
+<li><p>Rollback and retry</p></li>
+<li><p>Check for conflicts</p></li>
+<li><p>Manual intervention if needed</p></li>
+</ol>
+</section>
+<section id="performance-issues">
+<h3>Performance Issues<a class="headerlink" href="#performance-issues" title="Link to this heading"></a></h3>
+<p><strong>Problem:</strong> Slow queries</p>
+<p><strong>Solutions:</strong></p>
+<ol class="arabic simple">
+<li><p>Add appropriate indexes</p></li>
+<li><p>Use eager loading for relationships</p></li>
+<li><p>Implement pagination</p></li>
+<li><p>Optimize queries</p></li>
+<li><p>Use database profiling tools</p></li>
+</ol>
+</section>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../development/migrations.html"><span class="doc">Database Migrations</span></a> - Migration guide</p></li>
+<li><p><a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a> - Configuration guide</p></li>
+<li><p><a class="reference internal" href="testing.html"><span class="doc">Testing</span></a> - Testing with databases</p></li>
+<li><p><a class="reference internal" href="../reference/makefile-commands.html"><span class="doc">Makefile Commands</span></a> - Database commands</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="configuration.html" class="btn btn-neutral float-left" title="Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="caching.html" class="btn btn-neutral float-right" title="Caching" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Peopl3s.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+Template Customization
+======================
+
+Guide to customizing the cookiecutter template.
+
+Forking the Template
+--------------------
+
+1. Fork the repository on GitHub
+2. Clone your fork
+3. Make modifications
+4. Use your fork with cookiecutter
+
+.. code-block:: bash
+
+   cookiecutter https://github.com/YOUR_USERNAME/clean-architecture-fastapi-project-template.git
+
+Modifying Template Files
+-------------------------
+
+Template files use Jinja2 syntax:
+
+Variables
+~~~~~~~~~
+
+.. code-block:: python
+
+   # Use variables
+   {{ cookiecutter.project_name }}
+   {{ cookiecutter.author_name }}
+
+Conditionals
+~~~~~~~~~~~~
+
+.. code-block:: python
+
+   {% if cookiecutter.use_database == "postgresql" %}
+   # PostgreSQL specific code
+   {% endif %}
+
+Loops
+~~~~~
+
+.. code-block:: python
+
+   {% for option in cookiecutter.database_options %}
+   # {{ option }}
+   {% endfor %}
+
+Adding New Variables
+--------------------
+
+Edit ``cookiecutter.json``:
+
+.. code-block:: json
+
+   {
+     "project_name": "My Project",
+     "new_variable": "default_value",
+     "new_choice": ["option1", "option2", "option3"]
+   }
+
+Use in templates:
+
+.. code-block:: python
+
+   {{ cookiecutter.new_variable }}
+
+Cookiecutter Hooks
+------------------
+
+Pre-generation Hook
+~~~~~~~~~~~~~~~~~~~
+
+``hooks/pre_gen_project.py`` - Runs before generation:
+
+.. code-block:: python
+
+   import sys
+   
+   project_name = "{{ cookiecutter.project_name }}"
+   
+   if len(project_name) < 3:
+       print("ERROR: Project name too short")
+       sys.exit(1)
+
+Post-generation Hook
+~~~~~~~~~~~~~~~~~~~~
+
+``hooks/post_gen_project.py`` - Runs after generation:
+
+.. code-block:: python
+
+   import os
+   import subprocess
+   
+   # Initialize git
+   subprocess.run(["git", "init"])
+   
+   # Remove unused files
+   if "{{ cookiecutter.use_docker }}" != "y":
+       os.remove("Dockerfile")
+       os.remove("docker-compose.yml")
+
+Custom Templates
+----------------
+
+Create custom template structure:
+
+.. code-block:: text
+
+   my-template/
+   ├── cookiecutter.json
+   ├── hooks/
+   │   ├── pre_gen_project.py
+   │   └── post_gen_project.py
+   └── {{cookiecutter.project_slug}}/
+       └── your files here
+
+See Also
+--------
+
+* :doc:`../getting-started/template-variables` - Variables
+* :doc:`hooks` - Hooks guide
+* :doc:`../development/contributing` - Contributing

@@ -1,0 +1,366 @@
+Frequently Asked Questions
+==========================
+
+General Questions
+-----------------
+
+What is this template for?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This is a cookiecutter template for creating FastAPI applications following Clean Architecture principles. It provides a production-ready foundation with best practices, testing, Docker support, and comprehensive tooling.
+
+Who should use this template?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Developers starting new FastAPI projects
+* Teams wanting a standardized project structure
+* Anyone looking to implement Clean Architecture in Python
+* Projects requiring scalability and maintainability
+
+Do I need to know Clean Architecture?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Basic understanding helps, but the template includes comprehensive documentation explaining the architecture. You can learn as you build.
+
+Template Usage
+--------------
+
+How do I create a project from this template?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   pip install cookiecutter
+   cookiecutter https://github.com/Peopl3s/clean-architecture-fastapi-project-template.git
+
+Can I use this template for commercial projects?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Yes! The template is MIT licensed. Projects you create can use any license you choose.
+
+Can I customize the template?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Absolutely! You can:
+
+* Fork the repository and modify it
+* Use cookiecutter hooks to add custom logic
+* Modify generated projects after creation
+
+How do I update an existing project with template changes?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Currently, manual updates are required. We recommend:
+
+1. Review template changes in the repository
+2. Apply relevant changes to your project
+3. Test thoroughly
+
+Database Questions
+------------------
+
+Which database should I choose?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* **PostgreSQL**: Production applications, complex queries, scalability
+* **MySQL**: Existing MySQL infrastructure, compatibility requirements
+* **SQLite**: Development, testing, simple applications
+* **None**: API-only services, external data sources
+
+Can I change the database later?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Yes, but it requires:
+
+1. Updating connection strings in configuration
+2. Modifying database-specific code if any
+3. Re-running migrations
+4. Testing thoroughly
+
+How do I handle database migrations?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The template uses Alembic:
+
+.. code-block:: bash
+
+   # Create migration
+   make migration msg="Description"
+   
+   # Apply migrations
+   make migrate
+   
+   # Rollback
+   make migrate-downgrade
+
+Caching Questions
+-----------------
+
+Do I need a cache?
+~~~~~~~~~~~~~~~~~~
+
+Caching is optional but recommended for:
+
+* Frequently accessed data
+* Expensive computations
+* Rate limiting
+* Session storage
+
+Which cache backend should I use?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* **Redis**: Most popular, great ecosystem, proven reliability
+* **KeyDB**: Redis-compatible, multi-threaded, better performance
+* **Dragonfly**: Modern Redis alternative, high performance
+* **Tarantool**: In-memory database with Lua scripting
+* **None**: Simple applications without caching needs
+
+Message Broker Questions
+------------------------
+
+When do I need a message broker?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use message brokers for:
+
+* Asynchronous task processing
+* Event-driven architecture
+* Microservices communication
+* Decoupling services
+
+Which broker should I choose?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* **Kafka**: High throughput, event streaming, data pipelines
+* **RabbitMQ**: Complex routing, traditional messaging patterns
+* **NATS**: Lightweight, cloud-native, simple pub/sub
+* **None**: Monolithic applications, synchronous processing
+
+Docker Questions
+----------------
+
+Do I need Docker?
+~~~~~~~~~~~~~~~~~
+
+Docker is optional but highly recommended for:
+
+* Consistent development environments
+* Easy deployment
+* Service orchestration
+* CI/CD pipelines
+
+Can I run without Docker?
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Yes! Install dependencies locally:
+
+.. code-block:: bash
+
+   make install-dev
+   # Set up database, cache, etc. manually
+   make migrate
+   uv run python -m your_project.main
+
+How do I customize Docker configuration?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Edit these files:
+
+* ``Dockerfile`` - Application container
+* ``docker-compose.yml`` - Services configuration
+* ``.dockerignore`` - Files to exclude
+
+Development Questions
+---------------------
+
+How do I add a new endpoint?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Create use case in ``application/use_cases/``
+2. Add endpoint in ``presentation/api/``
+3. Create schemas in ``presentation/schemas/``
+4. Write tests in ``tests/``
+
+How do I add a new database table?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Create entity in ``domain/entities/``
+2. Add model in ``infrastructure/database/models/``
+3. Create repository in ``infrastructure/database/repositories/``
+4. Generate migration: ``make migration msg="Add table"``
+5. Apply: ``make migrate``
+
+How do I run tests?
+~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # All tests
+   make test
+   
+   # With coverage
+   make test-cov
+   
+   # Specific test
+   uv run pytest tests/unit/test_something.py
+
+How do I format and lint code?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Format
+   make format
+   
+   # Lint
+   make lint
+   
+   # Fix auto-fixable issues
+   make lint-fix
+   
+   # All checks
+   make check
+
+Deployment Questions
+--------------------
+
+How do I deploy to production?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Build production image: ``make docker-build``
+2. Push to registry
+3. Deploy to your platform (Kubernetes, ECS, etc.)
+4. Run migrations: ``make docker-migrate``
+5. Start application
+
+What environment variables do I need?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+See ``env.template`` for all variables. Key ones:
+
+* ``DATABASE_URL`` - Database connection
+* ``REDIS_URL`` - Cache connection (if using)
+* ``DEBUG`` - Set to ``false`` in production
+* ``LOG_LEVEL`` - Set to ``INFO`` or ``WARNING``
+
+How do I handle secrets?
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Use environment variables
+* Never commit secrets to git
+* Use secret management services (AWS Secrets Manager, etc.)
+* Use ``.env`` files locally (gitignored)
+
+Performance Questions
+---------------------
+
+How do I improve performance?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Enable caching for frequently accessed data
+* Use database indexes appropriately
+* Implement pagination for large datasets
+* Use async operations throughout
+* Profile and optimize bottlenecks
+* Scale horizontally with multiple workers
+
+How many workers should I use?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Start with: ``(2 × CPU cores) + 1``
+
+Adjust based on:
+
+* CPU vs I/O bound workload
+* Available memory
+* Load testing results
+
+Troubleshooting
+---------------
+
+Tests are failing
+~~~~~~~~~~~~~~~~~
+
+1. Check test database is running
+2. Ensure migrations are applied
+3. Verify environment variables
+4. Check test fixtures
+
+Docker containers won't start
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Check logs: ``make docker-logs``
+2. Verify ports aren't in use
+3. Ensure Docker daemon is running
+4. Try clean rebuild: ``make docker-rebuild``
+
+Database connection errors
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Verify database is running
+2. Check connection string in ``.env``
+3. Ensure database exists
+4. Check network connectivity
+5. Verify credentials
+
+Import errors
+~~~~~~~~~~~~~
+
+1. Ensure dependencies are installed: ``make install-dev``
+2. Check Python path
+3. Verify virtual environment is activated
+4. Look for circular imports
+
+Getting Help
+------------
+
+Where can I get help?
+~~~~~~~~~~~~~~~~~~~~~
+
+* Read the documentation thoroughly
+* Check GitHub issues
+* Create a new issue with details
+* Review example code in the template
+
+How do I report bugs?
+~~~~~~~~~~~~~~~~~~~~~~
+
+Open an issue on GitHub with:
+
+* Template version
+* Steps to reproduce
+* Expected vs actual behavior
+* Error messages
+* Environment details
+
+How do I request features?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Open a GitHub issue describing:
+
+* Use case
+* Proposed solution
+* Why it benefits the template
+* Willingness to contribute
+
+Contributing
+------------
+
+How can I contribute?
+~~~~~~~~~~~~~~~~~~~~~
+
+* Report bugs
+* Suggest features
+* Improve documentation
+* Submit pull requests
+* Share your experience
+
+See :doc:`../development/contributing` for details.
+
+See Also
+--------
+
+* :doc:`../getting-started/installation` - Installation guide
+* :doc:`../getting-started/quickstart` - Quick start
+* :doc:`../user-guide/architecture` - Architecture guide
+* :doc:`makefile-commands` - Command reference

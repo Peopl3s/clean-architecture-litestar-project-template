@@ -1,0 +1,46 @@
+Database Migrations
+===================
+
+The template uses Alembic for database schema migrations.
+
+Quick Start
+-----------
+
+.. code-block:: bash
+
+   # Create migration
+   make migration msg="Add users table"
+   
+   # Apply migrations
+   make migrate
+   
+   # Rollback
+   make migrate-downgrade
+
+Creating Migrations
+-------------------
+
+Auto-generate:
+
+.. code-block:: bash
+
+   make migration msg="Add users table"
+
+This creates a migration file in ``alembic/versions/``.
+
+Applying Migrations
+-------------------
+
+.. code-block:: bash
+
+   # Upgrade to latest
+   make migrate
+   
+   # Downgrade one step
+   make migrate-downgrade
+
+See Also
+--------
+
+* :doc:`../user-guide/database` - Database guide
+* :doc:`../reference/makefile-commands` - Commands

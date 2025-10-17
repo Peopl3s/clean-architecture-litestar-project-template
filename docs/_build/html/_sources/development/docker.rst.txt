@@ -1,0 +1,614 @@
+Docker Guide
+============
+
+The template includes comprehensive Docker support for development, testing, and production.
+
+Docker Files
+------------
+
+Dockerfile
+~~~~~~~~~~
+
+Multi-stage Dockerfile with three targets:
+
+* **development** - Dev dependencies, hot-reload
+* **testing** - Test dependencies, CI/CD
+* **production** - Minimal image, optimized
+
+.. code-block:: dockerfile
+
+   # Development stage
+   FROM python:3.12-slim as development
+   WORKDIR /app
+   RUN pip install uv
+   COPY pyproject.toml uv.lock ./
+   RUN uv sync --dev
+   COPY . .
+   CMD ["uv", "run", "python", "-m", "your_project.main"]
+   
+   # Testing stage
+   FROM development as testing
+   RUN uv run pytest
+   
+   # Production stage
+   FROM python:3.12-slim as production
+   WORKDIR /app
+   RUN pip install uv
+   COPY pyproject.toml uv.lock ./
+   RUN uv sync --no-dev
+   COPY src ./src
+   RUN useradd -m appuser && chown -R appuser:appuser /app
+   USER appuser
+   CMD ["uv", "run", "python", "-m", "your_project.main"]
+
+docker-compose.yml
+~~~~~~~~~~~~~~~~~~
+
+Orchestrates all services:
+
+.. code-block:: yaml
+
+   version: '3.8'
+   
+   services:
+     app:
+       build:
+         context: .
+         target: development
+       ports:
+         - "8000:8000"
+       volumes:
+         - ./src:/app/src
+       env_file:
+         - .env
+       depends_on:
+         - postgres
+         - redis
+       command: uv run python -m your_project.main --reload
+     
+     postgres:
+       image: postgres:16-alpine
+       environment:
+         POSTGRES_DB: ${DATABASE_NAME}
+         POSTGRES_USER: ${DATABASE_USER}
+         POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+       ports:
+         - "5432:5432"
+       volumes:
+         - postgres_data:/var/lib/postgresql/data
+     
+     redis:
+       image: redis:7-alpine
+       ports:
+         - "6379:6379"
+       command: redis-server --requirepass ${REDIS_PASSWORD}
+   
+   volumes:
+     postgres_data:
+
+Building Images
+---------------
+
+Development
+~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Build development image
+   make docker-build-dev
+   
+   # Or manually
+   docker build --target development -t myapp:dev .
+
+Testing
+~~~~~~~
+
+.. code-block:: bash
+
+   # Build testing image
+   make docker-build-test
+   
+   # Run tests in container
+   docker run --rm myapp:test
+
+Production
+~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Build production image
+   make docker-build
+   
+   # Or manually
+   docker build --target production -t myapp:latest .
+   
+   # Optimize size
+   docker build --target production \
+     --build-arg PYTHON_VERSION=3.12-slim \
+     -t myapp:latest .
+
+Running Services
+----------------
+
+Start All Services
+~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Start in background
+   make docker-up
+   
+   # Or manually
+   docker-compose up -d
+   
+   # View logs
+   make docker-logs
+   
+   # Follow specific service
+   docker-compose logs -f app
+
+Stop Services
+~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Stop all services
+   make docker-down
+   
+   # Stop and remove volumes
+   docker-compose down -v
+
+Development Workflow
+--------------------
+
+Hot Reload
+~~~~~~~~~~
+
+The development setup includes hot-reload:
+
+.. code-block:: yaml
+
+   services:
+     app:
+       volumes:
+         - ./src:/app/src  # Mount source code
+       command: uv run python -m your_project.main --reload
+
+Changes to source code automatically restart the server.
+
+Shell Access
+~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Open shell in running container
+   make docker-shell
+   
+   # Or manually
+   docker-compose exec app bash
+   
+   # Run commands
+   docker-compose exec app uv run python -m your_project.main
+
+Database Operations
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Run migrations
+   make docker-migrate
+   
+   # Create migration
+   docker-compose exec app uv run alembic revision --autogenerate -m "message"
+   
+   # Access database
+   docker-compose exec postgres psql -U user -d dbname
+
+Testing in Docker
+~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Run tests
+   make docker-test
+   
+   # Or manually
+   docker-compose --profile test run --rm test
+
+Docker Compose Profiles
+-----------------------
+
+The template uses profiles for different environments:
+
+Development Profile
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: yaml
+
+   services:
+     app:
+       profiles: ["dev"]
+     
+     postgres:
+       profiles: ["dev"]
+
+.. code-block:: bash
+
+   docker-compose --profile dev up
+
+Testing Profile
+~~~~~~~~~~~~~~~
+
+.. code-block:: yaml
+
+   services:
+     test:
+       profiles: ["test"]
+       build:
+         target: testing
+
+.. code-block:: bash
+
+   docker-compose --profile test run --rm test
+
+Production Profile
+~~~~~~~~~~~~~~~~~~
+
+.. code-block:: yaml
+
+   services:
+     app:
+       build:
+         target: production
+       restart: always
+
+.. code-block:: bash
+
+   docker-compose up -d
+
+Volumes
+-------
+
+Named Volumes
+~~~~~~~~~~~~~
+
+Persist data across container restarts:
+
+.. code-block:: yaml
+
+   volumes:
+     postgres_data:
+       driver: local
+     redis_data:
+       driver: local
+
+Bind Mounts
+~~~~~~~~~~~
+
+Mount local directories:
+
+.. code-block:: yaml
+
+   services:
+     app:
+       volumes:
+         - ./src:/app/src          # Source code
+         - ./tests:/app/tests      # Tests
+         - ./alembic:/app/alembic  # Migrations
+
+Networks
+--------
+
+Custom Networks
+~~~~~~~~~~~~~~~
+
+.. code-block:: yaml
+
+   networks:
+     frontend:
+       driver: bridge
+     backend:
+       driver: bridge
+   
+   services:
+     app:
+       networks:
+         - frontend
+         - backend
+     
+     postgres:
+       networks:
+         - backend
+
+Environment Variables
+---------------------
+
+.env File
+~~~~~~~~~
+
+.. code-block:: bash
+
+   # .env
+   DATABASE_NAME=mydb
+   DATABASE_USER=user
+   DATABASE_PASSWORD=password
+   REDIS_PASSWORD=redispass
+
+docker-compose.yml
+~~~~~~~~~~~~~~~~~~
+
+.. code-block:: yaml
+
+   services:
+     app:
+       env_file:
+         - .env
+       environment:
+         - DEBUG=true
+         - LOG_LEVEL=DEBUG
+
+Health Checks
+-------------
+
+Application Health
+~~~~~~~~~~~~~~~~~~
+
+.. code-block:: yaml
+
+   services:
+     app:
+       healthcheck:
+         test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+         interval: 30s
+         timeout: 10s
+         retries: 3
+         start_period: 40s
+
+Database Health
+~~~~~~~~~~~~~~~
+
+.. code-block:: yaml
+
+   services:
+     postgres:
+       healthcheck:
+         test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER}"]
+         interval: 10s
+         timeout: 5s
+         retries: 5
+
+Depends On
+~~~~~~~~~~
+
+.. code-block:: yaml
+
+   services:
+     app:
+       depends_on:
+         postgres:
+           condition: service_healthy
+         redis:
+           condition: service_started
+
+Resource Limits
+---------------
+
+Memory and CPU
+~~~~~~~~~~~~~~
+
+.. code-block:: yaml
+
+   services:
+     app:
+       deploy:
+         resources:
+           limits:
+             cpus: '0.5'
+             memory: 512M
+           reservations:
+             cpus: '0.25'
+             memory: 256M
+
+Logging
+-------
+
+Configure Logging
+~~~~~~~~~~~~~~~~~
+
+.. code-block:: yaml
+
+   services:
+     app:
+       logging:
+         driver: "json-file"
+         options:
+           max-size: "10m"
+           max-file: "3"
+
+View Logs
+~~~~~~~~~
+
+.. code-block:: bash
+
+   # All services
+   docker-compose logs
+   
+   # Specific service
+   docker-compose logs app
+   
+   # Follow logs
+   docker-compose logs -f
+   
+   # Last 100 lines
+   docker-compose logs --tail=100
+
+Best Practices
+--------------
+
+Image Optimization
+~~~~~~~~~~~~~~~~~~
+
+1. **Use slim base images**
+
+.. code-block:: dockerfile
+
+   FROM python:3.12-slim
+
+2. **Multi-stage builds**
+
+.. code-block:: dockerfile
+
+   FROM python:3.12 as builder
+   # Build steps
+   
+   FROM python:3.12-slim
+   COPY --from=builder /app /app
+
+3. **Minimize layers**
+
+.. code-block:: dockerfile
+
+   RUN apt-get update && \
+       apt-get install -y package1 package2 && \
+       apt-get clean && \
+       rm -rf /var/lib/apt/lists/*
+
+4. **Use .dockerignore**
+
+.. code-block:: text
+
+   __pycache__
+   *.pyc
+   .git
+   .pytest_cache
+   htmlcov
+
+Security
+~~~~~~~~
+
+1. **Run as non-root user**
+
+.. code-block:: dockerfile
+
+   RUN useradd -m appuser
+   USER appuser
+
+2. **Don't include secrets**
+
+.. code-block:: dockerfile
+
+   # Bad
+   ENV SECRET_KEY=my-secret
+   
+   # Good - use environment variables
+   ENV SECRET_KEY=${SECRET_KEY}
+
+3. **Scan images**
+
+.. code-block:: bash
+
+   docker scan myapp:latest
+
+Development
+~~~~~~~~~~~
+
+1. **Use volumes for code**
+
+.. code-block:: yaml
+
+   volumes:
+     - ./src:/app/src
+
+2. **Enable hot-reload**
+
+.. code-block:: yaml
+
+   command: uvicorn main:app --reload
+
+3. **Use docker-compose for services**
+
+Troubleshooting
+---------------
+
+Container Won't Start
+~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Check logs
+   docker-compose logs app
+   
+   # Check container status
+   docker-compose ps
+   
+   # Inspect container
+   docker inspect container-id
+
+Port Already in Use
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Find process using port
+   lsof -i :8000
+   
+   # Kill process
+   kill -9 PID
+   
+   # Or change port in docker-compose.yml
+   ports:
+     - "8001:8000"
+
+Permission Errors
+~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Fix ownership
+   sudo chown -R $USER:$USER .
+   
+   # Or run as root (not recommended)
+   docker-compose exec -u root app bash
+
+Clean Up
+--------
+
+Remove Containers
+~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Stop and remove
+   docker-compose down
+   
+   # Remove volumes too
+   docker-compose down -v
+
+Remove Images
+~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Remove specific image
+   docker rmi myapp:latest
+   
+   # Remove all unused images
+   docker image prune -a
+
+System Cleanup
+~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+   # Remove everything
+   make docker-clean
+   
+   # Or manually
+   docker system prune -a --volumes
+
+See Also
+--------
+
+* :doc:`../user-guide/deployment` - Deployment guide
+* :doc:`../reference/makefile-commands` - Docker commands
+* :doc:`../user-guide/configuration` - Configuration

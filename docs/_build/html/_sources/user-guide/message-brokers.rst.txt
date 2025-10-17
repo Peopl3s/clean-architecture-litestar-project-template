@@ -1,0 +1,90 @@
+Message Brokers
+===============
+
+Guide to using message brokers in generated projects.
+
+Supported Brokers
+-----------------
+
+* **Kafka** - High throughput, event streaming
+* **RabbitMQ** - Complex routing, traditional messaging
+* **NATS** - Lightweight, cloud-native
+
+Configuration
+-------------
+
+Kafka
+~~~~~
+
+.. code-block:: bash
+
+   KAFKA_BOOTSTRAP_SERVERS=localhost:9092
+   KAFKA_GROUP_ID=my_consumer_group
+   KAFKA_TOPIC=my_topic
+
+Docker:
+
+.. code-block:: yaml
+
+   services:
+     kafka:
+       image: confluentinc/cp-kafka:latest
+       ports:
+         - "9092:9092"
+
+RabbitMQ
+~~~~~~~~
+
+.. code-block:: bash
+
+   RABBITMQ_URL=amqp://guest:guest@localhost:5672/
+   RABBITMQ_QUEUE=my_queue
+
+NATS
+~~~~
+
+.. code-block:: bash
+
+   NATS_URL=nats://localhost:4222
+   NATS_SUBJECT=my_subject
+
+Usage
+-----
+
+Producer
+~~~~~~~~
+
+.. code-block:: python
+
+   from your_project.infrastructure.broker.producer import Producer
+   
+   producer = Producer()
+   
+   await producer.publish("topic", {"event": "user_created", "user_id": 1})
+
+Consumer
+~~~~~~~~
+
+.. code-block:: python
+
+   from faststream import FastStream
+   from your_project.infrastructure.broker.consumer import broker
+   
+   @broker.subscriber("topic")
+   async def handle_message(message: dict):
+       print(f"Received: {message}")
+
+Best Practices
+--------------
+
+* Use message schemas
+* Handle errors gracefully
+* Implement idempotency
+* Monitor message queues
+* Set up dead letter queues
+
+See Also
+--------
+
+* :doc:`configuration` - Configuration guide
+* :doc:`../development/docker` - Docker setup

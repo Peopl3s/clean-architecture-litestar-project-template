@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Docker Guide &mdash; Clean Architecture FastAPI Template 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../_static/copybutton.js?v=30646c52"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Database Migrations" href="migrations.html" />
+    <link rel="prev" title="Code Quality" href="code-quality.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Clean Architecture FastAPI Template
+          </a>
+              <div class="version">
+                1.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html#installing-cookiecutter">Installing Cookiecutter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html#creating-a-project">Creating a Project</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/installation.html#from-github">From GitHub</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/installation.html#from-local-clone">From Local Clone</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/installation.html#interactive-setup">Interactive Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/installation.html#non-interactive-setup">Non-Interactive Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html#post-installation">Post-Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/installation.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/quickstart.html">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html#create-your-first-project">Create Your First Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html#project-structure-overview">Project Structure Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html#running-the-application">Running the Application</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/quickstart.html#using-docker-recommended">Using Docker (Recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/quickstart.html#local-development">Local Development</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html#exploring-the-api">Exploring the API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/quickstart.html#health-check">Health Check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/quickstart.html#interactive-documentation">Interactive Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html#development-workflow">Development Workflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/quickstart.html#running-tests">Running Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/quickstart.html#code-quality">Code Quality</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/quickstart.html#database-migrations">Database Migrations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html#adding-a-new-feature">Adding a New Feature</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html#common-commands">Common Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/quickstart.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/template-variables.html">Template Variables</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/template-variables.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/template-variables.html#project-information">Project Information</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#project-name">project_name</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#project-slug">project_slug</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#project-description">project_description</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/template-variables.html#author-information">Author Information</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#author-name">author_name</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#author-email">author_email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#github-username">github_username</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/template-variables.html#version-information">Version Information</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#version">version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#python-version">python_version</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/template-variables.html#api-configuration">API Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#api-title">api_title</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#api-version">api_version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#api-description">api_description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#domain-name">domain_name</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/template-variables.html#database-configuration">Database Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#use-database">use_database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#database-name">database_name</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#database-user">database_user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#database-password">database_password</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/template-variables.html#cache-configuration">Cache Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#use-cache">use_cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#redis-password">redis_password</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/template-variables.html#message-broker-configuration">Message Broker Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#use-broker">use_broker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/template-variables.html#feature-flags">Feature Flags</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#add-docker">add_docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#add-tests">add_tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#add-docs">add_docs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#add-precommit">add_precommit</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/template-variables.html#license">License</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#license-type">license_type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/template-variables.html#example-configurations">Example Configurations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#minimal-setup">Minimal Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#full-featured-setup">Full-Featured Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../getting-started/template-variables.html#microservice-setup">Microservice Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started/template-variables.html#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user-guide/project-structure.html">Project Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/project-structure.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/project-structure.html#root-directory">Root Directory</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/project-structure.html#configuration-files">Configuration Files</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/project-structure.html#source-code-src">Source Code (<code class="docutils literal notranslate"><span class="pre">src/</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/project-structure.html#domain-layer-domain">Domain Layer (<code class="docutils literal notranslate"><span class="pre">domain/</span></code>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/project-structure.html#application-layer-application">Application Layer (<code class="docutils literal notranslate"><span class="pre">application/</span></code>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/project-structure.html#infrastructure-layer-infrastructure">Infrastructure Layer (<code class="docutils literal notranslate"><span class="pre">infrastructure/</span></code>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/project-structure.html#presentation-layer-presentation">Presentation Layer (<code class="docutils literal notranslate"><span class="pre">presentation/</span></code>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/project-structure.html#configuration-config">Configuration (<code class="docutils literal notranslate"><span class="pre">config/</span></code>)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/project-structure.html#tests-tests">Tests (<code class="docutils literal notranslate"><span class="pre">tests/</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/project-structure.html#database-migrations-alembic">Database Migrations (<code class="docutils literal notranslate"><span class="pre">alembic/</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/project-structure.html#documentation-docs">Documentation (<code class="docutils literal notranslate"><span class="pre">docs/</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/project-structure.html#scripts-scripts">Scripts (<code class="docutils literal notranslate"><span class="pre">scripts/</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/project-structure.html#file-naming-conventions">File Naming Conventions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/project-structure.html#python-files">Python Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/project-structure.html#classes">Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/project-structure.html#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/project-structure.html#constants">Constants</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/project-structure.html#import-organization">Import Organization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/project-structure.html#module-organization">Module Organization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/project-structure.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/project-structure.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../user-guide/architecture.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/architecture.html#clean-architecture-overview">Clean Architecture Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/architecture.html#architecture-layers">Architecture Layers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/architecture.html#domain-layer-core">1. Domain Layer (Core)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/architecture.html#application-layer-use-cases">2. Application Layer (Use Cases)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/architecture.html#infrastructure-layer-adapters">3. Infrastructure Layer (Adapters)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/architecture.html#presentation-layer-controllers">4. Presentation Layer (Controllers)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/architecture.html#dependency-flow">Dependency Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/architecture.html#dependency-injection">Dependency Injection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/architecture.html#benefits-of-this-architecture">Benefits of This Architecture</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/architecture.html#testability">Testability</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/architecture.html#maintainability">Maintainability</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/architecture.html#scalability">Scalability</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/architecture.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/architecture.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../user-guide/configuration.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/configuration.html#configuration-system">Configuration System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/configuration.html#configuration-file">Configuration File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/configuration.html#environment-variables">Environment Variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/configuration.html#application-settings">Application Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/configuration.html#server-settings">Server Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/configuration.html#database-settings">Database Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/configuration.html#cache-settings">Cache Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/configuration.html#message-broker-settings">Message Broker Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/configuration.html#setting-up-environment">Setting Up Environment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/configuration.html#development">Development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/configuration.html#production">Production</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/configuration.html#accessing-configuration">Accessing Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/configuration.html#in-application-code">In Application Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/configuration.html#with-dependency-injection">With Dependency Injection</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/configuration.html#validation">Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/configuration.html#environment-specific-config">Environment-Specific Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/configuration.html#multiple-environments">Multiple Environments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/configuration.html#configuration-files">Configuration Files</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/configuration.html#secrets-management">Secrets Management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/configuration.html#best-practices">Best Practices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/configuration.html#aws-secrets-manager-example">AWS Secrets Manager Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/configuration.html#configuration-testing">Configuration Testing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/configuration.html#test-configuration">Test Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/configuration.html#override-in-tests">Override in Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/configuration.html#common-patterns">Common Patterns</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/configuration.html#feature-flags">Feature Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/configuration.html#database-connection-pooling">Database Connection Pooling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/configuration.html#cors-configuration">CORS Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/configuration.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/configuration.html#configuration-not-loading">Configuration Not Loading</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/configuration.html#validation-errors">Validation Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/configuration.html#type-errors">Type Errors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/configuration.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../user-guide/database.html">Database</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/database.html#supported-databases">Supported Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/database.html#database-setup">Database Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/database.html#postgresql">PostgreSQL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/database.html#mysql">MySQL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/database.html#sqlite">SQLite</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/database.html#sqlalchemy-configuration">SQLAlchemy Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/database.html#base-model">Base Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/database.html#session-management">Session Management</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/database.html#creating-models">Creating Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/database.html#domain-entity">Domain Entity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/database.html#database-model">Database Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/database.html#relationships">Relationships</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/database.html#repository-pattern">Repository Pattern</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/database.html#interface-definition">Interface Definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/database.html#repository-implementation">Repository Implementation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/database.html#database-migrations">Database Migrations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/database.html#create-migration">Create Migration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/database.html#apply-migrations">Apply Migrations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/database.html#rollback-migration">Rollback Migration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/database.html#migration-history">Migration History</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/database.html#query-patterns">Query Patterns</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/database.html#basic-queries">Basic Queries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/database.html#pagination">Pagination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/database.html#joins">Joins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/database.html#aggregations">Aggregations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/database.html#transactions">Transactions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/database.html#auto-commit">Auto-commit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/database.html#manual-transaction">Manual Transaction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/database.html#rollback-on-error">Rollback on Error</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/database.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/database.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/database.html#connection-errors">Connection Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/database.html#migration-errors">Migration Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/database.html#performance-issues">Performance Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/database.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../user-guide/caching.html">Caching</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/caching.html#supported-backends">Supported Backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/caching.html#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/caching.html#redis">Redis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/caching.html#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/caching.html#basic-caching">Basic Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/caching.html#cache-decorator">Cache Decorator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/caching.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/caching.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../user-guide/message-brokers.html">Message Brokers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/message-brokers.html#supported-brokers">Supported Brokers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/message-brokers.html#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/message-brokers.html#kafka">Kafka</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/message-brokers.html#rabbitmq">RabbitMQ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/message-brokers.html#nats">NATS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/message-brokers.html#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/message-brokers.html#producer">Producer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/message-brokers.html#consumer">Consumer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/message-brokers.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/message-brokers.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../user-guide/testing.html">Testing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/testing.html#testing-philosophy">Testing Philosophy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/testing.html#test-structure">Test Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/testing.html#running-tests">Running Tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/testing.html#basic-commands">Basic Commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/testing.html#coverage">Coverage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/testing.html#unit-tests">Unit Tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/testing.html#domain-entity-tests">Domain Entity Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/testing.html#use-case-tests">Use Case Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/testing.html#integration-tests">Integration Tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/testing.html#api-endpoint-tests">API Endpoint Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/testing.html#database-tests">Database Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/testing.html#fixtures">Fixtures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/testing.html#common-fixtures">Common Fixtures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/testing.html#test-data-fixtures">Test Data Fixtures</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/testing.html#mocking">Mocking</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/testing.html#mock-external-services">Mock External Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/testing.html#mock-repository">Mock Repository</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/testing.html#parametrized-tests">Parametrized Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/testing.html#test-markers">Test Markers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/testing.html#custom-markers">Custom Markers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/testing.html#run-by-marker">Run by Marker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/testing.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/testing.html#coverage-goals">Coverage Goals</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/testing.html#target-coverage">Target Coverage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/testing.html#check-coverage">Check Coverage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/testing.html#continuous-integration">Continuous Integration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/testing.html#github-actions">GitHub Actions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/testing.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/testing.html#async-test-issues">Async Test Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/testing.html#database-test-issues">Database Test Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/testing.html#fixture-not-found">Fixture Not Found</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/testing.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../user-guide/deployment.html">Deployment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/deployment.html#deployment-options">Deployment Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/deployment.html#docker-deployment">Docker Deployment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#production-build">Production Build</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#docker-compose">Docker Compose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#environment-variables">Environment Variables</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/deployment.html#kubernetes-deployment">Kubernetes Deployment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#deployment-manifest">Deployment Manifest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#service">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#secrets">Secrets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#configmap">ConfigMap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#deploy">Deploy</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/deployment.html#aws-deployment">AWS Deployment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#aws-ecs-fargate">AWS ECS (Fargate)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#aws-lambda">AWS Lambda</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/deployment.html#google-cloud-platform">Google Cloud Platform</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#cloud-run">Cloud Run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#gke-google-kubernetes-engine">GKE (Google Kubernetes Engine)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/deployment.html#azure-deployment">Azure Deployment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#azure-container-instances">Azure Container Instances</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/deployment.html#platform-as-a-service">Platform as a Service</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#railway">Railway</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#render">Render</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#heroku">Heroku</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/deployment.html#production-checklist">Production Checklist</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#security">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#performance">Performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#reliability">Reliability</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#monitoring">Monitoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#database">Database</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/deployment.html#id1">Environment Variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#production-environment">Production Environment</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/deployment.html#ci-cd-pipeline">CI/CD Pipeline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#github-actions">GitHub Actions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/deployment.html#rollback-strategy">Rollback Strategy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#docker-tags">Docker Tags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#kubernetes">Kubernetes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/deployment.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#container-won-t-start">Container Won’t Start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#high-memory-usage">High Memory Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user-guide/deployment.html#slow-response-times">Slow Response Times</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user-guide/deployment.html#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="code-quality.html">Code Quality</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code-quality.html#tools-overview">Tools Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-quality.html#ruff">Ruff</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="code-quality.html#configuration">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code-quality.html#running-ruff">Running Ruff</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code-quality.html#common-rules">Common Rules</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="code-quality.html#mypy">MyPy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="code-quality.html#id1">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code-quality.html#running-mypy">Running MyPy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code-quality.html#type-hints-best-practices">Type Hints Best Practices</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="code-quality.html#pytest">Pytest</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="code-quality.html#id2">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code-quality.html#running-tests">Running Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code-quality.html#writing-tests">Writing Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="code-quality.html#pre-commit-hooks">Pre-commit Hooks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="code-quality.html#id3">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code-quality.html#setup">Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="code-quality.html#code-quality-checklist">Code Quality Checklist</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="code-quality.html#before-committing">Before Committing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code-quality.html#before-pull-request">Before Pull Request</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="code-quality.html#best-practices">Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="code-quality.html#code-style">Code Style</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code-quality.html#testing">Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code-quality.html#architecture">Architecture</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="code-quality.html#common-issues">Common Issues</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="code-quality.html#import-errors">Import Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code-quality.html#type-errors">Type Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code-quality.html#test-failures">Test Failures</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="code-quality.html#continuous-integration">Continuous Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-quality.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Docker Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#docker-files">Docker Files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#dockerfile">Dockerfile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#docker-compose-yml">docker-compose.yml</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#building-images">Building Images</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#development">Development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testing">Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#production">Production</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#running-services">Running Services</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#start-all-services">Start All Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#stop-services">Stop Services</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#development-workflow">Development Workflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hot-reload">Hot Reload</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shell-access">Shell Access</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#database-operations">Database Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testing-in-docker">Testing in Docker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#docker-compose-profiles">Docker Compose Profiles</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#development-profile">Development Profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testing-profile">Testing Profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#production-profile">Production Profile</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#volumes">Volumes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#named-volumes">Named Volumes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bind-mounts">Bind Mounts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#networks">Networks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#custom-networks">Custom Networks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#environment-variables">Environment Variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#env-file">.env File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">docker-compose.yml</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#health-checks">Health Checks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#application-health">Application Health</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#database-health">Database Health</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#depends-on">Depends On</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#resource-limits">Resource Limits</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#memory-and-cpu">Memory and CPU</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#logging">Logging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#configure-logging">Configure Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#view-logs">View Logs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#image-optimization">Image Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#security">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Development</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#container-won-t-start">Container Won’t Start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#port-already-in-use">Port Already in Use</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#permission-errors">Permission Errors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#clean-up">Clean Up</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#remove-containers">Remove Containers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#remove-images">Remove Images</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#system-cleanup">System Cleanup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="migrations.html">Database Migrations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="migrations.html#quick-start">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="migrations.html#creating-migrations">Creating Migrations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="migrations.html#applying-migrations">Applying Migrations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="migrations.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#getting-started">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#development-setup">Development Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#install-dependencies">Install Dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#test-the-template">Test the Template</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#making-changes">Making Changes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#template-files">Template Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#configuration">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#hooks">Hooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#documentation">Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#testing-your-changes">Testing Your Changes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#test-generation">Test Generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#test-generated-project">Test Generated Project</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#code-style">Code Style</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#template-code">Template Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#generated-code">Generated Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#documentation-style">Documentation Style</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#commit-guidelines">Commit Guidelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#commit-messages">Commit Messages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#commit-best-practices">Commit Best Practices</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#submitting-changes">Submitting Changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#pull-request-guidelines">Pull Request Guidelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#before-submitting">Before Submitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#pr-checklist">PR Checklist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#review-process">Review Process</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#types-of-contributions">Types of Contributions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#bug-reports">Bug Reports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#feature-requests">Feature Requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#id1">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#code-contributions">Code Contributions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#community-guidelines">Community Guidelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#be-respectful">Be Respectful</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#be-collaborative">Be Collaborative</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#be-professional">Be Professional</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#getting-help">Getting Help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#recognition">Recognition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/customization.html">Template Customization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/customization.html#forking-the-template">Forking the Template</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/customization.html#modifying-template-files">Modifying Template Files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/customization.html#variables">Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/customization.html#conditionals">Conditionals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/customization.html#loops">Loops</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/customization.html#adding-new-variables">Adding New Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/customization.html#cookiecutter-hooks">Cookiecutter Hooks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/customization.html#pre-generation-hook">Pre-generation Hook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/customization.html#post-generation-hook">Post-generation Hook</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/customization.html#custom-templates">Custom Templates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/customization.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/hooks.html">Cookiecutter Hooks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/hooks.html#hook-types">Hook Types</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/hooks.html#pre-generation-hook">Pre-generation Hook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/hooks.html#post-generation-hook">Post-generation Hook</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/hooks.html#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/hooks.html#validation-hook">Validation Hook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/hooks.html#cleanup-hook">Cleanup Hook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/hooks.html#git-initialization">Git Initialization</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/hooks.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/hooks.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/ci-cd.html">CI/CD Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/ci-cd.html#github-actions">GitHub Actions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/ci-cd.html#test-workflow">Test Workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/ci-cd.html#deploy-workflow">Deploy Workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/ci-cd.html#gitlab-ci">GitLab CI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/ci-cd.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/ci-cd.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/best-practices.html">Best Practices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/best-practices.html#architecture">Architecture</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/best-practices.html#layer-boundaries">Layer Boundaries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/best-practices.html#single-responsibility">Single Responsibility</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/best-practices.html#code-quality">Code Quality</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/best-practices.html#type-hints">Type Hints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/best-practices.html#docstrings">Docstrings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/best-practices.html#testing">Testing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/best-practices.html#test-pyramid">Test Pyramid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/best-practices.html#mock-external-dependencies">Mock External Dependencies</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/best-practices.html#database">Database</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/best-practices.html#use-indexes">Use Indexes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/best-practices.html#connection-pooling">Connection Pooling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/best-practices.html#security">Security</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/best-practices.html#environment-variables">Environment Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/best-practices.html#input-validation">Input Validation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/best-practices.html#performance">Performance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/best-practices.html#caching">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../advanced/best-practices.html#async-operations">Async Operations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced/best-practices.html#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference/makefile-commands.html">Makefile Commands</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/makefile-commands.html#development-commands">Development Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#install">install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#install-dev">install-dev</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#dev-setup">dev-setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/makefile-commands.html#code-quality-commands">Code Quality Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#lint">lint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#lint-fix">lint-fix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#format">format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#type-check">type-check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#check">check</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/makefile-commands.html#testing-commands">Testing Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#test">test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#test-cov">test-cov</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#clean">clean</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/makefile-commands.html#database-commands">Database Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#migration">migration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#migrate">migrate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#migrate-downgrade">migrate-downgrade</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#migrate-history">migrate-history</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#migrate-current">migrate-current</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#migrate-stamp">migrate-stamp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/makefile-commands.html#docker-commands">Docker Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-build">docker-build</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-build-dev">docker-build-dev</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-build-test">docker-build-test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-up">docker-up</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-up-dev">docker-up-dev</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-down">docker-down</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-logs">docker-logs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-logs-app">docker-logs-app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-shell">docker-shell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-migrate">docker-migrate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-test">docker-test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-clean">docker-clean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-rebuild">docker-rebuild</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/makefile-commands.html#environment-commands">Environment Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#setup-env">setup-env</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#dev-setup-docker">dev-setup-docker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/makefile-commands.html#ci-cd-commands">CI/CD Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#ci">ci</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/makefile-commands.html#message-broker-commands-kafka">Message Broker Commands (Kafka)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-kafka-logs">docker-kafka-logs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-kafka-shell">docker-kafka-shell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-kafka-topics">docker-kafka-topics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-kafka-create-topic">docker-kafka-create-topic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#docker-kafka-consume">docker-kafka-consume</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/makefile-commands.html#common-workflows">Common Workflows</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#starting-development">Starting Development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#before-committing">Before Committing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#deploying">Deploying</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/makefile-commands.html#help">Help</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/makefile-commands.html#id1">help</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/makefile-commands.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/environment-variables.html">Environment Variables</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/environment-variables.html#application-variables">Application Variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/environment-variables.html#app-name">APP_NAME</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/environment-variables.html#app-version">APP_VERSION</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/environment-variables.html#debug">DEBUG</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/environment-variables.html#log-level">LOG_LEVEL</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/environment-variables.html#server-variables">Server Variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/environment-variables.html#host">HOST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/environment-variables.html#port">PORT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/environment-variables.html#workers">WORKERS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/environment-variables.html#database-variables">Database Variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/environment-variables.html#database-url">DATABASE_URL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/environment-variables.html#db-echo">DB_ECHO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/environment-variables.html#db-pool-size">DB_POOL_SIZE</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/environment-variables.html#cache-variables">Cache Variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/environment-variables.html#redis-url">REDIS_URL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/environment-variables.html#redis-password">REDIS_PASSWORD</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/environment-variables.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/faq.html">Frequently Asked Questions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#general-questions">General Questions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#what-is-this-template-for">What is this template for?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#who-should-use-this-template">Who should use this template?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#do-i-need-to-know-clean-architecture">Do I need to know Clean Architecture?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#template-usage">Template Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-create-a-project-from-this-template">How do I create a project from this template?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#can-i-use-this-template-for-commercial-projects">Can I use this template for commercial projects?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#can-i-customize-the-template">Can I customize the template?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-update-an-existing-project-with-template-changes">How do I update an existing project with template changes?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#database-questions">Database Questions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#which-database-should-i-choose">Which database should I choose?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#can-i-change-the-database-later">Can I change the database later?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-handle-database-migrations">How do I handle database migrations?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#caching-questions">Caching Questions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#do-i-need-a-cache">Do I need a cache?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#which-cache-backend-should-i-use">Which cache backend should I use?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#message-broker-questions">Message Broker Questions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#when-do-i-need-a-message-broker">When do I need a message broker?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#which-broker-should-i-choose">Which broker should I choose?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#docker-questions">Docker Questions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#do-i-need-docker">Do I need Docker?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#can-i-run-without-docker">Can I run without Docker?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-customize-docker-configuration">How do I customize Docker configuration?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#development-questions">Development Questions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-add-a-new-endpoint">How do I add a new endpoint?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-add-a-new-database-table">How do I add a new database table?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-run-tests">How do I run tests?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-format-and-lint-code">How do I format and lint code?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#deployment-questions">Deployment Questions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-deploy-to-production">How do I deploy to production?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#what-environment-variables-do-i-need">What environment variables do I need?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-handle-secrets">How do I handle secrets?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#performance-questions">Performance Questions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-improve-performance">How do I improve performance?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-many-workers-should-i-use">How many workers should I use?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#tests-are-failing">Tests are failing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#docker-containers-won-t-start">Docker containers won’t start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#database-connection-errors">Database connection errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#import-errors">Import errors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#getting-help">Getting Help</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#where-can-i-get-help">Where can I get help?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-report-bugs">How do I report bugs?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-do-i-request-features">How do I request features?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#contributing">Contributing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/faq.html#how-can-i-contribute">How can I contribute?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/faq.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#unreleased">[Unreleased]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id1">[1.0.0] - 2025-10-01</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#added">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#features">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#template-variables">Template Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#documentation">Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#id2">[0.1.0] - 2024-09-29</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#id3">Added</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../license.html#mit-license">MIT License</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../license.html#generated-projects">Generated Projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../license.html#third-party-licenses">Third-Party Licenses</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../license.html#fastapi">FastAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../license.html#sqlalchemy">SQLAlchemy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../license.html#pydantic">Pydantic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../license.html#ruff">Ruff</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../license.html#dishka">Dishka</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../license.html#contributing">Contributing</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Clean Architecture FastAPI Template</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Docker Guide</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/Peopl3s/clean-architecture-fastapi-project-template/blob/main/docs/development/docker.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="docker-guide">
+<h1>Docker Guide<a class="headerlink" href="#docker-guide" title="Link to this heading"></a></h1>
+<p>The template includes comprehensive Docker support for development, testing, and production.</p>
+<section id="docker-files">
+<h2>Docker Files<a class="headerlink" href="#docker-files" title="Link to this heading"></a></h2>
+<section id="dockerfile">
+<h3>Dockerfile<a class="headerlink" href="#dockerfile" title="Link to this heading"></a></h3>
+<p>Multi-stage Dockerfile with three targets:</p>
+<ul class="simple">
+<li><p><strong>development</strong> - Dev dependencies, hot-reload</p></li>
+<li><p><strong>testing</strong> - Test dependencies, CI/CD</p></li>
+<li><p><strong>production</strong> - Minimal image, optimized</p></li>
+</ul>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="c"># Development stage</span>
+<span class="k">FROM</span><span class="w"> </span><span class="s">python:3.12-slim</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="s">development</span>
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+<span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>uv
+<span class="k">COPY</span><span class="w"> </span>pyproject.toml<span class="w"> </span>uv.lock<span class="w"> </span>./
+<span class="k">RUN</span><span class="w"> </span>uv<span class="w"> </span>sync<span class="w"> </span>--dev
+<span class="k">COPY</span><span class="w"> </span>.<span class="w"> </span>.
+<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;uv&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;run&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;python&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;-m&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;your_project.main&quot;</span><span class="p">]</span>
+
+<span class="c"># Testing stage</span>
+<span class="k">FROM</span><span class="w"> </span><span class="s">development</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="s">testing</span>
+<span class="k">RUN</span><span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>pytest
+
+<span class="c"># Production stage</span>
+<span class="k">FROM</span><span class="w"> </span><span class="s">python:3.12-slim</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="s">production</span>
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+<span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>uv
+<span class="k">COPY</span><span class="w"> </span>pyproject.toml<span class="w"> </span>uv.lock<span class="w"> </span>./
+<span class="k">RUN</span><span class="w"> </span>uv<span class="w"> </span>sync<span class="w"> </span>--no-dev
+<span class="k">COPY</span><span class="w"> </span>src<span class="w"> </span>./src
+<span class="k">RUN</span><span class="w"> </span>useradd<span class="w"> </span>-m<span class="w"> </span>appuser<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </span>appuser:appuser<span class="w"> </span>/app
+<span class="k">USER</span><span class="w"> </span><span class="s">appuser</span>
+<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;uv&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;run&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;python&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;-m&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;your_project.main&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="docker-compose-yml">
+<h3>docker-compose.yml<a class="headerlink" href="#docker-compose-yml" title="Link to this heading"></a></h3>
+<p>Orchestrates all services:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3.8&#39;</span>
+
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">app</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">build</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.</span>
+<span class="w">      </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">development</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;8000:8000&quot;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./src:/app/src</span>
+<span class="w">    </span><span class="nt">env_file</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.env</span>
+<span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redis</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">uv run python -m your_project.main --reload</span>
+
+<span class="w">  </span><span class="nt">postgres</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres:16-alpine</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">POSTGRES_DB</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${DATABASE_NAME}</span>
+<span class="w">      </span><span class="nt">POSTGRES_USER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${DATABASE_USER}</span>
+<span class="w">      </span><span class="nt">POSTGRES_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${DATABASE_PASSWORD}</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;5432:5432&quot;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres_data:/var/lib/postgresql/data</span>
+
+<span class="w">  </span><span class="nt">redis</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redis:7-alpine</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;6379:6379&quot;</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redis-server --requirepass ${REDIS_PASSWORD}</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">postgres_data</span><span class="p">:</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="building-images">
+<h2>Building Images<a class="headerlink" href="#building-images" title="Link to this heading"></a></h2>
+<section id="development">
+<h3>Development<a class="headerlink" href="#development" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build development image</span>
+make<span class="w"> </span>docker-build-dev
+
+<span class="c1"># Or manually</span>
+docker<span class="w"> </span>build<span class="w"> </span>--target<span class="w"> </span>development<span class="w"> </span>-t<span class="w"> </span>myapp:dev<span class="w"> </span>.
+</pre></div>
+</div>
+</section>
+<section id="testing">
+<h3>Testing<a class="headerlink" href="#testing" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build testing image</span>
+make<span class="w"> </span>docker-build-test
+
+<span class="c1"># Run tests in container</span>
+docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>myapp:test
+</pre></div>
+</div>
+</section>
+<section id="production">
+<h3>Production<a class="headerlink" href="#production" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build production image</span>
+make<span class="w"> </span>docker-build
+
+<span class="c1"># Or manually</span>
+docker<span class="w"> </span>build<span class="w"> </span>--target<span class="w"> </span>production<span class="w"> </span>-t<span class="w"> </span>myapp:latest<span class="w"> </span>.
+
+<span class="c1"># Optimize size</span>
+docker<span class="w"> </span>build<span class="w"> </span>--target<span class="w"> </span>production<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">PYTHON_VERSION</span><span class="o">=</span><span class="m">3</span>.12-slim<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-t<span class="w"> </span>myapp:latest<span class="w"> </span>.
+</pre></div>
+</div>
+</section>
+</section>
+<section id="running-services">
+<h2>Running Services<a class="headerlink" href="#running-services" title="Link to this heading"></a></h2>
+<section id="start-all-services">
+<h3>Start All Services<a class="headerlink" href="#start-all-services" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start in background</span>
+make<span class="w"> </span>docker-up
+
+<span class="c1"># Or manually</span>
+docker-compose<span class="w"> </span>up<span class="w"> </span>-d
+
+<span class="c1"># View logs</span>
+make<span class="w"> </span>docker-logs
+
+<span class="c1"># Follow specific service</span>
+docker-compose<span class="w"> </span>logs<span class="w"> </span>-f<span class="w"> </span>app
+</pre></div>
+</div>
+</section>
+<section id="stop-services">
+<h3>Stop Services<a class="headerlink" href="#stop-services" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Stop all services</span>
+make<span class="w"> </span>docker-down
+
+<span class="c1"># Stop and remove volumes</span>
+docker-compose<span class="w"> </span>down<span class="w"> </span>-v
+</pre></div>
+</div>
+</section>
+</section>
+<section id="development-workflow">
+<h2>Development Workflow<a class="headerlink" href="#development-workflow" title="Link to this heading"></a></h2>
+<section id="hot-reload">
+<h3>Hot Reload<a class="headerlink" href="#hot-reload" title="Link to this heading"></a></h3>
+<p>The development setup includes hot-reload:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">app</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./src:/app/src</span><span class="w">  </span><span class="c1"># Mount source code</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">uv run python -m your_project.main --reload</span>
+</pre></div>
+</div>
+<p>Changes to source code automatically restart the server.</p>
+</section>
+<section id="shell-access">
+<h3>Shell Access<a class="headerlink" href="#shell-access" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Open shell in running container</span>
+make<span class="w"> </span>docker-shell
+
+<span class="c1"># Or manually</span>
+docker-compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>bash
+
+<span class="c1"># Run commands</span>
+docker-compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>your_project.main
+</pre></div>
+</div>
+</section>
+<section id="database-operations">
+<h3>Database Operations<a class="headerlink" href="#database-operations" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run migrations</span>
+make<span class="w"> </span>docker-migrate
+
+<span class="c1"># Create migration</span>
+docker-compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app<span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>alembic<span class="w"> </span>revision<span class="w"> </span>--autogenerate<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;message&quot;</span>
+
+<span class="c1"># Access database</span>
+docker-compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>user<span class="w"> </span>-d<span class="w"> </span>dbname
+</pre></div>
+</div>
+</section>
+<section id="testing-in-docker">
+<h3>Testing in Docker<a class="headerlink" href="#testing-in-docker" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run tests</span>
+make<span class="w"> </span>docker-test
+
+<span class="c1"># Or manually</span>
+docker-compose<span class="w"> </span>--profile<span class="w"> </span><span class="nb">test</span><span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="nb">test</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="docker-compose-profiles">
+<h2>Docker Compose Profiles<a class="headerlink" href="#docker-compose-profiles" title="Link to this heading"></a></h2>
+<p>The template uses profiles for different environments:</p>
+<section id="development-profile">
+<h3>Development Profile<a class="headerlink" href="#development-profile" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">app</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">profiles</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;dev&quot;</span><span class="p p-Indicator">]</span>
+
+<span class="w">  </span><span class="nt">postgres</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">profiles</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;dev&quot;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker-compose<span class="w"> </span>--profile<span class="w"> </span>dev<span class="w"> </span>up
+</pre></div>
+</div>
+</section>
+<section id="testing-profile">
+<h3>Testing Profile<a class="headerlink" href="#testing-profile" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">test</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">profiles</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;test&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">build</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">testing</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker-compose<span class="w"> </span>--profile<span class="w"> </span><span class="nb">test</span><span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="nb">test</span>
+</pre></div>
+</div>
+</section>
+<section id="production-profile">
+<h3>Production Profile<a class="headerlink" href="#production-profile" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">app</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">build</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">production</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker-compose<span class="w"> </span>up<span class="w"> </span>-d
+</pre></div>
+</div>
+</section>
+</section>
+<section id="volumes">
+<h2>Volumes<a class="headerlink" href="#volumes" title="Link to this heading"></a></h2>
+<section id="named-volumes">
+<h3>Named Volumes<a class="headerlink" href="#named-volumes" title="Link to this heading"></a></h3>
+<p>Persist data across container restarts:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">postgres_data</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local</span>
+<span class="w">  </span><span class="nt">redis_data</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local</span>
+</pre></div>
+</div>
+</section>
+<section id="bind-mounts">
+<h3>Bind Mounts<a class="headerlink" href="#bind-mounts" title="Link to this heading"></a></h3>
+<p>Mount local directories:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">app</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./src:/app/src</span><span class="w">          </span><span class="c1"># Source code</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./tests:/app/tests</span><span class="w">      </span><span class="c1"># Tests</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./alembic:/app/alembic</span><span class="w">  </span><span class="c1"># Migrations</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="networks">
+<h2>Networks<a class="headerlink" href="#networks" title="Link to this heading"></a></h2>
+<section id="custom-networks">
+<h3>Custom Networks<a class="headerlink" href="#custom-networks" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">frontend</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bridge</span>
+<span class="w">  </span><span class="nt">backend</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bridge</span>
+
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">app</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">frontend</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backend</span>
+
+<span class="w">  </span><span class="nt">postgres</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backend</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="environment-variables">
+<h2>Environment Variables<a class="headerlink" href="#environment-variables" title="Link to this heading"></a></h2>
+<section id="env-file">
+<h3>.env File<a class="headerlink" href="#env-file" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># .env</span>
+<span class="nv">DATABASE_NAME</span><span class="o">=</span>mydb
+<span class="nv">DATABASE_USER</span><span class="o">=</span>user
+<span class="nv">DATABASE_PASSWORD</span><span class="o">=</span>password
+<span class="nv">REDIS_PASSWORD</span><span class="o">=</span>redispass
+</pre></div>
+</div>
+</section>
+<section id="id1">
+<h3>docker-compose.yml<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">app</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">env_file</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.env</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DEBUG=true</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LOG_LEVEL=DEBUG</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="health-checks">
+<h2>Health Checks<a class="headerlink" href="#health-checks" title="Link to this heading"></a></h2>
+<section id="application-health">
+<h3>Application Health<a class="headerlink" href="#application-health" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">app</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">healthcheck</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">test</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;CMD&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;curl&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;-f&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;http://localhost:8000/health&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30s</span>
+<span class="w">      </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10s</span>
+<span class="w">      </span><span class="nt">retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">      </span><span class="nt">start_period</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">40s</span>
+</pre></div>
+</div>
+</section>
+<section id="database-health">
+<h3>Database Health<a class="headerlink" href="#database-health" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">postgres</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">healthcheck</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">test</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;CMD-SHELL&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;pg_isready</span><span class="nv"> </span><span class="s">-U</span><span class="nv"> </span><span class="s">${DATABASE_USER}&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10s</span>
+<span class="w">      </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5s</span>
+<span class="w">      </span><span class="nt">retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+</pre></div>
+</div>
+</section>
+<section id="depends-on">
+<h3>Depends On<a class="headerlink" href="#depends-on" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">app</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">postgres</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">service_healthy</span>
+<span class="w">      </span><span class="nt">redis</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">service_started</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="resource-limits">
+<h2>Resource Limits<a class="headerlink" href="#resource-limits" title="Link to this heading"></a></h2>
+<section id="memory-and-cpu">
+<h3>Memory and CPU<a class="headerlink" href="#memory-and-cpu" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">app</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">resources</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">limits</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">cpus</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;0.5&#39;</span>
+<span class="w">          </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">512M</span>
+<span class="w">        </span><span class="nt">reservations</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">cpus</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;0.25&#39;</span>
+<span class="w">          </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256M</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="logging">
+<h2>Logging<a class="headerlink" href="#logging" title="Link to this heading"></a></h2>
+<section id="configure-logging">
+<h3>Configure Logging<a class="headerlink" href="#configure-logging" title="Link to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">app</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">logging</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;json-file&quot;</span>
+<span class="w">      </span><span class="nt">options</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">max-size</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;10m&quot;</span>
+<span class="w">        </span><span class="nt">max-file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;3&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="view-logs">
+<h3>View Logs<a class="headerlink" href="#view-logs" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># All services</span>
+docker-compose<span class="w"> </span>logs
+
+<span class="c1"># Specific service</span>
+docker-compose<span class="w"> </span>logs<span class="w"> </span>app
+
+<span class="c1"># Follow logs</span>
+docker-compose<span class="w"> </span>logs<span class="w"> </span>-f
+
+<span class="c1"># Last 100 lines</span>
+docker-compose<span class="w"> </span>logs<span class="w"> </span>--tail<span class="o">=</span><span class="m">100</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading"></a></h2>
+<section id="image-optimization">
+<h3>Image Optimization<a class="headerlink" href="#image-optimization" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p><strong>Use slim base images</strong></p></li>
+</ol>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.12-slim</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p><strong>Multi-stage builds</strong></p></li>
+</ol>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.12</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="s">builder</span>
+<span class="c"># Build steps</span>
+
+<span class="k">FROM</span><span class="w"> </span><span class="s">python:3.12-slim</span>
+<span class="k">COPY</span><span class="w"> </span>--from<span class="o">=</span>builder<span class="w"> </span>/app<span class="w"> </span>/app
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p><strong>Minimize layers</strong></p></li>
+</ol>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>package1<span class="w"> </span>package2<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>apt-get<span class="w"> </span>clean<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>rm<span class="w"> </span>-rf<span class="w"> </span>/var/lib/apt/lists/*
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p><strong>Use .dockerignore</strong></p></li>
+</ol>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>__pycache__
+*.pyc
+.git
+.pytest_cache
+htmlcov
+</pre></div>
+</div>
+</section>
+<section id="security">
+<h3>Security<a class="headerlink" href="#security" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p><strong>Run as non-root user</strong></p></li>
+</ol>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">RUN</span><span class="w"> </span>useradd<span class="w"> </span>-m<span class="w"> </span>appuser
+<span class="k">USER</span><span class="w"> </span><span class="s">appuser</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p><strong>Don’t include secrets</strong></p></li>
+</ol>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="c"># Bad</span>
+<span class="k">ENV</span><span class="w"> </span><span class="nv">SECRET_KEY</span><span class="o">=</span>my-secret
+
+<span class="c"># Good - use environment variables</span>
+<span class="k">ENV</span><span class="w"> </span><span class="nv">SECRET_KEY</span><span class="o">=</span><span class="si">${</span><span class="nv">SECRET_KEY</span><span class="si">}</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p><strong>Scan images</strong></p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>scan<span class="w"> </span>myapp:latest
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h3>Development<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p><strong>Use volumes for code</strong></p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./src:/app/src</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p><strong>Enable hot-reload</strong></p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">uvicorn main:app --reload</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p><strong>Use docker-compose for services</strong></p></li>
+</ol>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<section id="container-won-t-start">
+<h3>Container Won’t Start<a class="headerlink" href="#container-won-t-start" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check logs</span>
+docker-compose<span class="w"> </span>logs<span class="w"> </span>app
+
+<span class="c1"># Check container status</span>
+docker-compose<span class="w"> </span>ps
+
+<span class="c1"># Inspect container</span>
+docker<span class="w"> </span>inspect<span class="w"> </span>container-id
+</pre></div>
+</div>
+</section>
+<section id="port-already-in-use">
+<h3>Port Already in Use<a class="headerlink" href="#port-already-in-use" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find process using port</span>
+lsof<span class="w"> </span>-i<span class="w"> </span>:8000
+
+<span class="c1"># Kill process</span>
+<span class="nb">kill</span><span class="w"> </span>-9<span class="w"> </span>PID
+
+<span class="c1"># Or change port in docker-compose.yml</span>
+ports:
+<span class="w">  </span>-<span class="w"> </span><span class="s2">&quot;8001:8000&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="permission-errors">
+<h3>Permission Errors<a class="headerlink" href="#permission-errors" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fix ownership</span>
+sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </span><span class="nv">$USER</span>:<span class="nv">$USER</span><span class="w"> </span>.
+
+<span class="c1"># Or run as root (not recommended)</span>
+docker-compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>app<span class="w"> </span>bash
+</pre></div>
+</div>
+</section>
+</section>
+<section id="clean-up">
+<h2>Clean Up<a class="headerlink" href="#clean-up" title="Link to this heading"></a></h2>
+<section id="remove-containers">
+<h3>Remove Containers<a class="headerlink" href="#remove-containers" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Stop and remove</span>
+docker-compose<span class="w"> </span>down
+
+<span class="c1"># Remove volumes too</span>
+docker-compose<span class="w"> </span>down<span class="w"> </span>-v
+</pre></div>
+</div>
+</section>
+<section id="remove-images">
+<h3>Remove Images<a class="headerlink" href="#remove-images" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Remove specific image</span>
+docker<span class="w"> </span>rmi<span class="w"> </span>myapp:latest
+
+<span class="c1"># Remove all unused images</span>
+docker<span class="w"> </span>image<span class="w"> </span>prune<span class="w"> </span>-a
+</pre></div>
+</div>
+</section>
+<section id="system-cleanup">
+<h3>System Cleanup<a class="headerlink" href="#system-cleanup" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Remove everything</span>
+make<span class="w"> </span>docker-clean
+
+<span class="c1"># Or manually</span>
+docker<span class="w"> </span>system<span class="w"> </span>prune<span class="w"> </span>-a<span class="w"> </span>--volumes
+</pre></div>
+</div>
+</section>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../user-guide/deployment.html"><span class="doc">Deployment</span></a> - Deployment guide</p></li>
+<li><p><a class="reference internal" href="../reference/makefile-commands.html"><span class="doc">Makefile Commands</span></a> - Docker commands</p></li>
+<li><p><a class="reference internal" href="../user-guide/configuration.html"><span class="doc">Configuration</span></a> - Configuration</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="code-quality.html" class="btn btn-neutral float-left" title="Code Quality" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="migrations.html" class="btn btn-neutral float-right" title="Database Migrations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Peopl3s.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

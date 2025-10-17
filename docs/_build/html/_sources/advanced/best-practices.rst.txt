@@ -1,0 +1,202 @@
+Best Practices
+===============
+
+Collection of best practices for using the template.
+
+Architecture
+------------
+
+Layer Boundaries
+~~~~~~~~~~~~~~~~
+
+* Keep dependencies pointing inward
+* Don't skip layers
+* Use interfaces for infrastructure
+
+.. code-block:: python
+
+   # Good
+   class CreateUserUseCase:
+       def __init__(self, repo: IUserRepository):
+           self._repo = repo
+   
+   # Bad - direct infrastructure dependency
+   class CreateUserUseCase:
+       def __init__(self, session: AsyncSession):
+           self._session = session
+
+Single Responsibility
+~~~~~~~~~~~~~~~~~~~~~
+
+Each class should have one reason to change:
+
+.. code-block:: python
+
+   # Good - focused use case
+   class CreateUserUseCase:
+       async def execute(self, dto: CreateUserDTO) -> User:
+           # Only handles user creation
+           pass
+   
+   # Bad - multiple responsibilities
+   class UserService:
+       async def create_user(self, dto): pass
+       async def send_email(self, user): pass
+       async def log_activity(self, user): pass
+
+Code Quality
+------------
+
+Type Hints
+~~~~~~~~~~
+
+Always use type hints:
+
+.. code-block:: python
+
+   # Good
+   async def get_user(user_id: int) -> Optional[User]:
+       pass
+   
+   # Bad
+   async def get_user(user_id):
+       pass
+
+Docstrings
+~~~~~~~~~~
+
+Document public APIs:
+
+.. code-block:: python
+
+   def create_user(username: str, email: str) -> User:
+       """Create a new user.
+       
+       Args:
+           username: The username for the new user.
+           email: The email address.
+           
+       Returns:
+           The created user entity.
+           
+       Raises:
+           ValueError: If username already exists.
+       """
+       pass
+
+Testing
+-------
+
+Test Pyramid
+~~~~~~~~~~~~
+
+* 70% Unit tests
+* 20% Integration tests
+* 10% E2E tests
+
+Mock External Dependencies
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   @pytest.mark.asyncio
+   async def test_use_case():
+       mock_repo = AsyncMock()
+       use_case = CreateUserUseCase(mock_repo)
+       
+       result = await use_case.execute(dto)
+       
+       mock_repo.create.assert_called_once()
+
+Database
+--------
+
+Use Indexes
+~~~~~~~~~~~
+
+Add indexes for frequently queried columns:
+
+.. code-block:: python
+
+   class UserModel(Base):
+       __tablename__ = "users"
+       
+       username = Column(String(50), index=True)
+       email = Column(String(100), index=True)
+
+Connection Pooling
+~~~~~~~~~~~~~~~~~~
+
+Configure appropriate pool size:
+
+.. code-block:: python
+
+   engine = create_async_engine(
+       url,
+       pool_size=20,
+       max_overflow=10,
+   )
+
+Security
+--------
+
+Environment Variables
+~~~~~~~~~~~~~~~~~~~~~
+
+Never hardcode secrets:
+
+.. code-block:: python
+
+   # Good
+   SECRET_KEY = os.getenv("SECRET_KEY")
+   
+   # Bad
+   SECRET_KEY = "my-secret-key"
+
+Input Validation
+~~~~~~~~~~~~~~~~
+
+Use Pydantic for validation:
+
+.. code-block:: python
+
+   class UserCreateSchema(BaseModel):
+       username: str = Field(min_length=3, max_length=50)
+       email: EmailStr
+
+Performance
+-----------
+
+Caching
+~~~~~~~
+
+Cache expensive operations:
+
+.. code-block:: python
+
+   @cache(ttl=3600)
+   async def get_user_stats(user_id: int):
+       # Expensive calculation
+       pass
+
+Async Operations
+~~~~~~~~~~~~~~~~
+
+Use async/await throughout:
+
+.. code-block:: python
+
+   # Good
+   async def get_users():
+       return await repository.get_all()
+   
+   # Bad - blocking
+   def get_users():
+       return repository.get_all_sync()
+
+See Also
+--------
+
+* :doc:`../development/code-quality` - Code quality
+* :doc:`../user-guide/testing` - Testing guide
+* :doc:`../user-guide/architecture` - Architecture

@@ -1,0 +1,101 @@
+Changelog
+=========
+
+All notable changes to the Clean Architecture FastAPI Template will be documented in this file.
+
+The format is based on `Keep a Changelog <https://keepachangelog.com/en/1.0.0/>`_,
+and this project adheres to `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_.
+
+[Unreleased]
+------------
+
+[1.0.0] - 2025-10-01
+--------------------
+
+Added
+~~~~~
+
+* Initial release of Clean Architecture FastAPI Template
+* Clean Architecture implementation with 4 layers (Domain, Application, Infrastructure, Presentation)
+* FastAPI integration with async support
+* Multiple database support (PostgreSQL, MySQL, SQLite)
+* Multiple cache backends (Redis, KeyDB, Tarantool, Dragonfly)
+* Message broker integration (Kafka, RabbitMQ, NATS)
+* Dishka dependency injection
+* SQLAlchemy 2.0 with async support
+* Alembic database migrations
+* Docker and Docker Compose configuration
+* Comprehensive Makefile with development commands
+* Ruff for linting and formatting
+* MyPy for type checking
+* Pytest test suite with async support
+* Pre-commit hooks configuration
+* Structured logging with structlog
+* Environment-based configuration with pydantic-settings
+* API documentation with Swagger/OpenAPI
+* Comprehensive project documentation
+* Multiple license options
+* GitHub Actions CI/CD workflows
+
+Features
+~~~~~~~~
+
+* **Architecture**: Domain-Driven Design with clear separation of concerns
+* **Async Support**: Full async/await support throughout the stack
+* **Type Safety**: Complete type hints with MyPy validation
+* **Testing**: Unit, integration, and e2e test examples
+* **Code Quality**: Automated linting, formatting, and type checking
+* **Docker**: Multi-stage builds for production, development, and testing
+* **Migrations**: Automatic migration generation with Alembic
+* **DI Container**: Dishka for clean dependency management
+* **Logging**: Structured JSON logging for production
+* **Configuration**: Environment-based settings with validation
+
+Template Variables
+~~~~~~~~~~~~~~~~~~
+
+* ``project_name`` - Human-readable project name
+* ``project_slug`` - Python package name
+* ``project_description`` - Project description
+* ``author_name`` - Author name
+* ``author_email`` - Author email
+* ``github_username`` - GitHub username
+* ``version`` - Initial version
+* ``python_version`` - Python version (3.10, 3.11, 3.12)
+* ``use_database`` - Database choice (none, postgresql, mysql, sqlite)
+* ``use_cache`` - Cache choice (none, redis, keydb, tarantool, dragonfly)
+* ``use_broker`` - Message broker (none, kafka, rabbitmq, nats)
+* ``add_docker`` - Include Docker configuration
+* ``add_tests`` - Include test suite
+* ``add_docs`` - Include documentation
+* ``add_precommit`` - Include pre-commit hooks
+* ``license_type`` - License (MIT, Apache-2.0, GPL-3.0, BSD-3-Clause, None)
+
+Documentation
+~~~~~~~~~~~~~
+
+* Installation guide
+* Quick start tutorial
+* Architecture documentation
+* Project structure guide
+* Configuration reference
+* Testing guide
+* Deployment guide
+* Makefile commands reference
+* FAQ
+
+[0.1.0] - 2024-09-29
+--------------------
+
+Added
+~~~~~
+
+* Initial template structure
+* Basic FastAPI setup
+* SQLAlchemy integration
+* Docker configuration
+* Basic documentation
+
+.. _Unreleased: https://github.com/Peopl3s/clean-architecture-fastapi-project-template/compare/v1.0.0...HEAD
+.. _1.0.0: https://github.com/Peopl3s/clean-architecture-fastapi-project-template/releases/tag/v1.0.0
+.. _0.1.0: https://github.com/Peopl3s/clean-architecture-fastapi-project-template/releases/tag/v0.1.0
