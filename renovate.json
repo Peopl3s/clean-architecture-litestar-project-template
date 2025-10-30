@@ -1,0 +1,43 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard"
+  ],
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 0,
+  "labels": [
+    "dependencies"
+  ],
+  "commitMessagePrefix": "chore(deps): ",
+  "minimumReleaseAge": "1 day",
+  "packageRules": [
+    {
+      "matchManagers": [
+        "github-actions"
+      ],
+      "groupName": "GitHub Actions updates",
+      "schedule": [
+        "* 2 * * *"
+      ]
+    },
+    {
+      "matchManagers": [
+        "dockerfile"
+      ],
+      "groupName": "Docker image updates",
+      "schedule": [
+        "* 2 * * *"
+      ]
+    },
+    {
+      "matchManagers": [
+        "pip_requirements"
+      ],
+      "groupName": "Python dependencies",
+      "schedule": [
+        "* 2 * * *"
+      ]
+    }
+  ]
+}
