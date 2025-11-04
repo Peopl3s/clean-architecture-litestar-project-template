@@ -52,7 +52,7 @@ x-app-dev-environment: &app-dev-environment
 services:
 {% if cookiecutter.use_database == "postgresql" %}
   postgres:
-    image: postgres:16-alpine
+    image: postgres:18-alpine
     container_name: {{ cookiecutter.project_slug }}-postgres
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
@@ -71,7 +71,7 @@ services:
       - {{ cookiecutter.project_slug }}-network
 
   postgres-test:
-    image: postgres:16-alpine
+    image: postgres:18-alpine
     container_name: {{ cookiecutter.project_slug }}-postgres-test
     environment:
       POSTGRES_DB: {{ cookiecutter.database_name }}_test
@@ -91,7 +91,7 @@ services:
 
 {% if cookiecutter.use_database == "mysql" %}
   mysql:
-    image: mysql:8.0
+    image: mysql:9.5
     container_name: {{ cookiecutter.project_slug }}-mysql
     environment:
       MYSQL_DATABASE: ${MYSQL_DB}
@@ -110,7 +110,7 @@ services:
       - {{ cookiecutter.project_slug }}-network
 
   mysql-test:
-    image: mysql:8.0
+    image: mysql:9.5
     container_name: {{ cookiecutter.project_slug }}-mysql-test
     environment:
       MYSQL_DATABASE: {{ cookiecutter.database_name }}_test
@@ -217,7 +217,7 @@ services:
 
 {% if cookiecutter.use_broker == "kafka" %}
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.4.0
+    image: confluentinc/cp-zookeeper:7.9.4
     container_name: {{ cookiecutter.project_slug }}-zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -228,7 +228,7 @@ services:
       - {{ cookiecutter.project_slug }}-network
 
   kafka:
-    image: confluentinc/cp-kafka:7.4.0
+    image: confluentinc/cp-kafka:8.1.0
     container_name: {{ cookiecutter.project_slug }}-kafka
     depends_on:
       zookeeper:
@@ -259,7 +259,7 @@ services:
 
 {% if cookiecutter.use_broker == "rabbitmq" %}
   rabbitmq:
-    image: rabbitmq:3.13-management
+    image: rabbitmq:4.2-management
     container_name: {{ cookiecutter.project_slug }}-rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: guest
@@ -280,7 +280,7 @@ services:
 
 {% if cookiecutter.use_broker == "nats" %}
   nats:
-    image: nats:2.10-alpine
+    image: nats:2.12-alpine
     container_name: {{ cookiecutter.project_slug }}-nats
     command: |
       -js
