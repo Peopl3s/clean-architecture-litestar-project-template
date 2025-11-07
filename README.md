@@ -12,6 +12,8 @@
 
 A comprehensive cookiecutter template for creating modern Litestar applications with clean architecture, Docker support, and best practices included.
 
+:books: Explore project details and documentation on DeepWiki — https://deepwiki.com/Peopl3s/clean-architecture-litestar-project-template
+
 :electric_plug: FastAPI Clean Architecture Project Template - https://github.com/Peopl3s/clean-architecture-fastapi-project-template
 
 ## 🚀 Features
